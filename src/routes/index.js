@@ -9,9 +9,6 @@ import {
   Heart,
   Layout,
   List,
-  Map,
-  PieChart,
-  Sliders,
   Users
 } from "react-feather";
 
@@ -36,10 +33,6 @@ const Progress = async(() => import("../pages/components/Progress"));
 const Snackbars = async(() => import("../pages/components/Snackbars"));
 const Tooltips = async(() => import("../pages/components/Tooltips"));
 
-// Dashboards components
-const Default = async(() => import("../pages/dashboards/Default"));
-const Analytics = async(() => import("../pages/dashboards/Analytics"));
-
 // Forms components
 const Pickers = async(() => import("../pages/forms/Pickers"));
 const SelectionCtrls = async(() => import("../pages/forms/SelectionControls"));
@@ -54,7 +47,6 @@ const FeatherIcons = async(() => import("../pages/icons/FeatherIcons"));
 const Blank = async(() => import("../pages/pages/Blank"));
 const Invoice = async(() => import("../pages/pages/Invoice"));
 const Pricing = async(() => import("../pages/pages/Pricing"));
-const Profile = async(() => import("../pages/pages/Profile"));
 const Settings = async(() => import("../pages/pages/Settings"));
 const Tasks = async(() => import("../pages/pages/Tasks"));
 const Projects = async(() => import("../pages/pages/Projects"));
@@ -63,46 +55,14 @@ const Projects = async(() => import("../pages/pages/Projects"));
 const SimpleTable = async(() => import("../pages/tables/SimpleTable"));
 const AdvancedTable = async(() => import("../pages/tables/AdvancedTable"));
 
-// Chart components
-const Chartjs = async(() => import("../pages/charts/Chartjs"));
-
-// Maps components
-const GoogleMaps = async(() => import("../pages/maps/GoogleMaps"));
-const VectorMaps = async(() => import("../pages/maps/VectorMaps"));
-
 // Documentation
 const Docs = async(() => import("../pages/docs/Documentation"));
-
-const dashboardsRoutes = {
-  id: "Dashboard",
-  path: "/dashboard",
-  header: "Main",
-  icon: <Sliders />,
-  containsHome: true,
-  children: [
-    {
-      path: "/",
-      name: "Default",
-      component: Default
-    },
-    {
-      path: "/dashboard/analytics",
-      name: "Analytics",
-      component: Analytics
-    }
-  ]
-};
 
 const pagesRoutes = {
   id: "Pages",
   path: "/pages",
   icon: <Layout />,
   children: [
-    {
-      path: "/pages/profile",
-      name: "Profile",
-      component: Profile
-    },
     {
       path: "/pages/settings",
       name: "Settings",
@@ -173,7 +133,7 @@ const authRoutes = {
 
 const documentationRoutes = {
   id: "Documentation",
-  path: "/documentation",
+  path: "/",
   icon: <BookOpen />,
   component: Docs,
   children: null
@@ -312,32 +272,6 @@ const iconsRoutes = {
   ]
 };
 
-const chartRoutes = {
-  id: "Charts",
-  path: "/charts",
-  icon: <PieChart />,
-  component: Chartjs,
-  children: null
-};
-
-const mapsRoutes = {
-  id: "Maps",
-  path: "/maps",
-  icon: <Map />,
-  children: [
-    {
-      path: "/maps/google-maps",
-      name: "Google Maps",
-      component: GoogleMaps
-    },
-    {
-      path: "/maps/vector-maps",
-      name: "Vector Maps",
-      component: VectorMaps
-    }
-  ]
-};
-
 // This route is not visisble in the sidebar
 const privateRoutes = {
   id: "Private",
@@ -347,29 +281,23 @@ const privateRoutes = {
 };
 
 export const dashboard = [
-  dashboardsRoutes,
   pagesRoutes,
   documentationRoutes,
   componentsRoutes,
-  chartRoutes,
   formsRoutes,
   tablesRoutes,
   iconsRoutes,
-  mapsRoutes,
   privateRoutes
 ];
 
 export const auth = [authRoutes];
 
 export default [
-  dashboardsRoutes,
   pagesRoutes,
   authRoutes,
   documentationRoutes,
   componentsRoutes,
-  chartRoutes,
   formsRoutes,
   tablesRoutes,
   iconsRoutes,
-  mapsRoutes
 ];
