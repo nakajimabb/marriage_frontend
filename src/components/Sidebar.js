@@ -28,6 +28,7 @@ import { ExpandLess, ExpandMore } from "@material-ui/icons";
 import routes from "../routes/index";
 
 import { Layers } from "react-feather";
+import {connect} from "react-redux";
 
 const NavLink = React.forwardRef((props, ref) => (
   <RouterNavLink innerRef={ref} {...props} />
@@ -285,7 +286,7 @@ class Sidebar extends React.Component {
   }
 
   render() {
-    const { classes, staticContext, ...other } = this.props;
+    const { classes, staticContext, session, ...other } = this.props;
 
     return (
       <Drawer variant="permanent" {...other}>
@@ -357,11 +358,11 @@ class Sidebar extends React.Component {
             </Grid>
             <Grid item>
               <SidebarFooterText variant="body2">
-                Lucy Lavender
+                { session.user.last_name } { session.user.first_name }
               </SidebarFooterText>
               <SidebarFooterText variant="body2">
                 <Dot />
-                Online
+                { session.loggedIn ? 'Online': 'Offline' }
               </SidebarFooterText>
             </Grid>
           </Grid>
@@ -371,4 +372,4 @@ class Sidebar extends React.Component {
   }
 }
 
-export default withRouter(Sidebar);
+export default connect(store => ({ session: store.sessionReducer }))(withRouter(Sidebar));

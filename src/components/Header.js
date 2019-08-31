@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import styled, { withTheme } from "styled-components";
 import { connect } from "react-redux";
 import { darken } from "polished";
+import { withRouter } from "react-router-dom";
 
 import {
   Badge,
@@ -23,6 +24,9 @@ import {
   Search as SearchIcon,
   Power
 } from "react-feather";
+
+import { logout } from "../redux/actions/sessionActions";
+
 
 const AppBar = styled(MuiAppBar)`
   background: ${props => props.theme.header.background};
@@ -175,6 +179,13 @@ class UserMenu extends Component {
     this.setState({ anchorMenu: null });
   };
 
+  signOut = () => {
+    const { dispatch, history } = this.props;
+
+    dispatch(logout());
+    history.push('/auth/sign-in');
+  };
+
   render() {
     const { anchorMenu } = this.state;
     const open = Boolean(anchorMenu);
@@ -204,7 +215,7 @@ class UserMenu extends Component {
           </MenuItem>
           <MenuItem
             onClick={() => {
-              this.closeMenu();
+              this.signOut();
             }}
           >
             Sign out
@@ -214,6 +225,8 @@ class UserMenu extends Component {
     );
   }
 }
+
+UserMenu = connect(store => ({ session: store.sessionReducer }))(withRouter(UserMenu));
 
 const Header = ({ onDrawerToggle }) => (
   <React.Fragment>

@@ -5,6 +5,7 @@ import { dashboard as dashboardRoutes, auth as authRoutes } from "./index";
 import DashboardLayout from "../layouts/Dashboard";
 import AuthLayout from "../layouts/Auth";
 import Page404 from "../pages/auth/Page404";
+import AuthGuard from "../components/AuthGuard";
 
 const childRoutes = (Layout, routes) =>
   routes.map(({ children, path, component: Component }, index) =>
@@ -37,19 +38,23 @@ const childRoutes = (Layout, routes) =>
     )
   );
 
-const Routes = () => (
+const Routes = (props) => (
   <Router>
     <Switch>
-      {childRoutes(DashboardLayout, dashboardRoutes)}
       {childRoutes(AuthLayout, authRoutes)}
-      <Route
-        render={() => (
-          <AuthLayout>
-            <Page404 />
-          </AuthLayout>
-        )}
-      />
     </Switch>
+    <AuthGuard props={props}>
+      <Switch>
+        {childRoutes(DashboardLayout, dashboardRoutes)}
+        <Route
+          render={() => (
+            <AuthLayout>
+              <Page404 />
+            </AuthLayout>
+          )}
+        />
+      </Switch>
+    </AuthGuard>
   </Router>
 );
 
