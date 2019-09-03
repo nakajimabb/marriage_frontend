@@ -58,6 +58,9 @@ const AdvancedTable = async(() => import("../pages/tables/AdvancedTable"));
 // Documentation
 const Docs = async(() => import("../pages/docs/Documentation"));
 
+// Users
+const UserList = async(() => import("../pages/users/UserList"));
+
 const pagesRoutes = {
   id: "Pages",
   path: "/pages",
@@ -95,6 +98,19 @@ const pagesRoutes = {
       name: "Blank Page",
       component: Blank
     }
+  ]
+};
+
+const usersRoutes = {
+  id: "Users",
+  path: "/users",
+  icon: <Layout />,
+  children: [
+    {
+      path: "/users",
+      name: "List",
+      component: UserList
+    },
   ]
 };
 
@@ -281,6 +297,7 @@ const privateRoutes = {
 };
 
 export const dashboard = [
+  usersRoutes,
   pagesRoutes,
   documentationRoutes,
   componentsRoutes,
@@ -293,6 +310,7 @@ export const dashboard = [
 export const auth = [authRoutes];
 
 export default [
+  usersRoutes,
   pagesRoutes,
   authRoutes,
   documentationRoutes,
