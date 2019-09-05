@@ -17,7 +17,8 @@ import {
   TableSortLabel,
   Toolbar,
   Tooltip,
-  Typography
+  FormControl,
+  Typography, Grid, InputLabel, Input, FormControlLabel
 } from "@material-ui/core";
 
 import {
@@ -56,6 +57,18 @@ function desc(a, b, orderCol) {
   return 0;
 }
 
+function filterDate(array, search, columns, exact) {
+  console.log(columns);
+  if(search) {
+    return array.filter(n => columns.some(c => {
+      let v = String(val(n, c));
+      return exact ? (v == search) : ~v.indexOf(search);
+    }));
+  } else {
+    return array;
+  }
+}
+
 function stableSort(array, cmp) {
   const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
@@ -84,19 +97,26 @@ class EnhancedTableHead extends React.Component {
       order,
       orderBy,
       numSelected,
-      rowCount
+      rowCount,
+      checkbox
     } = this.props;
 
     return (
       <TableHead>
         <TableRow>
-          <TableCell padding="checkbox">
-            <Checkbox
-              indeterminate={numSelected > 0 && numSelected < rowCount}
-              checked={numSelected === rowCount}
-              onChange={onSelectAllClick}
-            />
-          </TableCell>
+          {
+            checkbox ?
+              (
+                <TableCell padding="checkbox">
+                  <Checkbox
+                    indeterminate={numSelected > 0 && numSelected < rowCount}
+                    checked={numSelected === rowCount}
+                    onChange={onSelectAllClick}
+                  />
+                </TableCell>
+              ) : null
+
+          }
           {columns.map(
             row => (
               <TableCell
@@ -182,8 +202,12 @@ export default class EnhancedTable extends React.Component {
       orderBy: props.columns[0].id,
       selected: [],
       page: 0,
-      rowsPerPage: 10
+      rowsPerPage: 10,
+      search: '',
+      exact: false,
     };
+
+    this.handleChange = this.handleChange.bind(this);
   }
 
   handleRequestSort = (event, property) => {
@@ -227,6 +251,14 @@ export default class EnhancedTable extends React.Component {
     this.setState({ selected: newSelected });
   };
 
+  handleChange = event => {
+    this.setState({ [event.target.name]: event.target.value });
+  };
+
+  clickCheckbox = event => {
+    this.setState({ [event.target.name]: !this.state[event.target.name] });
+  };
+
   handleChangePage = (event, page) => {
     this.setState({ page });
   };
@@ -238,28 +270,43 @@ export default class EnhancedTable extends React.Component {
   isSelected = id => this.state.selected.indexOf(id) !== -1;
 
   render() {
-    const { data, columns } = this.props;
-    const { order, orderBy, selected, rowsPerPage, page } = this.state;
+    const { data, columns, checkbox } = this.props;
+    const { order, orderBy, selected, rowsPerPage, page, search, exact } = this.state;
     const emptyRows =
       rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
 
-    const orderCol = columns.find(c => c.id == orderBy);
+    const orderCol = columns.find(c => c.id === orderBy);
 
     return (
       <Card mb={6}>
-        <CardContent pb={0}>
-          <Typography variant="h6" gutterBottom>
-            Sorting, Selecting & Pagination
-          </Typography>
-          <Typography variant="body2" gutterBottom>
-            This example demonstrates the use of <code>Checkbox</code> and
-            clickable rows for selection, with a custom <code>Toolbar</code>. It
-            uses the <code>TableSortLabel</code> component to help style column
-            headings.
-          </Typography>
-        </CardContent>
         <Paper>
-          <EnhancedTableToolbar numSelected={selected.length} />
+          <CardContent pb={0} ml={5} mb={5} >
+            <Grid container spacing={6} >
+              <Grid item md={4}>
+                <FormControl fullWidth>
+                  <InputLabel htmlFor="search">Search</InputLabel>
+                  <Input id="search" name="search" defaultValue="" placeholder="Search word" onChange={this.handleChange} />
+                </FormControl>
+              </Grid>
+              <Grid item md={2}>
+                <FormControl>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        name="exact"
+                        checked={this.exact}
+                        onClick={this.clickCheckbox}
+                      />
+                    }
+                    label="exact"
+                  />
+                </FormControl>
+              </Grid>
+            </Grid>
+          </CardContent>
+          {
+            checkbox ? <EnhancedTableToolbar numSelected={selected.length} /> : null
+          }
           <TableWrapper>
             <Table aria-labelledby="tableTitle">
               <EnhancedTableHead
@@ -270,9 +317,10 @@ export default class EnhancedTable extends React.Component {
                 onSelectAllClick={this.handleSelectAllClick}
                 onRequestSort={this.handleRequestSort}
                 rowCount={data.length}
+                checkbox={checkbox}
               />
               <TableBody>
-                {stableSort(data, getSorting(order, orderCol))
+                {stableSort(filterDate(data, search, columns, exact), getSorting(order, orderCol))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map(n => {
                     const isSelected = this.isSelected(n.id);
@@ -286,9 +334,9 @@ export default class EnhancedTable extends React.Component {
                         key={n.id}
                         selected={isSelected}
                       >
-                        <TableCell padding="checkbox">
-                          <Checkbox checked={isSelected} />
-                        </TableCell>
+                        {
+                          checkbox ? <TableCell padding="checkbox"><Checkbox checked={isSelected} /></TableCell> : null
+                        }
                         {
                           columns.map((c) => {
                             return (

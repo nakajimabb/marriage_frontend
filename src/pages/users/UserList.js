@@ -74,18 +74,8 @@ class UserList extends React.Component {
     return (
       <React.Fragment>
         <Typography variant="h3" gutterBottom display="inline">
-          Advanced Table
+          User List
         </Typography>
-
-        <Breadcrumbs aria-label="Breadcrumb" mt={2}>
-          <Link component={NavLink} exact to="/">
-            Dashboard
-          </Link>
-          <Link component={NavLink} exact to="/">
-            Tables
-          </Link>
-          <Typography>Advanced Table</Typography>
-        </Breadcrumbs>
 
         <Divider my={6} />
 
