@@ -60,6 +60,7 @@ const Docs = async(() => import("../pages/docs/Documentation"));
 
 // Users
 const UserList = async(() => import("../pages/users/UserList"));
+const UserForm = async(() => import("../pages/users/UserForm"));
 
 const pagesRoutes = {
   id: "Pages",
@@ -110,6 +111,16 @@ const usersRoutes = {
       path: "/users",
       name: "List",
       component: UserList
+    },
+    {
+      path: "/users/new",
+      name: "new",
+      component: UserForm
+    },
+    {
+      path: "/users/:id/edit",
+      name: "edit",
+      component: UserForm
     },
   ]
 };

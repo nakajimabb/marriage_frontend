@@ -125,19 +125,24 @@ class EnhancedTableHead extends React.Component {
                 padding={row.disablePadding ? "none" : "default"}
                 sortDirection={orderBy === row.id ? order : false}
               >
-                <Tooltip
-                  title="Sort"
-                  placement={row.numeric ? "bottom-end" : "bottom-start"}
-                  enterDelay={300}
-                >
-                  <TableSortLabel
-                    active={orderBy === row.id}
-                    direction={order}
-                    onClick={this.createSortHandler(row.id)}
+              {
+                row.sortable ?
+                  (
+                  <Tooltip
+                    title="Sort"
+                    placement={row.numeric ? "bottom-end" : "bottom-start"}
+                    enterDelay={300}
                   >
-                    {row.label}
-                  </TableSortLabel>
-                </Tooltip>
+                    <TableSortLabel
+                      active={orderBy === row.id}
+                      direction={order}
+                      onClick={this.createSortHandler(row.id)}
+                    >
+                      {row.label}
+                    </TableSortLabel>
+                  </Tooltip>
+                  ) : row.label
+                }
               </TableCell>
             ),
             this
@@ -344,8 +349,10 @@ export default class EnhancedTable extends React.Component {
                                 scope="row"
                                 padding={c.disablePadding ? "none" : "default"}
                                 align={c.numeric ? "right" : "left"}
-                              >
-                                { val(n, c) }
+                                >
+                                {
+                                  c.component ? React.cloneElement(c.component, c.props(n)) : val(n, c)
+                                }
                               </TableCell>
                             );
                           })

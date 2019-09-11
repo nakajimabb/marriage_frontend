@@ -13,9 +13,12 @@ import {
 
 import { spacing } from "@material-ui/system";
 
+import EditIcon from '@material-ui/icons/Edit';
+
 import { logout } from "../../redux/actions/sessionActions";
 import env from '../../environment';
 import EnhancedTable from "../components/EnhancedTable";
+import UserForm from "./UserForm";
 
 const NavLink = React.forwardRef((props, ref) => (
   <RouterNavLink innerRef={ref} {...props} />
@@ -30,17 +33,21 @@ class UserList extends React.Component {
     super(props);
 
     this.updateList = this.updateList.bind(this);
+    this.openUserForm = this.openUserForm.bind(this);
 
     this.state = {
       columns: [
-        { id: "id", numeric: true, disablePadding: true, label: "id" },
-        { id: "full_name", numeric: false, disablePadding: false, label: "name", f: n => n.last_name + ' ' + n.first_name },
-        { id: "full_kana", numeric: false, disablePadding: false, label: "kana", f: n => n.last_name_kana + ' ' + n.first_name_kana },
-        { id: "nickname", numeric: false, disablePadding: false, label: "nickname" },
-        { id: "email", numeric: false, disablePadding: false, label: "email" },
-        { id: "sex", numeric: false, disablePadding: false, label: "sex" },
-        { id: "birthday", numeric: false, disablePadding: false, label: "birthday" },
+        { id: "id", numeric: true, disablePadding: true, label: "id", sortable: true },
+        { id: "full_name", numeric: false, disablePadding: false, label: "name", sortable: true, f: n => n.last_name + ' ' + n.first_name },
+        { id: "full_kana", numeric: false, disablePadding: false, label: "kana", sortable: true, f: n => n.last_name_kana + ' ' + n.first_name_kana },
+        { id: "nickname", numeric: false, disablePadding: false, label: "nickname", sortable: true },
+        { id: "email", numeric: false, disablePadding: false, label: "email", sortable: true },
+        { id: "sex", numeric: false, disablePadding: false, label: "sex", sortable: true },
+        { id: "birthday", numeric: false, disablePadding: false, label: "birthday", sortable: true },
+        { id: "id", numeric: false, search: false, disablePadding: false, sortable: false, component: (<EditIcon />), props: (n) => ({ onClick: this.openUserForm(n)}) },
       ],
+      open: false,
+      user_id: null,
       data: [],
     };
   }
@@ -48,6 +55,14 @@ class UserList extends React.Component {
   componentDidMount() {
     this.updateList();
   }
+
+  openUserForm = (n) => () => {
+    this.setState({open: true, user_id: n.id});
+  };
+
+  closeUserForm = () => {
+    this.setState({ open: false });
+  };
 
   updateList = async () =>  {
     const { dispatch, session, history } = this.props;
@@ -73,6 +88,7 @@ class UserList extends React.Component {
   render() {
     return (
       <React.Fragment>
+        <UserForm user_id={this.state.user_id} open={this.state.open} onClose={this.closeUserForm} />
         <Typography variant="h3" gutterBottom display="inline">
           User List
         </Typography>
