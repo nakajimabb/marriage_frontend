@@ -18,6 +18,7 @@ import {
   Toolbar,
   Tooltip,
   FormControl,
+  FormGroup,
   Typography, Grid, InputLabel, Input, FormControlLabel
 } from "@material-ui/core";
 
@@ -275,7 +276,7 @@ export default class EnhancedTable extends React.Component {
   isSelected = id => this.state.selected.indexOf(id) !== -1;
 
   render() {
-    const { data, columns, checkbox } = this.props;
+    const { data, columns, submenus, checkbox } = this.props;
     const { order, orderBy, selected, rowsPerPage, page, search, exact } = this.state;
     const emptyRows =
       rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage);
@@ -306,6 +307,27 @@ export default class EnhancedTable extends React.Component {
                     label="exact"
                   />
                 </FormControl>
+              </Grid>
+              <Grid item md={6} >
+                <Grid
+                  justify="space-between"
+                  container
+                  spacing={24}
+                >
+                <FormControl>
+                </FormControl>
+                <FormGroup row>
+                  {
+                    submenus ? submenus.map((menu) => {
+                      return (
+                        <FormControl>
+                          { React.cloneElement(menu.component, menu.props) }
+                        </FormControl>
+                      )
+                    }) : null
+                  }
+                </FormGroup>
+                </Grid>
               </Grid>
             </Grid>
           </CardContent>
