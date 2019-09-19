@@ -37,7 +37,11 @@ class UserForm extends React.Component {
   componentDidUpdate(prevProps, prevState, snapshot) {
     const { open, user_id } = this.props;
     if(open && user_id != this.state.user_id) {
-      this.updateData(this.props.user_id);
+      if(user_id) {
+        this.updateData(this.props.user_id);
+      } else {
+        this.setState({user_id: null, data: {}});
+      }
     }
   }
 
@@ -72,8 +76,17 @@ class UserForm extends React.Component {
     let body = {user: data};
 
     if(headers && headers['access-token'] && headers['client'] && headers['uid']) {
-      const url = env.API_ORIGIN + 'api/users/' + user_id;
-      axios.patch(url, body, { headers })
+      let url = env.API_ORIGIN + 'api/users/';
+      if(user_id) url += user_id;
+
+      let promise;
+      if(user_id) {
+        promise = axios.patch(url, body, { headers });
+      } else {
+        promise = axios.post(url, body, { headers });
+      }
+
+      promise
       .then((results) => {
         alert('社員を保存しました。');
       })
@@ -186,6 +199,28 @@ class UserForm extends React.Component {
               value={ String(data.bio) }
               onChange={this.handleChange}
               m={2}
+            />
+          </FormControl>
+
+          <FormControl fullWidth mb={3}>
+            <InputLabel htmlFor="password">password</InputLabel>
+            <Input
+              name="password"
+              defaultValue=""
+              type="password"
+              value={ String(data.password) }
+              onChange={this.handleChange}
+            />
+          </FormControl>
+
+          <FormControl fullWidth mb={3}>
+            <InputLabel htmlFor="password_confirmation">password confirmation</InputLabel>
+            <Input
+              name="password_confirmation"
+              defaultValue=""
+              type="password"
+              value={ String(data.password_confirmation) }
+              onChange={this.handleChange}
             />
           </FormControl>
 

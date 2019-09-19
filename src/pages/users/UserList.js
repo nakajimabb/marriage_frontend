@@ -13,7 +13,7 @@ import {
 
 import { spacing } from "@material-ui/system";
 
-import EditIcon from '@material-ui/icons/Edit';
+import { Edit as EditIcon, AddCircleOutlineSharp as AddIcon } from '@material-ui/icons';
 
 import { logout } from "../../redux/actions/sessionActions";
 import env from '../../environment';
@@ -32,31 +32,41 @@ class UserList extends React.Component {
   constructor(props) {
     super(props);
 
-    this.updateList = this.updateList.bind(this);
-    this.openUserForm = this.openUserForm.bind(this);
+    this.columns = [
+      { id: "id", numeric: true, disablePadding: true, label: "id", sortable: true },
+      { id: "full_name", numeric: false, disablePadding: false, label: "name", sortable: true, f: n => n.last_name + ' ' + n.first_name },
+      { id: "full_kana", numeric: false, disablePadding: false, label: "kana", sortable: true, f: n => n.last_name_kana + ' ' + n.first_name_kana },
+      { id: "nickname", numeric: false, disablePadding: false, label: "nickname", sortable: true },
+      { id: "email", numeric: false, disablePadding: false, label: "email", sortable: true },
+      { id: "sex", numeric: false, disablePadding: false, label: "sex", sortable: true },
+      { id: "birthday", numeric: false, disablePadding: false, label: "birthday", sortable: true },
+      { id: "id", numeric: false, search: false, disablePadding: false, sortable: false,
+        component: (<EditIcon className="fa fa-plus-circle" />), props: (n) => ({ onClick: this.openUserEditForm(n) }) },
+    ];
+    this.submenus = [
+      { component: (<AddIcon style={{ fontSize: 36 }} />), props: ({ onClick: this.openUserNewForm }) },
+    ];
 
     this.state = {
-      columns: [
-        { id: "id", numeric: true, disablePadding: true, label: "id", sortable: true },
-        { id: "full_name", numeric: false, disablePadding: false, label: "name", sortable: true, f: n => n.last_name + ' ' + n.first_name },
-        { id: "full_kana", numeric: false, disablePadding: false, label: "kana", sortable: true, f: n => n.last_name_kana + ' ' + n.first_name_kana },
-        { id: "nickname", numeric: false, disablePadding: false, label: "nickname", sortable: true },
-        { id: "email", numeric: false, disablePadding: false, label: "email", sortable: true },
-        { id: "sex", numeric: false, disablePadding: false, label: "sex", sortable: true },
-        { id: "birthday", numeric: false, disablePadding: false, label: "birthday", sortable: true },
-        { id: "id", numeric: false, search: false, disablePadding: false, sortable: false, component: (<EditIcon />), props: (n) => ({ onClick: this.openUserForm(n)}) },
-      ],
       open: false,
       user_id: null,
       data: [],
     };
+
+    this.updateList = this.updateList.bind(this);
+    this.openUserNewForm = this.openUserNewForm.bind(this);
+    this.openUserEditForm = this.openUserEditForm.bind(this);
   }
 
   componentDidMount() {
     this.updateList();
   }
 
-  openUserForm = (n) => () => {
+  openUserNewForm = () => {
+    this.setState({open: true, user_id: null});
+  };
+
+  openUserEditForm = (n) => () => {
     this.setState({open: true, user_id: n.id});
   };
 
@@ -97,7 +107,7 @@ class UserList extends React.Component {
 
         <Grid container spacing={6}>
           <Grid item xs={12}>
-            <EnhancedTable columns={this.state.columns} data={this.state.data} />
+            <EnhancedTable columns={this.columns} data={this.state.data} submenus={this.submenus} />
           </Grid>
         </Grid>
       </React.Fragment>
