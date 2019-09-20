@@ -9,6 +9,7 @@ import { ThemeProvider } from "styled-components";
 
 import maTheme from "./theme";
 import Routes from "./routes/Routes";
+import i18next from './i18n/index'
 
 function App({ theme }) {
   return (

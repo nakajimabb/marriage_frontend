@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build"
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -24,7 +24,11 @@
     "@material-ui/system": "4.3.3",
     "axios": "^0.19.0",
     "date-fns": "2.0.1",
+    "deepmerge": "^4.0.0",
+    "i18next": "^17.0.16",
+    "i18next-browser-languagedetector": "^3.0.3",
     "js-cookie": "^2.2.1",
+    "json-loader": "^0.5.7",
     "jss": "9.8.7",
     "polished": "3.4.1",
     "prop-types": "15.7.2",
@@ -33,11 +37,16 @@
     "react-dom": "16.9.0",
     "react-dragula": "^1.1.17",
     "react-feather": "2.0.3",
+    "react-i18next": "^10.12.5",
     "react-perfect-scrollbar": "1.5.3",
     "react-redux": "7.1.1",
     "react-router-dom": "5.0.1",
     "react-scripts": "3.1.1",
     "redux": "4.0.4",
     "styled-components": "4.3.2"
+  },
+  "devDependencies": {
+    "react-app-rewire-yaml": "^1.1.0",
+    "react-app-rewired": "^2.1.3"
   }
 }
