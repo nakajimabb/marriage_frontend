@@ -16,9 +16,27 @@ import {
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import axios from 'axios'
+import i18next from 'i18next'
 
 import env from "../../environment";
+import CustomizedSnackbar from "../components/CustomizedSnackbar";
 
+
+const collectErrors = (response) => {
+  let errors = {};
+  if (response.status === 500) {
+    const data_errors = response.data.errors;
+    const fields = Object.keys(data_errors);
+    fields.forEach(field => {
+      data_errors[field].forEach(message => {
+        errors[field] = i18next.attr('user', field) + message;
+      })
+    });
+  } else {
+    errors.base = response.status + ' ' + response.statusText;
+  }
+  return errors
+};
 
 class UserForm extends React.Component {
   constructor(props) {
@@ -27,10 +45,11 @@ class UserForm extends React.Component {
     this.state = {
       user_id: null,
       data: {},
+      errors: {},
     };
 
     this.handleChange = this.handleChange.bind(this);
-    this.updateData = this.updateData.bind(this);
+    this.showUser = this.showUser.bind(this);
     this.onSave = this.onSave.bind(this);
   }
 
@@ -38,9 +57,9 @@ class UserForm extends React.Component {
     const { open, user_id } = this.props;
     if(open && user_id != this.state.user_id) {
       if(user_id) {
-        this.updateData(this.props.user_id);
+        this.showUser(this.props.user_id);
       } else {
-        this.setState({user_id: null, data: {}});
+        this.setState({user_id: null, data: {}, errors: {}});
       }
     }
   }
@@ -51,7 +70,7 @@ class UserForm extends React.Component {
     this.setState({ data });
   };
 
-  updateData = async (user_id) =>  {
+  showUser = async (user_id) =>  {
     const { session } = this.props;
 
     const headers  = session.headers;
@@ -60,7 +79,7 @@ class UserForm extends React.Component {
       axios.get(url, {headers})
       .then((results) => {
         console.log(results);
-        this.setState({user_id: user_id, data: results.data.user});
+        this.setState({user_id: user_id, data: results.data.user, errors: {}});
       })
       .catch((data) => {
         alert('データの取得に失敗しました。');
@@ -69,7 +88,7 @@ class UserForm extends React.Component {
   };
 
   onSave = async () => {
-    const { session } = this.props;
+    const { session, onClose } = this.props;
     const { user_id, data } = this.state;
 
     const headers  = session.headers;
@@ -88,10 +107,10 @@ class UserForm extends React.Component {
 
       promise
       .then((results) => {
-        alert('社員を保存しました。');
+        onClose();
       })
-      .catch((data) =>{
-        alert('社員の保存に失敗しました。');
+      .catch((data) => {
+        this.setState({errors: collectErrors(data.response)});
       });
     }
   };
@@ -105,30 +124,43 @@ class UserForm extends React.Component {
         open={open}
         onClose={onClose}
       >
-        <DialogTitle id="simple-dialog-title">{String(data.last_name) + String(data.first_name)}'s profile</DialogTitle>
+        <DialogTitle id="simple-dialog-title">{String(data.last_name) + String(data.first_name)}</DialogTitle>
         <DialogContent>
+          { (Object.keys(this.state.errors).length > 0) ?
+            (<CustomizedSnackbar
+              variant="error"
+              message={
+                Object.keys(this.state.errors).map(key => {
+                  return (
+                    <div>{this.state.errors[key]}</div>
+                  );
+                })
+              }
+            />) : null
+          }
+
           <Grid container spacing={6}>
             <Grid item md={6}>
               <FormControl fullWidth mb={3}>
-                <InputLabel htmlFor="name">Last name</InputLabel>
+                <InputLabel htmlFor="name">{ i18next.attr('user', 'last_name') }</InputLabel>
                 <Input
                   name="last_name"
                   defaultValue=""
-                  placeholder="Last name"
                   value={ String(data.last_name) } p
                   onChange={this.handleChange}
+                  error={this.state.errors.last_name}
                 />
               </FormControl>
             </Grid>
             <Grid item md={6}>
               <FormControl fullWidth mb={3}>
-                <InputLabel htmlFor="name">First name</InputLabel>
+                <InputLabel htmlFor="name">{ i18next.attr('user', 'first_name') }</InputLabel>
                 <Input
                   name="first_name"
                   defaultValue=""
                   value={ String(data.first_name) }
-                  placeholder="First name"
                   onChange={this.handleChange}
+                  error={this.state.errors.first_name}
                 />
               </FormControl>
             </Grid>
@@ -136,7 +168,7 @@ class UserForm extends React.Component {
 
 
           <FormControl fullWidth mb={3}>
-            <InputLabel htmlFor="sex">Sex</InputLabel>
+            <InputLabel htmlFor="sex">{ i18next.attr('user', 'sex') }</InputLabel>
             <Select
               value={ String(data.sex) }
               onChange={this.handleChange}
@@ -144,42 +176,43 @@ class UserForm extends React.Component {
                 name: "sex",
                 id: "user_sex"
               }}
+              error={this.state.errors.sex}
             >
               <MenuItem value="">
-                <em>None</em>
+                <em></em>
               </MenuItem>
-              <MenuItem value='male'>male</MenuItem>
-              <MenuItem value='female'>female</MenuItem>
+              <MenuItem value='male'>{ i18next.enum('user', 'sex', 'male') }</MenuItem>
+              <MenuItem value='female'>{ i18next.enum('user', 'sex', 'female') }</MenuItem>
             </Select>
           </FormControl>
 
           <FormControl fullWidth mb={3}>
-            <InputLabel htmlFor="email">Email</InputLabel>
+            <InputLabel htmlFor="email">{ i18next.attr('user', 'email') }</InputLabel>
             <Input
               name="email"
               type="email"
               defaultValue=""
-              placeholder="Email"
               value={ String(data.email) } p
               onChange={this.handleChange}
+              error={this.state.errors.email}
             />
           </FormControl>
 
           <FormControl fullWidth mb={3}>
-            <InputLabel htmlFor="nickname">nickname</InputLabel>
+            <InputLabel htmlFor="nickname">{ i18next.attr('user', 'nickname') }</InputLabel>
             <Input
               name="nickname"
               defaultValue=""
-              placeholder="nickname"
               value={ String(data.nickname) } p
               onChange={this.handleChange}
+              error={this.state.errors.nickname}
             />
           </FormControl>
 
           <FormControl fullWidth mb={3}>
             <TextField
               name="birthday"
-              label="Birthday"
+              label={ i18next.attr('user', 'birthday') }
               type="date"
               defaultValue=""
               value={ String(data.birthday) } p
@@ -187,40 +220,44 @@ class UserForm extends React.Component {
               InputLabelProps={{
                 shrink: true
               }}
+              error={this.state.errors.birthday}
             />
           </FormControl>
 
           <FormControl fullWidth mb={3}>
             <TextField
               name="bio"
-              label="bio"
+              label={ i18next.attr('user', 'bio') }
               multiline
               rowsMax="4"
               value={ String(data.bio) }
               onChange={this.handleChange}
               m={2}
+              error={this.state.errors.bio}
             />
           </FormControl>
 
           <FormControl fullWidth mb={3}>
-            <InputLabel htmlFor="password">password</InputLabel>
+            <InputLabel htmlFor="password">{ i18next.attr('user', 'password') }</InputLabel>
             <Input
               name="password"
               defaultValue=""
               type="password"
               value={ String(data.password) }
               onChange={this.handleChange}
+              error={this.state.errors.password}
             />
           </FormControl>
 
           <FormControl fullWidth mb={3}>
-            <InputLabel htmlFor="password_confirmation">password confirmation</InputLabel>
+            <InputLabel htmlFor="password_confirmation">{ i18next.attr('user', 'password_confirmation') }</InputLabel>
             <Input
               name="password_confirmation"
               defaultValue=""
               type="password"
               value={ String(data.password_confirmation) }
               onChange={this.handleChange}
+              error={this.state.errors.password_confirmation}
             />
           </FormControl>
 

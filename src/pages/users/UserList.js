@@ -1,12 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import { NavLink as RouterNavLink, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 
 import {
   Grid,
-  Link,
-  Breadcrumbs as MuiBreadcrumbs,
   Divider as MuiDivider,
   Typography
 } from "@material-ui/core";
@@ -15,31 +13,28 @@ import { spacing } from "@material-ui/system";
 
 import { Edit as EditIcon, AddCircleOutlineSharp as AddIcon } from '@material-ui/icons';
 
+import i18next from 'i18next'
+
 import { logout } from "../../redux/actions/sessionActions";
 import env from '../../environment';
 import EnhancedTable from "../components/EnhancedTable";
 import UserForm from "./UserForm";
 
-const NavLink = React.forwardRef((props, ref) => (
-  <RouterNavLink innerRef={ref} {...props} />
-));
-
 const Divider = styled(MuiDivider)(spacing);
 
-const Breadcrumbs = styled(MuiBreadcrumbs)(spacing);
 
 class UserList extends React.Component {
   constructor(props) {
     super(props);
 
     this.columns = [
-      { id: "id", numeric: true, disablePadding: true, label: "id", sortable: true },
-      { id: "full_name", numeric: false, disablePadding: false, label: "name", sortable: true, f: n => n.last_name + ' ' + n.first_name },
-      { id: "full_kana", numeric: false, disablePadding: false, label: "kana", sortable: true, f: n => n.last_name_kana + ' ' + n.first_name_kana },
-      { id: "nickname", numeric: false, disablePadding: false, label: "nickname", sortable: true },
-      { id: "email", numeric: false, disablePadding: false, label: "email", sortable: true },
-      { id: "sex", numeric: false, disablePadding: false, label: "sex", sortable: true },
-      { id: "birthday", numeric: false, disablePadding: false, label: "birthday", sortable: true },
+      { id: "id", numeric: true, disablePadding: true, label: i18next.attr('user', 'id'), sortable: true },
+      { id: "full_name", numeric: false, disablePadding: false, label: i18next.attr('user', 'name'), sortable: true, f: n => n.last_name + ' ' + n.first_name },
+      { id: "full_kana", numeric: false, disablePadding: false, label: i18next.attr('user', 'kana'), sortable: true, f: n => n.last_name_kana + ' ' + n.first_name_kana },
+      { id: "nickname", numeric: false, disablePadding: false, label: i18next.attr('user', 'nickname'), sortable: true },
+      { id: "email", numeric: false, disablePadding: false, label: i18next.attr('user', 'email'), sortable: true },
+      { id: "sex", numeric: false, disablePadding: false, label: i18next.attr('user', 'sex'), sortable: true },
+      { id: "birthday", numeric: false, disablePadding: false, label: i18next.attr('user', 'birthday'), sortable: true },
       { id: "id", numeric: false, search: false, disablePadding: false, sortable: false,
         component: (<EditIcon className="fa fa-plus-circle" />), props: (n) => ({ onClick: this.openUserEditForm(n) }) },
     ];
@@ -83,7 +78,6 @@ class UserList extends React.Component {
       let response = await fetch(url, {method: 'GET', headers});
       if (response.ok) {
         let json = await response.json();
-        console.log(json);
         this.setState({data: json.users});
       } else {
         alert("データの取得に失敗しました。(" + response.status + ' ' + response.statusText + ')');
