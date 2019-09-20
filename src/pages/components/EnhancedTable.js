@@ -59,7 +59,6 @@ function desc(a, b, orderCol) {
 }
 
 function filterDate(array, search, columns, exact) {
-  console.log(columns);
   if(search) {
     return array.filter(n => columns.some(c => {
       let v = String(val(n, c));
@@ -214,6 +213,7 @@ export default class EnhancedTable extends React.Component {
     };
 
     this.handleChange = this.handleChange.bind(this);
+    this.handleChangeSearch = this.handleChangeSearch.bind(this);
   }
 
   handleRequestSort = (event, property) => {
@@ -261,6 +261,10 @@ export default class EnhancedTable extends React.Component {
     this.setState({ [event.target.name]: event.target.value });
   };
 
+  handleChangeSearch = event => {
+    this.setState({ search: event.target.value, page: 0 });
+  };
+
   clickCheckbox = event => {
     this.setState({ [event.target.name]: !this.state[event.target.name] });
   };
@@ -291,7 +295,7 @@ export default class EnhancedTable extends React.Component {
               <Grid item md={4}>
                 <FormControl fullWidth>
                   <InputLabel htmlFor="search">Search</InputLabel>
-                  <Input id="search" name="search" defaultValue="" placeholder="Search word" onChange={this.handleChange} />
+                  <Input id="search" name="search" defaultValue="" placeholder="Search word" onChange={this.handleChangeSearch} />
                 </FormControl>
               </Grid>
               <Grid item md={2}>
