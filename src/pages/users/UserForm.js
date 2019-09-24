@@ -19,6 +19,7 @@ import axios from 'axios'
 import i18next from 'i18next'
 
 import env from "../../environment";
+import { str } from '../../tools/str';
 import CustomizedSnackbar from "../components/CustomizedSnackbar";
 
 
@@ -124,7 +125,7 @@ class UserForm extends React.Component {
         open={open}
         onClose={onClose}
       >
-        <DialogTitle id="simple-dialog-title">{String(data.last_name) + String(data.first_name)}</DialogTitle>
+        <DialogTitle id="simple-dialog-title">{str(data.last_name) + str(data.first_name)}</DialogTitle>
         <DialogContent>
           { (Object.keys(this.state.errors).length > 0) ?
             (<CustomizedSnackbar
@@ -146,7 +147,7 @@ class UserForm extends React.Component {
                 <Input
                   name="last_name"
                   defaultValue=""
-                  value={ String(data.last_name) } p
+                  value={ str(data.last_name) } p
                   onChange={this.handleChange}
                   error={this.state.errors.last_name}
                 />
@@ -158,7 +159,7 @@ class UserForm extends React.Component {
                 <Input
                   name="first_name"
                   defaultValue=""
-                  value={ String(data.first_name) }
+                  value={ str(data.first_name) }
                   onChange={this.handleChange}
                   error={this.state.errors.first_name}
                 />
@@ -170,7 +171,7 @@ class UserForm extends React.Component {
           <FormControl fullWidth mb={3}>
             <InputLabel htmlFor="sex">{ i18next.attr('user', 'sex') }</InputLabel>
             <Select
-              value={ String(data.sex) }
+              value={ str(data.sex) }
               onChange={this.handleChange}
               inputProps={{
                 name: "sex",
@@ -192,7 +193,7 @@ class UserForm extends React.Component {
               name="email"
               type="email"
               defaultValue=""
-              value={ String(data.email) } p
+              value={ str(data.email) } p
               onChange={this.handleChange}
               error={this.state.errors.email}
             />
@@ -203,7 +204,7 @@ class UserForm extends React.Component {
             <Input
               name="nickname"
               defaultValue=""
-              value={ String(data.nickname) } p
+              value={ str(data.nickname) } p
               onChange={this.handleChange}
               error={this.state.errors.nickname}
             />
@@ -215,7 +216,7 @@ class UserForm extends React.Component {
               label={ i18next.attr('user', 'birthday') }
               type="date"
               defaultValue=""
-              value={ String(data.birthday) } p
+              value={ str(data.birthday) } p
               onChange={this.handleChange}
               InputLabelProps={{
                 shrink: true
@@ -230,7 +231,7 @@ class UserForm extends React.Component {
               label={ i18next.attr('user', 'bio') }
               multiline
               rowsMax="4"
-              value={ String(data.bio) }
+              value={ str(data.bio) }
               onChange={this.handleChange}
               m={2}
               error={this.state.errors.bio}
@@ -243,7 +244,7 @@ class UserForm extends React.Component {
               name="password"
               defaultValue=""
               type="password"
-              value={ String(data.password) }
+              value={ str(data.password) }
               onChange={this.handleChange}
               error={this.state.errors.password}
             />
@@ -255,7 +256,7 @@ class UserForm extends React.Component {
               name="password_confirmation"
               defaultValue=""
               type="password"
-              value={ String(data.password_confirmation) }
+              value={ str(data.password_confirmation) }
               onChange={this.handleChange}
               error={this.state.errors.password_confirmation}
             />

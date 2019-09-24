@@ -17,6 +17,7 @@ import i18next from 'i18next'
 
 import { logout } from "../../redux/actions/sessionActions";
 import env from '../../environment';
+import { str } from '../../tools/str';
 import EnhancedTable from "../components/EnhancedTable";
 import UserForm from "./UserForm";
 
@@ -28,7 +29,7 @@ class UserList extends React.Component {
     super(props);
 
     this.columns = [
-      { id: "id", numeric: true, disablePadding: true, label: i18next.attr('user', 'id'), sortable: true },
+      { id: "id", numeric: true, disablePadding: true, label: i18next.attr('user', 'id'), sortable: true, f: n => str(n.id, '', '0', 5) },
       { id: "full_name", numeric: false, disablePadding: false, label: i18next.attr('user', 'name'), sortable: true, f: n => n.last_name + ' ' + n.first_name },
       { id: "full_kana", numeric: false, disablePadding: false, label: i18next.attr('user', 'kana'), sortable: true, f: n => n.last_name_kana + ' ' + n.first_name_kana },
       { id: "nickname", numeric: false, disablePadding: false, label: i18next.attr('user', 'nickname'), sortable: true },
