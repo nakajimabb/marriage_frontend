@@ -11,9 +11,12 @@ import {
 
 import { spacing } from "@material-ui/system";
 
-import { Edit as EditIcon, AddCircleOutlineSharp as AddIcon } from '@material-ui/icons';
+import Fab from '@material-ui/core/Fab';
+import IconButton from '@material-ui/core/IconButton';
+import { Edit as EditIcon, AddOutlined as AddIcon, DeleteSharp as DeleteIcon } from '@material-ui/icons';
 
 import i18next from 'i18next'
+import axios from 'axios'
 
 import { logout } from "../../redux/actions/sessionActions";
 import env from '../../environment';
@@ -36,11 +39,13 @@ class UserList extends React.Component {
       { id: "email", numeric: false, disablePadding: false, label: i18next.attr('user', 'email'), sortable: true },
       { id: "sex", numeric: false, disablePadding: false, label: i18next.attr('user', 'sex'), sortable: true },
       { id: "birthday", numeric: false, disablePadding: false, label: i18next.attr('user', 'birthday'), sortable: true },
-      { id: "id", numeric: false, search: false, disablePadding: false, sortable: false,
-        component: (<EditIcon className="fa fa-plus-circle" />), props: (n) => ({ onClick: this.openUserEditForm(n) }) },
+      { id: "id", numeric: false, search: false, disablePadding: true, sortable: false,
+        component: (<IconButton size="small"><EditIcon fontSize="small" /></IconButton>), props: (n) => ({ onClick: this.openUserEditForm(n) }) },
+      { id: "id", numeric: false, search: false, disablePadding: true, sortable: false,
+        component: (<IconButton size="small"><DeleteIcon fontSize="small" /></IconButton>), props: (n) => ({ onClick: this.destroyUser(n) }) },
     ];
     this.submenus = [
-      { component: (<AddIcon style={{ fontSize: 36 }} />), props: ({ onClick: this.openUserNewForm }) },
+      { component: (<Fab size="small"><AddIcon style={{ fontSize: 36 }}/></Fab>), props: ({ onClick: this.openUserNewForm }) },
     ];
 
     this.state = {
@@ -52,6 +57,7 @@ class UserList extends React.Component {
     this.updateList = this.updateList.bind(this);
     this.openUserNewForm = this.openUserNewForm.bind(this);
     this.openUserEditForm = this.openUserEditForm.bind(this);
+    this.destroyUser = this.destroyUser.bind(this);
   }
 
   componentDidMount() {
@@ -64,6 +70,24 @@ class UserList extends React.Component {
 
   openUserEditForm = (n) => () => {
     this.setState({open: true, user_id: n.id});
+  };
+
+  destroyUser = (n) => () => {
+    if(window.confirm(i18next.t('message.confirm_delete'))) {
+      const { session } = this.props;
+      const { data } = this.state;
+      const headers  = session.headers;
+      if(headers && headers['access-token'] && headers['client'] && headers['uid']) {
+        const url = env.API_ORIGIN + 'api/users/' + n.id;
+        axios.delete(url, {headers})
+          .then((results) => {
+            this.setState({ data: data.filter(user => user.id != n.id) });
+          })
+          .catch((data) => {
+            alert('データの削除に失敗しました。');
+          });
+      }
+    }
   };
 
   closeUserForm = () => {
