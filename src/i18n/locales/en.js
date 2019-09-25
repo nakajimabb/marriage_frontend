@@ -1,4 +1,4 @@
 import merge from 'deepmerge'
-import en2 from './en/en.yml';
+import user from './en/user.yml';
 
-export const en = merge.all([en2]).en;
+export const en = merge.all([user]).en;

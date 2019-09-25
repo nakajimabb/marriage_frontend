@@ -56,7 +56,7 @@ class UserForm extends React.Component {
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     const { open, user_id } = this.props;
-    if(open && user_id != this.state.user_id) {
+    if(open && user_id !== this.state.user_id) {
       if(user_id) {
         this.showUser(this.props.user_id);
       } else {
@@ -79,7 +79,6 @@ class UserForm extends React.Component {
       const url = env.API_ORIGIN + 'api/users/' + user_id;
       axios.get(url, {headers})
       .then((results) => {
-        console.log(results);
         this.setState({user_id: user_id, data: results.data.user, errors: {}});
       })
       .catch((data) => {
@@ -108,6 +107,7 @@ class UserForm extends React.Component {
 
       promise
       .then((results) => {
+        this.setState({errors: {}});
         onClose();
       })
       .catch((data) => {
@@ -124,6 +124,8 @@ class UserForm extends React.Component {
       <Dialog
         open={open}
         onClose={onClose}
+        disableBackdropClick={ true }
+        disableEscapeKeyDown={ true }
       >
         <DialogTitle id="simple-dialog-title">{str(data.last_name) + str(data.first_name)}</DialogTitle>
         <DialogContent>
@@ -147,7 +149,7 @@ class UserForm extends React.Component {
                 <Input
                   name="last_name"
                   defaultValue=""
-                  value={ str(data.last_name) } p
+                  value={ str(data.last_name) }
                   onChange={this.handleChange}
                   error={this.state.errors.last_name}
                 />
@@ -192,8 +194,9 @@ class UserForm extends React.Component {
             <Input
               name="email"
               type="email"
+              autoComplete="off"
               defaultValue=""
-              value={ str(data.email) } p
+              value={ str(data.email) }
               onChange={this.handleChange}
               error={this.state.errors.email}
             />
@@ -203,8 +206,9 @@ class UserForm extends React.Component {
             <InputLabel htmlFor="nickname">{ i18next.attr('user', 'nickname') }</InputLabel>
             <Input
               name="nickname"
+              autoComplete="off"
               defaultValue=""
-              value={ str(data.nickname) } p
+              value={ str(data.nickname) }
               onChange={this.handleChange}
               error={this.state.errors.nickname}
             />
@@ -216,7 +220,7 @@ class UserForm extends React.Component {
               label={ i18next.attr('user', 'birthday') }
               type="date"
               defaultValue=""
-              value={ str(data.birthday) } p
+              value={ str(data.birthday) }
               onChange={this.handleChange}
               InputLabelProps={{
                 shrink: true
@@ -265,10 +269,10 @@ class UserForm extends React.Component {
         </DialogContent>
         <DialogActions>
           <Button onClick={onClose} color="primary">
-            Cancel
+            { i18next.t('dict.cancel') }
           </Button>
           <Button onClick={this.onSave} color="primary">
-            Save
+            { i18next.t('dict.save') }
           </Button>
         </DialogActions>
       </Dialog>

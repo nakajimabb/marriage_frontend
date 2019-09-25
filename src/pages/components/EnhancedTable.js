@@ -28,6 +28,7 @@ import {
 } from "@material-ui/icons";
 
 import { spacing } from "@material-ui/system";
+import i18next from 'i18next'
 
 const Card = styled(MuiCard)(spacing);
 
@@ -62,7 +63,7 @@ function filterDate(array, search, columns, exact) {
   if(search) {
     return array.filter(n => columns.some(c => {
       let v = String(val(n, c));
-      return exact ? (v == search) : ~v.indexOf(search);
+      return exact ? (v === search) : ~v.indexOf(search);
     }));
   } else {
     return array;
@@ -294,7 +295,7 @@ export default class EnhancedTable extends React.Component {
             <Grid container spacing={6} >
               <Grid item md={4}>
                 <FormControl fullWidth>
-                  <InputLabel htmlFor="search">Search</InputLabel>
+                  <InputLabel htmlFor="search">{ i18next.t('dict.search') }</InputLabel>
                   <Input id="search" name="search" defaultValue="" placeholder="Search word" onChange={this.handleChangeSearch} />
                 </FormControl>
               </Grid>
@@ -308,7 +309,7 @@ export default class EnhancedTable extends React.Component {
                         onClick={this.clickCheckbox}
                       />
                     }
-                    label="exact"
+                    label={ i18next.t('dict.exact') }
                   />
                 </FormControl>
               </Grid>

@@ -30,8 +30,8 @@ class UserList extends React.Component {
 
     this.columns = [
       { id: "id", numeric: true, disablePadding: true, label: i18next.attr('user', 'id'), sortable: true, f: n => str(n.id, '', '0', 5) },
-      { id: "full_name", numeric: false, disablePadding: false, label: i18next.attr('user', 'name'), sortable: true, f: n => n.last_name + ' ' + n.first_name },
-      { id: "full_kana", numeric: false, disablePadding: false, label: i18next.attr('user', 'kana'), sortable: true, f: n => n.last_name_kana + ' ' + n.first_name_kana },
+      { id: "full_name", numeric: false, disablePadding: false, label: i18next.attr('user', 'name'), sortable: true, f: n => str(n.last_name) + ' ' + str(n.first_name) },
+      { id: "full_kana", numeric: false, disablePadding: false, label: i18next.attr('user', 'kana'), sortable: true, f: n => str(n.last_name_kana) + ' ' + str(n.first_name_kana) },
       { id: "nickname", numeric: false, disablePadding: false, label: i18next.attr('user', 'nickname'), sortable: true },
       { id: "email", numeric: false, disablePadding: false, label: i18next.attr('user', 'email'), sortable: true },
       { id: "sex", numeric: false, disablePadding: false, label: i18next.attr('user', 'sex'), sortable: true },
@@ -95,7 +95,7 @@ class UserList extends React.Component {
       <React.Fragment>
         <UserForm user_id={this.state.user_id} open={this.state.open} onClose={this.closeUserForm} />
         <Typography variant="h3" gutterBottom display="inline">
-          User List
+          { i18next.t('activerecord.models.user') } { i18next.t('dict.list') }
         </Typography>
 
         <Divider my={6} />
