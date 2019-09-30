@@ -72,7 +72,7 @@ class SignIn extends Component {
     return (
       <Wrapper>
         <Typography component="h1" variant="h1" align="center" gutterBottom>
-          Marriage
+          Special4
         </Typography>
         <Typography component="h2" variant="body1" align="center">
           Sign in to your account to continue

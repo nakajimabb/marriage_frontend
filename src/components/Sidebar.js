@@ -73,10 +73,10 @@ const Brand = styled(ListItem)`
   }
 `;
 
-const BrandIcon = styled(Layers)`
-  margin-right: ${props => props.theme.spacing(2)}px;
-  color: ${props => props.theme.sidebar.header.brand.color};
-`;
+// const BrandIcon = styled(Layers)`
+//   margin-right: ${props => props.theme.spacing(2)}px;
+//   color: ${props => props.theme.sidebar.header.brand.color};
+// `;
 
 const Category = styled(ListItem)`
   padding-top: ${props => props.theme.spacing(3)}px;
@@ -291,7 +291,8 @@ class Sidebar extends React.Component {
     return (
       <Drawer variant="permanent" {...other}>
         <Brand>
-          <BrandIcon /> <Box ml={1}>Material App</Box>
+          <Avatar src="/logo.png" style={{ borderRadius: 0 }} />&nbsp;
+          <Box ml={1}>Special4</Box>
         </Brand>
         <Scrollbar>
           <List disablePadding>
