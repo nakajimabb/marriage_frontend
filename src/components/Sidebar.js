@@ -273,8 +273,9 @@ class Sidebar extends React.Component {
   componentWillMount() {
     /* Open collapse element that matches current url */
     const pathName = this.props.location.pathname;
+    const { session } = this.props;
 
-    routes.forEach((route, index) => {
+    routes(session.roles).forEach((route, index) => {
       const isActive = pathName.indexOf(route.path) === 0;
       const isOpen = route.open;
       const isHome = route.containsHome && pathName === "/" ? true : false;
@@ -297,7 +298,7 @@ class Sidebar extends React.Component {
         <Scrollbar>
           <List disablePadding>
             <Items>
-              {routes.map((category, index) => (
+              {routes(session.roles).map((category, index) => (
                 <React.Fragment key={index}>
                   {category.header ? (
                     <SidebarSection variant="caption">
