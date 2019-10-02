@@ -119,7 +119,7 @@ class UserList extends React.Component {
       <React.Fragment>
         <UserForm user_id={this.state.user_id} open={this.state.open} onClose={this.closeUserForm} />
         <Typography variant="h3" gutterBottom display="inline">
-          { i18next.t('activerecord.models.user') } { i18next.t('dict.list') }
+          { i18next.model('user') } { i18next.t('dict.list') }
         </Typography>
 
         <Divider my={6} />

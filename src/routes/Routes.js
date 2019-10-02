@@ -1,11 +1,11 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { dashboard as dashboardRoutes, auth as authRoutes } from "./index";
-
+import { HashRouter as Router, Route, Switch } from "react-router-dom";
+import { getRoutes, authRoutes } from "./index";
 import DashboardLayout from "../layouts/Dashboard";
 import AuthLayout from "../layouts/Auth";
 import Page404 from "../pages/auth/Page404";
 import AuthGuard from "../components/AuthGuard";
+import {connect} from "react-redux";
 
 const childRoutes = (Layout, routes) =>
   routes.map(({ children, path, component: Component }, index) =>
@@ -38,24 +38,28 @@ const childRoutes = (Layout, routes) =>
     )
   );
 
-const Routes = (props) => (
-  <Router>
-    <Switch>
-      {childRoutes(AuthLayout, authRoutes)}
-    </Switch>
-    <AuthGuard props={props}>
+const Routes = (props) => {
+  const { session } = props;
+  const routes = getRoutes(session.roles);
+  return (
+    <Router>
       <Switch>
-        {childRoutes(DashboardLayout, dashboardRoutes)}
-        <Route
-          render={() => (
-            <AuthLayout>
-              <Page404 />
-            </AuthLayout>
-          )}
-        />
+        {childRoutes(AuthLayout, [authRoutes])}
       </Switch>
-    </AuthGuard>
-  </Router>
-);
+      <AuthGuard props={props}>
+        <Switch>
+          {childRoutes(DashboardLayout, routes)}
+          <Route
+            render={() => (
+              <AuthLayout>
+                <Page404/>
+              </AuthLayout>
+            )}
+          />
+        </Switch>
+      </AuthGuard>
+    </Router>
+  );
+};
 
-export default Routes;
+export default connect(store => ({ session: store.sessionReducer  }))(Routes);

@@ -1,4 +1,5 @@
 import React from "react";
+import i18next from '../i18n'
 
 import async from "../components/Async";
 
@@ -7,6 +8,7 @@ import {
   CheckSquare,
   Grid,
   Heart,
+  Key,
   Layout,
   List,
   Users
@@ -98,62 +100,6 @@ const pagesRoutes = {
       path: "/pages/blank",
       name: "Blank Page",
       component: Blank
-    }
-  ]
-};
-
-const usersRoutes = {
-  id: "Users",
-  path: "/users",
-  icon: <Layout />,
-  children: [
-    {
-      path: "/users",
-      name: "List",
-      component: UserList
-    },
-    {
-      path: "/users/new",
-      name: "new",
-      component: UserForm
-    },
-    {
-      path: "/users/:id/edit",
-      name: "edit",
-      component: UserForm
-    },
-  ]
-};
-
-const authRoutes = {
-  id: "Auth",
-  path: "/auth",
-  icon: <Users />,
-  children: [
-    {
-      path: "/auth/sign-in",
-      name: "Sign In",
-      component: SignIn
-    },
-    {
-      path: "/auth/sign-up",
-      name: "Sign Up",
-      component: SignUp
-    },
-    {
-      path: "/auth/reset-password",
-      name: "Reset Password",
-      component: ResetPassword
-    },
-    {
-      path: "/auth/404",
-      name: "404 Page",
-      component: Page404
-    },
-    {
-      path: "/auth/500",
-      name: "500 Page",
-      component: Page500
     }
   ]
 };
@@ -307,26 +253,64 @@ const privateRoutes = {
   children: null
 };
 
-export const dashboard = [
-  usersRoutes,
-  pagesRoutes,
-  documentationRoutes,
-  componentsRoutes,
-  formsRoutes,
-  tablesRoutes,
-  iconsRoutes,
-  privateRoutes
-];
+const adminRoutes = {
+  id: i18next.t('dict.admin') + i18next.t('dict.tool'),
+  path: "/users",
+  icon: <Key />,
+  children: [
+    {
+      path: "/users",
+      name: i18next.model('user') + i18next.t('dict.list'),
+      component: UserList
+    },
+  ]
+};
 
-export const auth = [authRoutes];
+export const authRoutes = {
+  id: "Auth",
+  path: "/auth",
+  icon: <Users />,
+  children: [
+    {
+      path: "/auth/sign-in",
+      name: "Sign In",
+      component: SignIn
+    },
+    {
+      path: "/auth/sign-up",
+      name: "Sign Up",
+      component: SignUp
+    },
+    {
+      path: "/auth/reset-password",
+      name: "Reset Password",
+      component: ResetPassword
+    },
+    {
+      path: "/auth/404",
+      name: "404 Page",
+      component: Page404
+    },
+    {
+      path: "/auth/500",
+      name: "500 Page",
+      component: Page500
+    }
+  ]
+};
 
-export default [
-  usersRoutes,
-  pagesRoutes,
-  authRoutes,
-  documentationRoutes,
-  componentsRoutes,
-  formsRoutes,
-  tablesRoutes,
-  iconsRoutes,
-];
+export const getRoutes = (roles) => {
+  let routes = [documentationRoutes];
+  if(roles && ~roles.indexOf('admin'))
+    routes.push(adminRoutes);
+
+  return routes;
+};
+
+export default (roles) => {
+  let routes = [documentationRoutes];
+  if(roles && ~roles.indexOf('admin'))
+    routes.push(adminRoutes);
+
+  return routes;
+};

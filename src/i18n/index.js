@@ -19,5 +19,6 @@ i18next.init({
 
 i18next.attr = (...args) => i18next.t('activerecord.attributes.' + args.join('.'));
 i18next.enum = (...args) => i18next.t('enum.' + args.join('.'));
+i18next.model = (...args) => i18next.t('activerecord.models.' + args.join('.'));
 
 export default i18next;

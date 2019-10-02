@@ -4,7 +4,8 @@ import * as types from '../constants';
 const initialState = {
   loggedIn: false,
   headers: null,
-  user: {}
+  user: {},
+  roles: []
 };
 
 export default function reducer(state=initialState, actions) {

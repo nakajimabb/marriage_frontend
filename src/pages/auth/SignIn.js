@@ -61,7 +61,10 @@ class SignIn extends Component {
         'uid': response.headers.get('uid'),
       };
       let json = await response.json();
-      dispatch(login({headers, user: json.data}));
+      const user = json.data;
+      let roles = [];
+      if(user.admin) roles.push('admin');
+      dispatch(login({headers, user, roles}));
       history.push('/');
     } else {
       alert("ログインに失敗しました。(" + response.status + ' ' + response.statusText + ')');
