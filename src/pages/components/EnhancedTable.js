@@ -28,7 +28,7 @@ import {
 } from "@material-ui/icons";
 
 import { spacing } from "@material-ui/system";
-import i18next from 'i18next'
+import i18next from 'i18n'
 
 const Card = styled(MuiCard)(spacing);
 

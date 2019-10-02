@@ -1,4 +1,8 @@
 import React from "react";
+import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+import axios from 'axios'
+
 import {
   Button,
   Dialog,
@@ -13,14 +17,11 @@ import {
   TextField,
   Input
 } from "@material-ui/core";
-import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
-import axios from 'axios'
-import i18next from 'i18next'
 
-import env from "../../environment";
-import { str } from '../../tools/str';
-import CustomizedSnackbar from "../components/CustomizedSnackbar";
+import i18next from 'i18n'
+import env from "environment";
+import { str } from 'helpers/str';
+import CustomizedSnackbar from "pages/components/CustomizedSnackbar";
 
 
 const collectErrors = (response) => {

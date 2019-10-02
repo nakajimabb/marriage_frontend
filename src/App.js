@@ -7,9 +7,9 @@ import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { StylesProvider } from "@material-ui/styles";
 import { ThemeProvider } from "styled-components";
 
-import maTheme from "./theme";
-import Routes from "./routes/Routes";
-import i18next from './i18n/index'
+import maTheme from "theme";
+import Routes from "routes/Routes";
+import 'i18n'
 
 function App({ theme }) {
   return (

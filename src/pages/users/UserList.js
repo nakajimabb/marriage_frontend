@@ -2,30 +2,23 @@ import React from "react";
 import styled from "styled-components";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-
-import {
-  Grid,
-  Divider as MuiDivider,
-  Typography
-} from "@material-ui/core";
-
-import { spacing } from "@material-ui/system";
-
-import Fab from '@material-ui/core/Fab';
-import IconButton from '@material-ui/core/IconButton';
-import { Edit as EditIcon, AddOutlined as AddIcon, DeleteSharp as DeleteIcon } from '@material-ui/icons';
-
-import i18next from 'i18next'
 import axios from 'axios'
 
-import { logout } from "../../redux/actions/sessionActions";
-import env from '../../environment';
-import { str } from '../../tools/str';
-import EnhancedTable from "../components/EnhancedTable";
+import { Grid, Divider as MuiDivider, Typography } from "@material-ui/core";
+import { Edit as EditIcon, AddOutlined as AddIcon, DeleteSharp as DeleteIcon } from '@material-ui/icons';
+import Fab from '@material-ui/core/Fab';
+import IconButton from '@material-ui/core/IconButton';
+import { spacing } from "@material-ui/system";
+
+import i18next from 'i18n'
+import { logout } from "redux/actions/sessionActions";
+import env from 'environment';
+import { str } from 'helpers';
+import EnhancedTable from "pages/components/EnhancedTable";
 import UserForm from "./UserForm";
 
-const Divider = styled(MuiDivider)(spacing);
 
+const Divider = styled(MuiDivider)(spacing);
 
 class UserList extends React.Component {
   constructor(props) {
@@ -81,7 +74,7 @@ class UserList extends React.Component {
         const url = env.API_ORIGIN + 'api/users/' + n.id;
         axios.delete(url, {headers})
           .then((results) => {
-            this.setState({ data: data.filter(user => user.id != n.id) });
+            this.setState({ data: data.filter(user => user.id !== n.id) });
           })
           .catch((data) => {
             alert('データの削除に失敗しました。');
