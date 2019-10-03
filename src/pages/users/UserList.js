@@ -110,7 +110,11 @@ class UserList extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <UserForm user_id={this.state.user_id} open={this.state.open} onClose={this.closeUserForm} />
+        { (() => {
+          if (this.state.open)
+            return (<UserForm user_id={this.state.user_id} open={this.state.open} onClose={this.closeUserForm}/>);
+          })()
+        }
         <Typography variant="h3" gutterBottom display="inline">
           { i18next.model('user') } { i18next.t('dict.list') }
         </Typography>

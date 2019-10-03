@@ -15,12 +15,12 @@ import {
   MenuItem,
   Select,
   TextField,
-  Input
+  Input, Avatar
 } from "@material-ui/core";
 
 import i18next from 'i18n'
 import env from "environment";
-import { str, collectErrors } from 'helpers';
+import { str, collectErrors, createFormData } from 'helpers';
 import CustomizedSnackbar from "pages/components/CustomizedSnackbar";
 
 
@@ -33,20 +33,19 @@ class UserForm extends React.Component {
       user: {},
       errors: {},
     };
+    this.avatar = React.createRef();
 
     this.handleChange = this.handleChange.bind(this);
     this.showUser = this.showUser.bind(this);
     this.onSave = this.onSave.bind(this);
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    const { open, user_id } = this.props;
-    if(open && user_id !== this.state.user_id) {
-      if(user_id) {
-        this.showUser(this.props.user_id);
-      } else {
-        this.setState({user_id: null, user: {}, errors: {}});
-      }
+  componentDidMount() {
+    const { user_id } = this.props;
+    if(user_id) {
+      this.showUser(this.props.user_id);
+    } else {
+      this.setState({user_id: null, user: {}, errors: {}});
     }
   }
 
@@ -84,12 +83,17 @@ class UserForm extends React.Component {
       if(user_id) url += user_id;
 
       let promise;
-      let body = { user };
+      let user_params = createFormData(user, 'user');
+
+      const avatar = document.getElementById('avatar');
+      if(avatar.files.length > 0) {
+        user_params.append('user[avatar]', avatar.files[0]);
+      }
 
       if(user_id) {
-        promise = axios.patch(url, body, { headers });
+        promise = axios.patch(url, user_params, { headers });
       } else {
-        promise = axios.post(url, body, { headers });
+        promise = axios.post(url, user_params, { headers });
       }
 
       promise
@@ -128,6 +132,28 @@ class UserForm extends React.Component {
               }
             />) : null
           }
+
+          <Grid
+            container
+            spacing={0}
+            direction="column"
+            alignItems="center"
+            justify="center"
+          >
+            <Avatar
+              alt={ str(user.nickname) }
+              src={ user.avatar_url }
+              style={ {width: 160, height: 160} }
+            />
+            <FormControl fullWidth >
+              <input
+                id="avatar"
+                name="avatar"
+                type="file"
+                ref={ this.avatar }
+              />
+            </FormControl>
+          </Grid>
 
           <Grid container spacing={6}>
             <Grid item md={6}>

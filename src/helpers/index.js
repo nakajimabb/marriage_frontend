@@ -1,2 +1,2 @@
 export { str } from './str'
-export { collectErrors } from './rails_form'
+export { createFormData, collectErrors } from './rails_form'
