@@ -20,25 +20,9 @@ import {
 
 import i18next from 'i18n'
 import env from "environment";
-import { str } from 'helpers/str';
+import { str, collectErrors } from 'helpers';
 import CustomizedSnackbar from "pages/components/CustomizedSnackbar";
 
-
-const collectErrors = (response) => {
-  let errors = {};
-  if (response.status === 500) {
-    const data_errors = response.data.errors;
-    const fields = Object.keys(data_errors);
-    fields.forEach(field => {
-      data_errors[field].forEach(message => {
-        errors[field] = i18next.attr('user', field) + message;
-      })
-    });
-  } else {
-    errors.base = response.status + ' ' + response.statusText;
-  }
-  return errors
-};
 
 class UserForm extends React.Component {
   constructor(props) {
@@ -46,7 +30,7 @@ class UserForm extends React.Component {
 
     this.state = {
       user_id: null,
-      data: {},
+      user: {},
       errors: {},
     };
 
@@ -61,15 +45,15 @@ class UserForm extends React.Component {
       if(user_id) {
         this.showUser(this.props.user_id);
       } else {
-        this.setState({user_id: null, data: {}, errors: {}});
+        this.setState({user_id: null, user: {}, errors: {}});
       }
     }
   }
 
   handleChange = event => {
-    let data = Object.assign({}, this.state.data);
-    data[event.target.name] = event.target.value;
-    this.setState({ data });
+    let user = Object.assign({}, this.state.user);
+    user[event.target.name] = event.target.value;
+    this.setState({ user });
   };
 
   showUser = async (user_id) =>  {
@@ -80,7 +64,9 @@ class UserForm extends React.Component {
       const url = env.API_ORIGIN + 'api/users/' + user_id;
       axios.get(url, {headers})
       .then((results) => {
-        this.setState({user_id: user_id, data: results.data.user, errors: {}});
+        let user = results.data.user;
+        user.password = user.password_confirmation = '';
+        this.setState({user_id, user, errors: {}});
       })
       .catch((data) => {
         alert('データの取得に失敗しました。');
@@ -90,16 +76,16 @@ class UserForm extends React.Component {
 
   onSave = async () => {
     const { session, onClose } = this.props;
-    const { user_id, data } = this.state;
-
+    const { user_id, user } = this.state;
     const headers  = session.headers;
-    let body = {user: data};
 
     if(headers && headers['access-token'] && headers['client'] && headers['uid']) {
       let url = env.API_ORIGIN + 'api/users/';
       if(user_id) url += user_id;
 
       let promise;
+      let body = { user };
+
       if(user_id) {
         promise = axios.patch(url, body, { headers });
       } else {
@@ -119,7 +105,7 @@ class UserForm extends React.Component {
 
   render() {
     const { open, onClose } = this.props;
-    const { data } = this.state;
+    const { user } = this.state;
 
     return (
       <Dialog
@@ -128,7 +114,7 @@ class UserForm extends React.Component {
         disableBackdropClick={ true }
         disableEscapeKeyDown={ true }
       >
-        <DialogTitle id="simple-dialog-title">{str(data.last_name) + str(data.first_name)}</DialogTitle>
+        <DialogTitle id="simple-dialog-title">{str(user.last_name) + str(user.first_name)}</DialogTitle>
         <DialogContent>
           { (Object.keys(this.state.errors).length > 0) ?
             (<CustomizedSnackbar
@@ -149,8 +135,9 @@ class UserForm extends React.Component {
                 <InputLabel htmlFor="name">{ i18next.attr('user', 'last_name') }</InputLabel>
                 <Input
                   name="last_name"
+                  autoComplete="off"
                   defaultValue=""
-                  value={ str(data.last_name) }
+                  value={ str(user.last_name) }
                   onChange={this.handleChange}
                   error={this.state.errors.last_name}
                 />
@@ -161,8 +148,9 @@ class UserForm extends React.Component {
                 <InputLabel htmlFor="name">{ i18next.attr('user', 'first_name') }</InputLabel>
                 <Input
                   name="first_name"
+                  autoComplete="off"
                   defaultValue=""
-                  value={ str(data.first_name) }
+                  value={ str(user.first_name) }
                   onChange={this.handleChange}
                   error={this.state.errors.first_name}
                 />
@@ -174,7 +162,7 @@ class UserForm extends React.Component {
           <FormControl fullWidth mb={3}>
             <InputLabel htmlFor="sex">{ i18next.attr('user', 'sex') }</InputLabel>
             <Select
-              value={ str(data.sex) }
+              value={ str(user.sex) }
               onChange={this.handleChange}
               inputProps={{
                 name: "sex",
@@ -197,7 +185,7 @@ class UserForm extends React.Component {
               type="email"
               autoComplete="off"
               defaultValue=""
-              value={ str(data.email) }
+              value={ str(user.email) }
               onChange={this.handleChange}
               error={this.state.errors.email}
             />
@@ -209,7 +197,7 @@ class UserForm extends React.Component {
               name="nickname"
               autoComplete="off"
               defaultValue=""
-              value={ str(data.nickname) }
+              value={ str(user.nickname) }
               onChange={this.handleChange}
               error={this.state.errors.nickname}
             />
@@ -220,8 +208,9 @@ class UserForm extends React.Component {
               name="birthday"
               label={ i18next.attr('user', 'birthday') }
               type="date"
+              autoComplete="off"
               defaultValue=""
-              value={ str(data.birthday) }
+              value={ str(user.birthday) }
               onChange={this.handleChange}
               InputLabelProps={{
                 shrink: true
@@ -234,9 +223,10 @@ class UserForm extends React.Component {
             <TextField
               name="bio"
               label={ i18next.attr('user', 'bio') }
+              autoComplete="off"
               multiline
               rowsMax="4"
-              value={ str(data.bio) }
+              value={ str(user.bio) }
               onChange={this.handleChange}
               m={2}
               error={this.state.errors.bio}
@@ -247,9 +237,9 @@ class UserForm extends React.Component {
             <InputLabel htmlFor="password">{ i18next.attr('user', 'password') }</InputLabel>
             <Input
               name="password"
-              defaultValue=""
               type="password"
-              value={ str(data.password) }
+              autoComplete="new-password"
+              value={ str(user.password) }
               onChange={this.handleChange}
               error={this.state.errors.password}
             />
@@ -259,9 +249,9 @@ class UserForm extends React.Component {
             <InputLabel htmlFor="password_confirmation">{ i18next.attr('user', 'password_confirmation') }</InputLabel>
             <Input
               name="password_confirmation"
-              defaultValue=""
               type="password"
-              value={ str(data.password_confirmation) }
+              autoComplete="new-password"
+              value={ str(user.password_confirmation) }
               onChange={this.handleChange}
               error={this.state.errors.password_confirmation}
             />
