@@ -353,12 +353,6 @@ class Sidebar extends React.Component {
         <SidebarFooter>
           <Grid container spacing={2}>
             <Grid item>
-              <Avatar
-                alt="Lucy Lavender"
-                src="/static/img/avatars/avatar-1.jpg"
-              />
-            </Grid>
-            <Grid item>
               <SidebarFooterText variant="body2">
                 { session.user.last_name } { session.user.first_name }
               </SidebarFooterText>
