@@ -8,7 +8,6 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle,
   FormControl,
   Grid,
   InputLabel,
@@ -22,6 +21,7 @@ import i18next from 'i18n'
 import env from "environment";
 import { str, collectErrors, createFormData } from 'helpers';
 import CustomizedSnackbar from "pages/components/CustomizedSnackbar";
+import DialogTitle from "pages/components/DialogTitle";
 
 
 class UserForm extends React.Component {
@@ -32,12 +32,14 @@ class UserForm extends React.Component {
       user_id: null,
       user: {},
       errors: {},
+      fullScreen: this.props.fullScreen,
     };
     this.avatar = React.createRef();
 
     this.handleChange = this.handleChange.bind(this);
     this.showUser = this.showUser.bind(this);
     this.onSave = this.onSave.bind(this);
+    this.onResize = this.onResize.bind(this);
   }
 
   componentDidMount() {
@@ -107,9 +109,13 @@ class UserForm extends React.Component {
     }
   };
 
+  onResize = () => {
+    this.setState({fullScreen: !this.state.fullScreen});
+  };
+
   render() {
-    const { open, onClose } = this.props;
-    const { user } = this.state;
+    const { open, onClose, maxWidth } = this.props;
+    const { user, fullScreen } = this.state;
 
     return (
       <Dialog
@@ -117,8 +123,12 @@ class UserForm extends React.Component {
         onClose={onClose}
         disableBackdropClick={ true }
         disableEscapeKeyDown={ true }
+        fullScreen = { fullScreen }
+        maxWidth={ maxWidth }
       >
-        <DialogTitle id="simple-dialog-title">{str(user.last_name) + str(user.first_name)}</DialogTitle>
+        <DialogTitle fullScreen={ fullScreen } onClose={ onClose } onResize={ this.onResize } >
+          {str(user.last_name) + str(user.first_name)}
+        </DialogTitle>
         <DialogContent>
           { (Object.keys(this.state.errors).length > 0) ?
             (<CustomizedSnackbar
@@ -184,6 +194,34 @@ class UserForm extends React.Component {
             </Grid>
           </Grid>
 
+          <Grid container spacing={6}>
+            <Grid item md={6}>
+              <FormControl fullWidth mb={3}>
+                <InputLabel htmlFor="name">{ i18next.attr('user', 'last_name_kana') }</InputLabel>
+                <Input
+                  name="last_name_kana"
+                  autoComplete="off"
+                  defaultValue=""
+                  value={ str(user.last_name_kana) }
+                  onChange={this.handleChange}
+                  error={this.state.errors.last_name_kana}
+                />
+              </FormControl>
+            </Grid>
+            <Grid item md={6}>
+              <FormControl fullWidth mb={3}>
+                <InputLabel htmlFor="name">{ i18next.attr('user', 'first_name_kana') }</InputLabel>
+                <Input
+                  name="first_name_kana"
+                  autoComplete="off"
+                  defaultValue=""
+                  value={ str(user.first_name_kana) }
+                  onChange={this.handleChange}
+                  error={this.state.errors.first_name_kana}
+                />
+              </FormControl>
+            </Grid>
+          </Grid>
 
           <FormControl fullWidth mb={3}>
             <InputLabel htmlFor="sex">{ i18next.attr('user', 'sex') }</InputLabel>
