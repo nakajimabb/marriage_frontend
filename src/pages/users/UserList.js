@@ -112,7 +112,7 @@ class UserList extends React.Component {
       <React.Fragment>
         { (() => {
           if (this.state.open)
-            return (<UserForm user_id={this.state.user_id} open={this.state.open} onClose={this.closeUserForm} maxWidth="lg" />);
+            return (<UserForm user_id={this.state.user_id} open={this.state.open} onClose={this.closeUserForm} maxWidth="md" />);
           })()
         }
         <Typography variant="h3" gutterBottom display="inline">

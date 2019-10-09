@@ -10,11 +10,15 @@ import {
   DialogContent,
   FormControl,
   Grid,
+  FormControlLabel,
   InputLabel,
   MenuItem,
   Select,
   TextField,
-  Input, Avatar
+  Input,
+  Avatar,
+  Checkbox,
+  FormGroup,
 } from "@material-ui/core";
 
 import i18next from 'i18n'
@@ -37,6 +41,7 @@ class UserForm extends React.Component {
     this.avatar = React.createRef();
 
     this.handleChange = this.handleChange.bind(this);
+    this.handleChangeChecked = this.handleChangeChecked.bind(this);
     this.showUser = this.showUser.bind(this);
     this.onSave = this.onSave.bind(this);
     this.onResize = this.onResize.bind(this);
@@ -54,6 +59,12 @@ class UserForm extends React.Component {
   handleChange = event => {
     let user = Object.assign({}, this.state.user);
     user[event.target.name] = event.target.value;
+    this.setState({ user });
+  };
+
+  handleChangeChecked = event => {
+    let user = Object.assign({}, this.state.user);
+    user[event.target.name] = event.target.checked;
     this.setState({ user });
   };
 
@@ -116,6 +127,9 @@ class UserForm extends React.Component {
   render() {
     const { open, onClose, maxWidth } = this.props;
     const { user, fullScreen } = this.state;
+    const countries  = i18next.data_list('country');
+    const prefectures  = i18next.data_list('prefecture');
+    const religions  = i18next.data_list('enum', 'user', 'religion');
 
     return (
       <Dialog
@@ -165,63 +179,77 @@ class UserForm extends React.Component {
             </FormControl>
           </Grid>
 
-          <Grid container spacing={6}>
-            <Grid item md={6}>
-              <FormControl fullWidth mb={3}>
-                <InputLabel htmlFor="name">{ i18next.attr('user', 'last_name') }</InputLabel>
-                <Input
+          <FormControl fullWidth mb={3}>
+            <Grid fullWidth container spacing={4} >
+              <Grid item xs={6}>
+                <TextField
                   name="last_name"
+                  label={ i18next.attr('user', 'last_name') }
                   autoComplete="off"
                   defaultValue=""
                   value={ str(user.last_name) }
                   onChange={this.handleChange}
                   error={this.state.errors.last_name}
+                  fullWidth
                 />
-              </FormControl>
-            </Grid>
-            <Grid item md={6}>
-              <FormControl fullWidth mb={3}>
-                <InputLabel htmlFor="name">{ i18next.attr('user', 'first_name') }</InputLabel>
-                <Input
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
                   name="first_name"
+                  label={ i18next.attr('user', 'first_name') }
                   autoComplete="off"
                   defaultValue=""
                   value={ str(user.first_name) }
                   onChange={this.handleChange}
                   error={this.state.errors.first_name}
+                  fullWidth
                 />
-              </FormControl>
+              </Grid>
             </Grid>
-          </Grid>
+          </FormControl>
 
-          <Grid container spacing={6}>
-            <Grid item md={6}>
-              <FormControl fullWidth mb={3}>
-                <InputLabel htmlFor="name">{ i18next.attr('user', 'last_name_kana') }</InputLabel>
-                <Input
+          <FormControl fullWidth mb={3}>
+            <Grid fullWidth container spacing={4} >
+              <Grid item xs={6}>
+                <TextField
                   name="last_name_kana"
+                  label={ i18next.attr('user', 'last_name_kana') }
                   autoComplete="off"
                   defaultValue=""
                   value={ str(user.last_name_kana) }
                   onChange={this.handleChange}
                   error={this.state.errors.last_name_kana}
+                  fullWidth
                 />
-              </FormControl>
-            </Grid>
-            <Grid item md={6}>
-              <FormControl fullWidth mb={3}>
-                <InputLabel htmlFor="name">{ i18next.attr('user', 'first_name_kana') }</InputLabel>
-                <Input
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
                   name="first_name_kana"
+                  label={ i18next.attr('user', 'first_name_kana') }
                   autoComplete="off"
                   defaultValue=""
                   value={ str(user.first_name_kana) }
                   onChange={this.handleChange}
                   error={this.state.errors.first_name_kana}
+                  fullWidth
                 />
-              </FormControl>
+              </Grid>
             </Grid>
-          </Grid>
+          </FormControl>
+
+          <FormControl fullWidth mb={3}>
+            <TextField
+              name="email"
+              label={ i18next.attr('user', 'email') }
+              type="email"
+              autoComplete="off"
+              defaultValue=""
+              value={ str(user.email) }
+              onChange={this.handleChange}
+              error={this.state.errors.email}
+              fullWidth
+            />
+          </FormControl>
 
           <FormControl fullWidth mb={3}>
             <InputLabel htmlFor="sex">{ i18next.attr('user', 'sex') }</InputLabel>
@@ -233,6 +261,7 @@ class UserForm extends React.Component {
                 id: "user_sex"
               }}
               error={this.state.errors.sex}
+              fullWidth
             >
               <MenuItem value="">
                 <em></em>
@@ -243,28 +272,16 @@ class UserForm extends React.Component {
           </FormControl>
 
           <FormControl fullWidth mb={3}>
-            <InputLabel htmlFor="email">{ i18next.attr('user', 'email') }</InputLabel>
-            <Input
-              name="email"
-              type="email"
-              autoComplete="off"
-              defaultValue=""
-              value={ str(user.email) }
-              onChange={this.handleChange}
-              error={this.state.errors.email}
-            />
-          </FormControl>
-
-          <FormControl fullWidth mb={3}>
-            <InputLabel htmlFor="nickname">{ i18next.attr('user', 'nickname') }</InputLabel>
-            <Input
-              name="nickname"
-              autoComplete="off"
-              defaultValue=""
-              value={ str(user.nickname) }
-              onChange={this.handleChange}
-              error={this.state.errors.nickname}
-            />
+            <FormGroup aria-label="position" name="position" row >
+              <FormControlLabel
+                control={<Checkbox name="courtship" checked={ !!user.courtship } onChange={ this.handleChangeChecked } value={ 1 } />}
+                label= { i18next.attr('user', 'courtship') }
+              />
+              <FormControlLabel
+                control={<Checkbox name="matchmaker" checked={ !!user.matchmaker } onChange={ this.handleChangeChecked } value={ 1 } />}
+                label= { i18next.attr('user', 'matchmaker') }
+              />
+            </FormGroup>
           </FormControl>
 
           <FormControl fullWidth mb={3}>
@@ -280,7 +297,194 @@ class UserForm extends React.Component {
                 shrink: true
               }}
               error={this.state.errors.birthday}
+              fullWidth
             />
+          </FormControl>
+
+          <FormControl fullWidth mb={3}>
+            <TextField
+              name="nickname"
+              label={ i18next.attr('user', 'nickname') }
+              autoComplete="off"
+              defaultValue=""
+              value={ str(user.nickname) }
+              onChange={this.handleChange}
+              error={this.state.errors.nickname}
+              fullWidth
+            />
+          </FormControl>
+
+          <FormControl fullWidth mb={3}>
+            <Grid fullWidth container spacing={4} >
+              <Grid item xs={6}>
+                <InputLabel htmlFor="religion">{ i18next.attr('user', 'religion') }</InputLabel>
+                <Select
+                  value={ str(user.religion) }
+                  onChange={this.handleChange}
+                  inputProps={{
+                    name: "religion",
+                    id: "user_religion"
+                  }}
+                  error={this.state.errors.religion}
+                  fullWidth
+                >
+                  <MenuItem value="">
+                    <em></em>
+                  </MenuItem>
+                  {
+                    Object.keys(religions).map(religion => <MenuItem value={religion}>{ religions[religion] }</MenuItem>)
+                  }
+                </Select>
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  name="sect_name"
+                  label={ i18next.attr('user', 'sect_name') }
+                  autoComplete="off"
+                  defaultValue=""
+                  value={ str(user.sect_name) }
+                  onChange={this.handleChange}
+                  error={this.state.errors.sect_name}
+                  fullWidth
+                />
+              </Grid>
+            </Grid>
+          </FormControl>
+
+          <FormControl fullWidth mb={3}>
+            <InputLabel htmlFor="lang">{ i18next.attr('user', 'lang') }</InputLabel>
+            <Select
+              value={ str(user.lang) }
+              onChange={this.handleChange}
+              inputProps={{
+                name: "lang",
+                id: "user_lang"
+              }}
+              error={this.state.errors.lang}
+              fullWidth
+            >
+              <MenuItem value="">
+                <em></em>
+              </MenuItem>
+              <MenuItem value='en'>{ i18next.t('lang.en') }</MenuItem>
+              <MenuItem value='ja'>{ i18next.t('lang.ja') }</MenuItem>
+            </Select>
+          </FormControl>
+
+          <FormControl fullWidth mb={3}>
+            <Grid fullWidth container spacing={4} >
+              <Grid item xs={6}>
+                <InputLabel htmlFor="country">{ i18next.attr('user', 'country') }</InputLabel>
+                <Select
+                  value={ str(user.country) }
+                  onChange={this.handleChange}
+                  inputProps={{
+                    name: "country",
+                    id: "user_country"
+                  }}
+                  error={this.state.errors.country}
+                  fullWidth
+                >
+                  <MenuItem value="">
+                    <em></em>
+                  </MenuItem>
+                  {
+                    Object.keys(countries).map(country => <MenuItem value={country}>{ countries[country] }</MenuItem>)
+                  }
+                </Select>
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  name="zip"
+                  label={ i18next.attr('user', 'zip') }
+                  autoComplete="off"
+                  defaultValue=""
+                  value={ str(user.zip) }
+                  onChange={this.handleChange}
+                  error={this.state.errors.zip}
+                  fullWidth
+                />
+              </Grid>
+            </Grid>
+          </FormControl>
+
+          <FormControl fullWidth mb={3}>
+            <Grid fullWidth container spacing={4} >
+              <Grid item xs={6}>
+                <InputLabel htmlFor="prefecture">{ i18next.attr('user', 'prefecture') }</InputLabel>
+                <Select
+                  value={ str(user.prefecture) }
+                  onChange={this.handleChange}
+                  inputProps={{
+                    name: "prefecture",
+                    id: "user_prefecture"
+                  }}
+                  error={this.state.errors.prefecture}
+                  fullWidth
+                >
+                  <MenuItem value="">
+                    <em></em>
+                  </MenuItem>
+                  {
+                    Object.keys(prefectures).map(prefecture => <MenuItem value={prefecture}>{ prefectures[prefecture] }</MenuItem>)
+                  }
+                </Select>
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  name="city"
+                  label={ i18next.attr('user', 'city') }
+                  autoComplete="off"
+                  defaultValue=""
+                  value={ str(user.city) }
+                  onChange={this.handleChange}
+                  error={this.state.errors.city}
+                  fullWidth
+                />
+              </Grid>
+            </Grid>
+          </FormControl>
+
+          <FormControl fullWidth mb={3}>
+            <TextField
+              name="house_number"
+              label={ i18next.attr('user', 'house_number') }
+              autoComplete="off"
+              defaultValue=""
+              value={ str(user.house_number) }
+              onChange={this.handleChange}
+              error={this.state.errors.house_number}
+              fullWidth
+            />
+          </FormControl>
+
+          <FormControl fullWidth mb={3}>
+            <Grid fullWidth container spacing={4} >
+              <Grid item xs={6}>
+                <TextField
+                  name="tel"
+                  label={ i18next.attr('user', 'tel') }
+                  autoComplete="off"
+                  defaultValue=""
+                  value={ str(user.tel) }
+                  onChange={this.handleChange}
+                  error={this.state.errors.tel}
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  name="fax"
+                  label={ i18next.attr('user', 'fax') }
+                  autoComplete="off"
+                  defaultValue=""
+                  value={ str(user.fax) }
+                  onChange={this.handleChange}
+                  error={this.state.errors.fax}
+                  fullWidth
+                />
+              </Grid>
+            </Grid>
           </FormControl>
 
           <FormControl fullWidth mb={3}>
