@@ -26,6 +26,7 @@ import env from "environment";
 import { str, collectErrors, createFormData } from 'helpers';
 import CustomizedSnackbar from "pages/components/CustomizedSnackbar";
 import DialogTitle from "pages/components/DialogTitle";
+import ReactSelect from "pages/components/ReactSelect";
 
 
 class UserForm extends React.Component {
@@ -42,6 +43,7 @@ class UserForm extends React.Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleChangeChecked = this.handleChangeChecked.bind(this);
+    this.handleChangeSelect = this.handleChangeSelect.bind(this);
     this.showUser = this.showUser.bind(this);
     this.onSave = this.onSave.bind(this);
     this.onResize = this.onResize.bind(this);
@@ -59,6 +61,13 @@ class UserForm extends React.Component {
   handleChange = event => {
     let user = Object.assign({}, this.state.user);
     user[event.target.name] = event.target.value;
+    this.setState({ user });
+  };
+
+  handleChangeSelect = name => event => {
+    let user = Object.assign({}, this.state.user);
+    if(event) user[name] = event.value;
+    else      user[name] = null;
     this.setState({ user });
   };
 
@@ -374,24 +383,17 @@ class UserForm extends React.Component {
           <FormControl fullWidth mb={3}>
             <Grid fullWidth container spacing={4} >
               <Grid item xs={6}>
-                <InputLabel htmlFor="country">{ i18next.attr('user', 'country') }</InputLabel>
-                <Select
-                  value={ str(user.country) }
-                  onChange={this.handleChange}
-                  inputProps={{
-                    name: "country",
-                    id: "user_country"
-                  }}
+                <ReactSelect
+                  name="country"
+                  value={ user.country ? {label: countries[user.country], value: user.country} : null }
+                  label={ i18next.attr('user', 'country') }
+                  options={ Object.keys(countries).map(country => ({label: countries[country], value: country})) }
+                  onChange={this.handleChangeSelect('country')}
+                  placeholder="国名"
+                  isClearable={true}
                   error={this.state.errors.country}
-                  fullWidth
                 >
-                  <MenuItem value="">
-                    <em></em>
-                  </MenuItem>
-                  {
-                    Object.keys(countries).map(country => <MenuItem value={country}>{ countries[country] }</MenuItem>)
-                  }
-                </Select>
+                </ReactSelect>
               </Grid>
               <Grid item xs={6}>
                 <TextField
