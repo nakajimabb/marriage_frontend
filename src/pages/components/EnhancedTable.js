@@ -295,7 +295,7 @@ export default class EnhancedTable extends React.Component {
             <Grid container spacing={6} >
               <Grid item md={4}>
                 <FormControl fullWidth>
-                  <InputLabel htmlFor="search">{ i18next.t('dict.search') }</InputLabel>
+                  <InputLabel htmlFor="search">{ i18next.t('views.app.search') }</InputLabel>
                   <Input id="search" name="search" defaultValue="" placeholder="Search word" onChange={this.handleChangeSearch} />
                 </FormControl>
               </Grid>
@@ -309,7 +309,7 @@ export default class EnhancedTable extends React.Component {
                         onClick={this.clickCheckbox}
                       />
                     }
-                    label={ i18next.t('dict.exact') }
+                    label={ i18next.t('views.app.exact') }
                   />
                 </FormControl>
               </Grid>

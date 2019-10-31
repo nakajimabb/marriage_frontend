@@ -22,13 +22,12 @@ import {
   List as MuiList,
   Typography
 } from "@material-ui/core";
-
 import { ExpandLess, ExpandMore } from "@material-ui/icons";
-
-import routes from "../routes/index";
-
 import { Layers } from "react-feather";
 import {connect} from "react-redux";
+
+import routes from "../routes/index";
+import i18next from "../i18n";
 
 const NavLink = React.forwardRef((props, ref) => (
   <RouterNavLink innerRef={ref} {...props} />
@@ -311,7 +310,7 @@ class Sidebar extends React.Component {
                       <SidebarCategory
                         isOpen={!this.state[index]}
                         isCollapsable={true}
-                        name={category.id}
+                        name={i18next.t(category.id)}
                         icon={category.icon}
                         button={true}
                         onClick={() => this.toggle(index)}
@@ -325,7 +324,7 @@ class Sidebar extends React.Component {
                         {category.children.map((route, index) => (
                           <SidebarLink
                             key={index}
-                            name={route.name}
+                            name={i18next.t(route.name)}
                             to={route.path}
                             icon={route.icon}
                             badge={route.badge}
@@ -336,7 +335,7 @@ class Sidebar extends React.Component {
                   ) : (
                     <SidebarCategory
                       isCollapsable={false}
-                      name={category.id}
+                      name={i18next.t(category.id)}
                       to={category.path}
                       activeClassName="active"
                       component={NavLink}

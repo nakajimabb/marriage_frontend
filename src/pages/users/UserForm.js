@@ -18,7 +18,6 @@ import {
   Input,
   Avatar,
   Checkbox,
-  FormGroup,
   Box,
   Card,
   CardHeader,
@@ -498,7 +497,7 @@ const UserForm = props => {
             <Grid item xs={12} md={6} lg={4}>
               <Card className={classes.card}>
                 <CardHeader
-                    title={ i18next.t('views.user.member_info') }
+                    title={ i18next.t('views.user.members') }
                 />
                 <CardContent>
                   <Grid fullWidth container spacing={4} >
@@ -775,7 +774,7 @@ const UserForm = props => {
               </Card>
               <Card className={classes.card}>
                 <CardHeader
-                    title={ i18next.t('views.user.other_info') }
+                    title={ i18next.t('views.user.misc') }
                 />
                 <CardContent>
                   <Grid fullWidth container spacing={4} >
@@ -882,10 +881,10 @@ const UserForm = props => {
         </DialogContent>
         <DialogActions>
           <Button onClick={onClose} color="primary">
-            { i18next.t('dict.cancel') }
+            { i18next.t('views.app.cancel') }
           </Button>
           <Button onClick={onSave} color="primary">
-            { i18next.t('dict.save') }
+            { i18next.t('views.app.save') }
           </Button>
         </DialogActions>
       </Dialog>

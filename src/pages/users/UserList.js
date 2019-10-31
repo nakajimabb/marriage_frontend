@@ -100,7 +100,7 @@ const UserList = props => {
         })()
       }
       <Typography variant="h3" gutterBottom display="inline">
-        { i18next.model('user') } { i18next.t('dict.list') }
+        { i18next.t('views.user.list') }
       </Typography>
 
       <Divider my={6} />

@@ -11,7 +11,8 @@ import {
   Key,
   Layout,
   List,
-  Users
+  Users,
+  User,
 } from "react-feather";
 
 // Auth components
@@ -62,7 +63,6 @@ const Docs = async(() => import("../pages/docs/Documentation"));
 
 // Users
 const UserList = async(() => import("../pages/users/UserList"));
-const UserForm = async(() => import("../pages/users/UserForm"));
 
 const pagesRoutes = {
   id: "Pages",
@@ -254,13 +254,13 @@ const privateRoutes = {
 };
 
 const adminRoutes = {
-  id: i18next.t('dict.admin') + i18next.t('dict.tool'),
+  id: 'views.app.admin_tools',
   path: "/users",
   icon: <Key />,
   children: [
     {
       path: "/users",
-      name: i18next.model('user') + i18next.t('dict.list'),
+      name: 'views.user.list',
       component: UserList
     },
   ]
@@ -300,15 +300,15 @@ export const authRoutes = {
 };
 
 export const getRoutes = (roles) => {
-  let routes = [documentationRoutes];
+  let routes = [componentsRoutes, pagesRoutes, formsRoutes];
   if(roles && ~roles.indexOf('admin'))
     routes.push(adminRoutes);
 
   return routes;
 };
 
-export default (roles) => {
-  let routes = [documentationRoutes];
+export default (roles, lang) => {
+  let routes = [componentsRoutes, pagesRoutes, formsRoutes];
   if(roles && ~roles.indexOf('admin'))
     routes.push(adminRoutes);
 
