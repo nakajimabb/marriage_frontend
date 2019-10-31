@@ -63,6 +63,7 @@ const Docs = async(() => import("../pages/docs/Documentation"));
 
 // Users
 const UserList = async(() => import("../pages/users/UserList"));
+const UserProfile = async(() => import("../pages/users/UserProfile"));
 
 const pagesRoutes = {
   id: "Pages",
@@ -253,6 +254,14 @@ const privateRoutes = {
   children: null
 };
 
+const userRoutes = {
+  id: 'views.user.profile',
+  path: "/",
+  icon: <User />,
+  component: UserProfile,
+  children: null
+};
+
 const adminRoutes = {
   id: 'views.app.admin_tools',
   path: "/users",
@@ -300,7 +309,7 @@ export const authRoutes = {
 };
 
 export const getRoutes = (roles) => {
-  let routes = [componentsRoutes, pagesRoutes, formsRoutes];
+  let routes = [userRoutes, componentsRoutes, pagesRoutes, formsRoutes];
   if(roles && ~roles.indexOf('admin'))
     routes.push(adminRoutes);
 
@@ -308,7 +317,7 @@ export const getRoutes = (roles) => {
 };
 
 export default (roles, lang) => {
-  let routes = [componentsRoutes, pagesRoutes, formsRoutes];
+  let routes = [userRoutes, componentsRoutes, pagesRoutes, formsRoutes];
   if(roles && ~roles.indexOf('admin'))
     routes.push(adminRoutes);
 
