@@ -54,22 +54,6 @@ const UserList = props => {
     setUserId(n.id);
   };
 
-  const destroyUser = (n) => () => {
-    if(window.confirm(i18next.t('message.confirm_delete'))) {
-      const headers  = session.headers;
-      if(headers && headers['access-token'] && headers['client'] && headers['uid']) {
-        const url = env.API_ORIGIN + 'api/users/' + n.id;
-        axios.delete(url, {headers})
-          .then((results) => {
-            setData(data.filter(user => user.id !== n.id));
-          })
-          .catch((data) => {
-            alert('データの削除に失敗しました。');
-          });
-      }
-    }
-  };
-
   const closeUserForm = () => {
     setOpen(false);
   };
@@ -84,8 +68,6 @@ const UserList = props => {
     { id: "birthday", numeric: false, disablePadding: false, label: i18next.attr('user', 'birthday'), sortable: true },
     { id: "id", numeric: false, search: false, disablePadding: true, sortable: false,
       component: (<IconButton size="small"><EditIcon fontSize="small" /></IconButton>), props: (n) => ({ onClick: openUserEditForm(n) }) },
-    { id: "id", numeric: false, search: false, disablePadding: true, sortable: false,
-      component: (<IconButton size="small"><DeleteIcon fontSize="small" /></IconButton>), props: (n) => ({ onClick: destroyUser(n) }) },
   ];
 
   const submenus = [

@@ -501,15 +501,15 @@ const UserForm = props => {
                 />
                 <CardContent>
                   <Grid fullWidth container spacing={4} >
-                    <Grid item xs={4}>
+                    <Grid item xs={6}>
                       <FormControl fullWidth>
                         <FormControlLabel
-                          control={<Checkbox name="courtship" checked={ !!user.courtship } onChange={ handleChangeChecked } value={ 1 } />}
-                          label= { i18next.attr('user', 'courtship') }
+                          control={<Checkbox name="role_courtship" checked={ !!user.role_courtship } onChange={ handleChangeChecked } value={ 1 } />}
+                          label= { i18next.attr('user', 'role_courtship') }
                         />
                       </FormControl>
                     </Grid>
-                    <Grid item xs={8}>
+                    <Grid item xs={6}>
                       <FormControl fullWidth>
                         <InputLabel htmlFor="marital_status">{ i18next.attr('user', 'marital_status') }</InputLabel>
                         <Select
@@ -534,20 +534,20 @@ const UserForm = props => {
                   </Grid>
 
                   <Grid fullWidth container spacing={4} >
-                    <Grid item xs={4}>
+                    <Grid item xs={6}>
                       <FormControl fullWidth>
                         <FormControlLabel
-                            control={<Checkbox name="matchmaker" checked={ !!user.matchmaker } onChange={ handleChangeChecked } value={ 1 } />}
-                            label= { i18next.attr('user', 'matchmaker') }
+                            control={<Checkbox name="role_matchmaker" checked={ !!user.role_matchmaker } onChange={ handleChangeChecked } value={ 1 } />}
+                            label= { i18next.attr('user', 'role_matchmaker') }
                         />
                       </FormControl>
                     </Grid>
-                    <Grid item xs={8}>
+                    <Grid item xs={6}>
                       <FormControl fullWidth>
                         <FormControlLabel
                           control={<Checkbox name="married" checked={ !!user.married } onChange={ handleChangeChecked } value={ 1 } />}
                           label= { i18next.attr('user', 'married') }
-                          disabled={ !user.matchmaker }
+                          disabled={ !user.role_matchmaker }
                         />
                       </FormControl>
                     </Grid>

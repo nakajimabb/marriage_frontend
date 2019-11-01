@@ -42,7 +42,7 @@ class AuthGuard extends Component {
         let json = await response.json();
         const user = json.data;
         let roles = [];
-        if(user.admin) roles.push('admin');
+        if(user.role_head) roles.push('head');
         dispatch(login({headers, user, roles}));
       } else {
         this.redirectSignIn();

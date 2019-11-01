@@ -8,12 +8,13 @@ import {
   CheckSquare,
   Grid,
   Heart,
-  Key,
   Layout,
   List,
   Users,
   User,
 } from "react-feather";
+
+import { SupervisedUserCircle } from "@material-ui/icons";
 
 // Auth components
 const SignIn = async(() => import("../pages/auth/SignIn"));
@@ -262,10 +263,10 @@ const userRoutes = {
   children: null
 };
 
-const adminRoutes = {
-  id: 'views.app.admin_tools',
+const headRoutes = {
+  id: 'views.user.head_menu',
   path: "/users",
-  icon: <Key />,
+  icon: <SupervisedUserCircle />,
   children: [
     {
       path: "/users",
@@ -310,16 +311,16 @@ export const authRoutes = {
 
 export const getRoutes = (roles) => {
   let routes = [userRoutes, componentsRoutes, pagesRoutes, formsRoutes];
-  if(roles && ~roles.indexOf('admin'))
-    routes.push(adminRoutes);
+  if(roles && ~roles.indexOf('head'))
+    routes.push(headRoutes);
 
   return routes;
 };
 
 export default (roles, lang) => {
   let routes = [userRoutes, componentsRoutes, pagesRoutes, formsRoutes];
-  if(roles && ~roles.indexOf('admin'))
-    routes.push(adminRoutes);
+  if(roles && ~roles.indexOf('head'))
+    routes.push(headRoutes);
 
   return routes;
 };
