@@ -47,10 +47,10 @@ const UserForm = props => {
 
   const { open, user_id, session, onClose, maxWidth } = props;
   const [user, setUser] = useState({});
+  const [matchmakers, setMatchmakers] = useState([]);
   const [errors, setErrors] = useState({});
   const [fullScreen, setFullScreen] = useState(props.fullScreen);
   const avatar = useRef();
-  const countries = i18next.data_list('country');
   const prefectures = i18next.data_list('prefecture');
   const bloods = i18next.data_list('enum', 'user', 'blood');
   const religions = i18next.data_list('enum', 'user', 'religion');
@@ -58,6 +58,7 @@ const UserForm = props => {
   const smokings = i18next.data_list('enum', 'user', 'smoking');
   const marital_statuses = i18next.data_list('enum', 'user', 'marital_status');
   const classes = useStyles();
+  const is_head = ~session.roles.indexOf('head');
 
   useEffect(() => {
     if(user_id) {
@@ -66,9 +67,8 @@ const UserForm = props => {
         const url = env.API_ORIGIN + 'api/users/' + user_id + '/edit';
         axios.get(url, {headers})
             .then((results) => {
-              let user2 = results.data.user;
-              user2.password = user2.password_confirmation = '';
-              setUser(user2);
+              setUser(results.data.user);
+              setMatchmakers(results.data.matchmakers);
               setErrors({})
             })
             .catch((data) => {
@@ -515,6 +515,17 @@ const UserForm = props => {
                     </Grid>
                     <Grid item xs={6}>
                       <FormControl fullWidth>
+                        <FormControlLabel
+                          control={<Checkbox name="role_matchmaker" checked={ !!user.role_matchmaker } disabled={!is_head} onChange={ handleChangeChecked } value={ 1 } />}
+                          label= { i18next.attr('user', 'role_matchmaker') }
+                        />
+                      </FormControl>
+                    </Grid>
+                  </Grid>
+
+                  <Grid fullWidth container spacing={4} >
+                    <Grid item xs={4}>
+                      <FormControl fullWidth>
                         <InputLabel htmlFor="marital_status">{ i18next.attr('user', 'marital_status') }</InputLabel>
                         <Select
                           value={ str(user.marital_status) }
@@ -535,25 +546,35 @@ const UserForm = props => {
                         </Select>
                       </FormControl>
                     </Grid>
-                  </Grid>
-
-                  <Grid fullWidth container spacing={4} >
-                    <Grid item xs={6}>
-                      <FormControl fullWidth>
-                        <FormControlLabel
-                            control={<Checkbox name="role_matchmaker" checked={ !!user.role_matchmaker } onChange={ handleChangeChecked } value={ 1 } />}
-                            label= { i18next.attr('user', 'role_matchmaker') }
-                        />
-                      </FormControl>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <FormControl fullWidth>
-                        <FormControlLabel
-                          control={<Checkbox name="married" checked={ !!user.married } onChange={ handleChangeChecked } value={ 1 } />}
-                          label= { i18next.attr('user', 'married') }
-                          disabled={ !user.role_matchmaker }
-                        />
-                      </FormControl>
+                    <Grid item xs={8}>
+                      {(() => {
+                        if(user_id) {
+                          return (
+                            <FormControl fullWidth>
+                              <InputLabel htmlFor="matchmaker_id">{i18next.attr('user', 'matchmaker_id')}</InputLabel>
+                              <Select
+                                value={str(user.matchmaker_id)}
+                                onChange={handleChange}
+                                inputProps={{
+                                  name: "matchmaker_id",
+                                  id: "user_matchmaker_id"
+                                }}
+                                disabled={!is_head}
+                                error={errors.matchmaker_id}
+                                fullWidth
+                              >
+                                <MenuItem value="">
+                                  <em></em>
+                                </MenuItem>
+                                {
+                                  matchmakers.map(matchmaker => <MenuItem
+                                    value={matchmaker.id}>{matchmaker.full_name}</MenuItem>)
+                                }
+                              </Select>
+                            </FormControl>
+                          );
+                        }
+                      })() }
                     </Grid>
                   </Grid>
                 </CardContent>
@@ -655,17 +676,25 @@ const UserForm = props => {
                   <Grid fullWidth container spacing={4} >
                     <Grid item xs={6}>
                       <FormControl fullWidth>
-                        <ReactSelect
-                            name="country"
-                            value={ user.country ? {label: countries[user.country], value: user.country} : null }
-                            label={ i18next.attr('user', 'country') }
-                            options={ Object.keys(countries).map(country => ({label: countries[country], value: country})) }
-                            onChange={handleChangeSelect('country')}
-                            placeholder="国名"
-                            isClearable={true}
-                            error={errors.country}
+                        <InputLabel htmlFor="country">{ i18next.attr('user', 'country') }</InputLabel>
+                        <Select
+                          value={ str(user.country) }
+                          onChange={handleChange}
+                          inputProps={{
+                            name: "country",
+                            id: "user_country"
+                          }}
+                          error={errors.lang}
+                          fullWidth
                         >
-                        </ReactSelect>
+                          <MenuItem value="">
+                            <em></em>
+                          </MenuItem>
+                          <MenuItem value='jpn'>{ i18next.t('country.jpn') }</MenuItem>
+                          <MenuItem value='kor'>{ i18next.t('country.kor') }</MenuItem>
+                          <MenuItem value='usa'>{ i18next.t('country.usa') }</MenuItem>
+                          <MenuItem value='che'>{ i18next.t('country.che') }</MenuItem>
+                        </Select>
                       </FormControl>
                     </Grid>
                     <Grid item xs={6}>
