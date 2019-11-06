@@ -42,6 +42,8 @@ class AuthGuard extends Component {
         let json = await response.json();
         const user = json.data;
         let roles = [];
+        if(user.role_courtship) roles.push('courtship');
+        if(user.role_matchmaker) roles.push('matchmaker');
         if(user.role_head) roles.push('head');
         dispatch(login({headers, user, roles}));
       } else {

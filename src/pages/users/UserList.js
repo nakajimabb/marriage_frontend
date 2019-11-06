@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import axios from 'axios'
 
 import { Grid, Divider as MuiDivider, Typography } from "@material-ui/core";
-import { Edit as EditIcon, AddOutlined as AddIcon, DeleteSharp as DeleteIcon } from '@material-ui/icons';
+import { Edit as EditIcon, PersonAdd as AddIcon } from '@material-ui/icons';
 import Fab from '@material-ui/core/Fab';
 import IconButton from '@material-ui/core/IconButton';
 import { spacing } from "@material-ui/system";
@@ -60,18 +60,17 @@ const UserList = props => {
 
   const columns = [
     { id: "id", numeric: true, disablePadding: true, label: i18next.attr('user', 'id'), sortable: true, f: n => str(n.id, '', '0', 5) },
-    { id: "full_name", numeric: false, disablePadding: false, label: i18next.attr('user', 'name'), sortable: true, f: n => str(n.last_name) + ' ' + str(n.first_name) },
-    { id: "full_kana", numeric: false, disablePadding: false, label: i18next.attr('user', 'kana'), sortable: true, f: n => str(n.last_name_kana) + ' ' + str(n.first_name_kana) },
-    { id: "nickname", numeric: false, disablePadding: false, label: i18next.attr('user', 'nickname'), sortable: true },
-    { id: "email", numeric: false, disablePadding: false, label: i18next.attr('user', 'email'), sortable: true },
-    { id: "sex", numeric: false, disablePadding: false, label: i18next.attr('user', 'sex'), sortable: true },
-    { id: "birthday", numeric: false, disablePadding: false, label: i18next.attr('user', 'birthday'), sortable: true },
-    { id: "id", numeric: false, search: false, disablePadding: true, sortable: false,
+    { id: "full_name", disablePadding: false, label: i18next.attr('user', 'name'), sortable: true, f: n => str(n.last_name) + ' ' + str(n.first_name) },
+    { id: "nickname", disablePadding: false, label: i18next.attr('user', 'nickname'), sortable: true },
+    { id: "age", numeric: true, disablePadding: false, label: i18next.attr('user', 'age'), sortable: true },
+    { id: "prefecture", disablePadding: false, label: i18next.attr('user', 'prefecture'), sortable: true, f: n => n.prefecture ? i18next.t('prefecture.' + n.prefecture) : '' },
+    { id: "religion", disablePadding: false, label: i18next.attr('user', 'religion'), sortable: true, f: n => n.religion ? i18next.enum('user', 'religion', n.religion) : '' },
+    { id: "id", search: false, disablePadding: true, sortable: false,
       component: (<IconButton size="small"><EditIcon fontSize="small" /></IconButton>), props: (n) => ({ onClick: openUserEditForm(n) }) },
   ];
 
   const submenus = [
-    { component: (<Fab size="small"><AddIcon style={{ fontSize: 36 }}/></Fab>), props: ({ onClick: openUserNewForm }) },
+    { component: (<Fab size="medium"><AddIcon/></Fab>), props: ({ onClick: openUserNewForm }) },
   ];
 
   return (

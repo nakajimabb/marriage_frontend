@@ -27,5 +27,6 @@ i18next.data_list = (...args) => {
   }
   return data;
 };
+i18next.age = (year) => String(year) + i18next.t('views.app.age_year');
 
 export default i18next;

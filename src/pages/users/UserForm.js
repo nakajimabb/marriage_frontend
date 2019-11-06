@@ -63,7 +63,7 @@ const UserForm = props => {
     if(user_id) {
       const headers  = session.headers;
       if(headers && headers['access-token'] && headers['client'] && headers['uid']) {
-        const url = env.API_ORIGIN + 'api/users/' + user_id;
+        const url = env.API_ORIGIN + 'api/users/' + user_id + '/edit';
         axios.get(url, {headers})
             .then((results) => {
               let user2 = results.data.user;
@@ -121,12 +121,16 @@ const UserForm = props => {
       promise
       .then((results) => {
         setErrors({});
-        onClose();
+        onClose(results.data.user.id);
       })
       .catch((data) => {
         setErrors(collectErrors(data.response));
       });
     }
+  };
+
+  const onClose2 = () => {
+    onClose(null);
   };
 
   const onResize = () => {
@@ -136,14 +140,14 @@ const UserForm = props => {
   return (
       <Dialog
         open={open}
-        onClose={onClose}
+        onClose={onClose2}
         disableBackdropClick={ true }
         disableEscapeKeyDown={ true }
         fullScreen = { fullScreen }
         maxWidth={ maxWidth }
       >
-        <DialogTitle fullScreen={ fullScreen } onClose={ onClose } onResize={ onResize } >
-          {str(user.last_name) + str(user.first_name)}
+        <DialogTitle fullScreen={ fullScreen } onClose={ onClose2 } onResize={ onResize } >
+          {str(user.last_name) + str(user.first_name)} { user.id ? '(' + user.id + ')' : ''  }
         </DialogTitle>
         <DialogContent className={classes.content}>
           { (Object.keys(errors).length > 0) ?
@@ -880,7 +884,7 @@ const UserForm = props => {
           </Grid>
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose} color="primary">
+          <Button onClick={onClose2} color="primary">
             { i18next.t('views.app.cancel') }
           </Button>
           <Button onClick={onSave} color="primary">

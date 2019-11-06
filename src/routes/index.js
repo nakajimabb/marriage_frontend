@@ -14,7 +14,7 @@ import {
   User,
 } from "react-feather";
 
-import { SupervisedUserCircle } from "@material-ui/icons";
+import { SupervisedUserCircle, FavoriteBorder } from "@material-ui/icons";
 
 // Auth components
 const SignIn = async(() => import("../pages/auth/SignIn"));
@@ -64,6 +64,7 @@ const Docs = async(() => import("../pages/docs/Documentation"));
 
 // Users
 const UserList = async(() => import("../pages/users/UserList"));
+const MemberList = async(() => import("../pages/users/MemberList"));
 const UserProfile = async(() => import("../pages/users/UserProfile"));
 
 const pagesRoutes = {
@@ -263,6 +264,19 @@ const userRoutes = {
   children: null
 };
 
+const matchmakerRoutes = {
+  id: 'views.user.matchmaker_menu',
+  path: "/users",
+  icon: <FavoriteBorder />,
+  children: [
+    {
+      path: "/courtships",
+      name: 'views.user.courtships',
+      component: MemberList
+    },
+  ]
+};
+
 const headRoutes = {
   id: 'views.user.head_menu',
   path: "/users",
@@ -311,6 +325,8 @@ export const authRoutes = {
 
 export const getRoutes = (roles) => {
   let routes = [userRoutes, componentsRoutes, pagesRoutes, formsRoutes];
+  if(roles && ~roles.indexOf('matchmaker'))
+    routes.push(matchmakerRoutes);
   if(roles && ~roles.indexOf('head'))
     routes.push(headRoutes);
 
@@ -319,6 +335,8 @@ export const getRoutes = (roles) => {
 
 export default (roles, lang) => {
   let routes = [userRoutes, componentsRoutes, pagesRoutes, formsRoutes];
+  if(roles && ~roles.indexOf('matchmaker'))
+    routes.push(matchmakerRoutes);
   if(roles && ~roles.indexOf('head'))
     routes.push(headRoutes);
 
