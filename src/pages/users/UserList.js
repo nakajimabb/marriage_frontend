@@ -82,12 +82,19 @@ const UserList = props => {
   const religions = i18next.data_list('enum', 'user', 'religion');
   const keys = ['sex', 'prefecture', 'religion'];
   const ages = [search.min_age, search.max_age];
+
   const columns = [ (n => str(n.last_name) + str(n.first_name)),
     (n => str(n.last_name_kana) + str(n.first_name_kana)),
     (n => n.nickname)];
+
   const array = filterUser(data, search, columns, keys, ages);
-  const i1 = page * +rowsPerPage;
-  const i2 = (page + 1) * +rowsPerPage;
+  let target_array;
+  if(rowsPerPage <= 0) {
+    target_array = array;
+  } else {
+    const index = page * rowsPerPage;
+    target_array = array.slice(index, index + rowsPerPage)
+  }
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -276,7 +283,7 @@ const UserList = props => {
 
       <Grid container spacing={6}>
         {
-          array.slice(i1, i2).map(user => {
+          target_array.map(user => {
             return (
               <Grid item xs={6} md={4} lg={3} xl={2} className={classes.grid} >
                 <Card className={classes.card}>
