@@ -64,7 +64,7 @@ const Docs = async(() => import("../pages/docs/Documentation"));
 
 // Users
 const MemberList = async(() => import("../pages/users/MemberList"));
-const CourtshipList = async(() => import("../pages/users/CourtshipList"));
+const UserAll = async(() => import("../pages/users/UserAll"));
 const UserProfile = async(() => import("../pages/users/UserProfile"));
 
 const pagesRoutes = {
@@ -270,9 +270,9 @@ const matchmakerRoutes = {
   icon: <FavoriteBorder />,
   children: [
     {
-      path: "/courtships",
-      name: 'views.user.courtships',
-      component: CourtshipList
+      path: "/members",
+      name: 'views.user.members',
+      component: MemberList
     },
   ]
 };
@@ -285,7 +285,7 @@ const headRoutes = {
     {
       path: "/users",
       name: 'views.user.list',
-      component: MemberList
+      component: UserAll
     },
   ]
 };

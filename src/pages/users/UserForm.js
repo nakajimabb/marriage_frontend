@@ -30,7 +30,6 @@ import env from "environment";
 import { str, collectErrors, createFormData } from 'helpers';
 import CustomizedSnackbar from "pages/components/CustomizedSnackbar";
 import DialogTitle from "pages/components/DialogTitle";
-import ReactSelect from "pages/components/ReactSelect";
 
 
 const useStyles = makeStyles(theme => ({
@@ -56,6 +55,7 @@ const UserForm = props => {
   const religions = i18next.data_list('enum', 'user', 'religion');
   const drinkings = i18next.data_list('enum', 'user', 'drinking');
   const smokings = i18next.data_list('enum', 'user', 'smoking');
+  const member_sharings = i18next.data_list('enum', 'user', 'member_sharing');
   const marital_statuses = i18next.data_list('enum', 'user', 'marital_status');
   const classes = useStyles();
   const is_head = ~session.roles.indexOf('head');
@@ -75,6 +75,13 @@ const UserForm = props => {
               alert('データの取得に失敗しました。');
             });
       }
+    } else {
+      const full_name = session.user.last_name + ' ' + session.user.first_name;
+      setMatchmakers([{id: session.user.id, full_name: full_name}]);
+
+      let user2 = Object.assign({}, user);
+      user2.matchmaker_id = session.user.id;
+      setUser(user2);
     }
   }, [user_id, session.headers]);
 
@@ -504,26 +511,7 @@ const UserForm = props => {
                     title={ i18next.t('views.user.members') }
                 />
                 <CardContent>
-                  <Grid fullWidth container spacing={4} >
-                    <Grid item xs={6}>
-                      <FormControl fullWidth>
-                        <FormControlLabel
-                          control={<Checkbox name="role_courtship" checked={ !!user.role_courtship } onChange={ handleChangeChecked } value={ 1 } />}
-                          label= { i18next.attr('user', 'role_courtship') }
-                        />
-                      </FormControl>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <FormControl fullWidth>
-                        <FormControlLabel
-                          control={<Checkbox name="role_matchmaker" checked={ !!user.role_matchmaker } disabled={!is_head} onChange={ handleChangeChecked } value={ 1 } />}
-                          label= { i18next.attr('user', 'role_matchmaker') }
-                        />
-                      </FormControl>
-                    </Grid>
-                  </Grid>
-
-                  <Grid fullWidth container spacing={4} >
+                  <Grid fullWidth container spacing={2} >
                     <Grid item xs={4}>
                       <FormControl fullWidth>
                         <InputLabel htmlFor="marital_status">{ i18next.attr('user', 'marital_status') }</InputLabel>
@@ -546,35 +534,73 @@ const UserForm = props => {
                         </Select>
                       </FormControl>
                     </Grid>
-                    <Grid item xs={8}>
-                      {(() => {
-                        if(user_id) {
-                          return (
-                            <FormControl fullWidth>
-                              <InputLabel htmlFor="matchmaker_id">{i18next.attr('user', 'matchmaker_id')}</InputLabel>
-                              <Select
-                                value={str(user.matchmaker_id)}
-                                onChange={handleChange}
-                                inputProps={{
-                                  name: "matchmaker_id",
-                                  id: "user_matchmaker_id"
-                                }}
-                                disabled={!is_head}
-                                error={errors.matchmaker_id}
-                                fullWidth
-                              >
-                                <MenuItem value="">
-                                  <em></em>
-                                </MenuItem>
-                                {
-                                  matchmakers.map(matchmaker => <MenuItem
-                                    value={matchmaker.id}>{matchmaker.full_name}</MenuItem>)
-                                }
-                              </Select>
-                            </FormControl>
-                          );
-                        }
-                      })() }
+                    <Grid item xs={12}>
+                    </Grid>
+                  </Grid>
+
+                  <Grid fullWidth container spacing={4} >
+                    <Grid item xs={6}>
+                      <FormControl fullWidth>
+                        <FormControlLabel
+                          control={<Checkbox name="role_courtship" checked={ !!user.role_courtship } onChange={ handleChangeChecked } value={ 1 } />}
+                          label= { i18next.attr('user', 'role_courtship') }
+                        />
+                      </FormControl>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <FormControl fullWidth>
+                        <InputLabel htmlFor="matchmaker_id">{i18next.attr('user', 'matchmaker_id')}</InputLabel>
+                        <Select
+                          value={str(user.matchmaker_id)}
+                          onChange={handleChange}
+                          inputProps={{
+                            name: "matchmaker_id",
+                            id: "user_matchmaker_id"
+                          }}
+                          disabled={!is_head}
+                          error={errors.matchmaker_id}
+                          fullWidth
+                        >
+                          {
+                            matchmakers.map(matchmaker => <MenuItem
+                              value={matchmaker.id}>{matchmaker.full_name}</MenuItem>)
+                          }
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                  </Grid>
+
+                  <Grid fullWidth container spacing={4} >
+                    <Grid item xs={6}>
+                      <FormControl fullWidth>
+                        <FormControlLabel
+                          control={<Checkbox name="role_matchmaker" checked={ !!user.role_matchmaker } disabled={!is_head} onChange={ handleChangeChecked } value={ 1 } />}
+                          label= { i18next.attr('user', 'role_matchmaker') }
+                        />
+                      </FormControl>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <FormControl fullWidth>
+                        <InputLabel htmlFor="member_sharing">{ i18next.attr('user', 'member_sharing') }</InputLabel>
+                        <Select
+                          value={ str(user.member_sharing) }
+                          onChange={handleChange}
+                          inputProps={{
+                            name: "member_sharing",
+                            id: "user_member_sharing"
+                          }}
+                          error={errors.member_sharing}
+                          disabled={!user.role_matchmaker}
+                          fullWidth
+                        >
+                          <MenuItem value="">
+                            <em></em>
+                          </MenuItem>
+                          {
+                            Object.keys(member_sharings).map(member_sharing => <MenuItem value={member_sharing}>{ member_sharings[member_sharing] }</MenuItem>)
+                          }
+                        </Select>
+                      </FormControl>
                     </Grid>
                   </Grid>
                 </CardContent>
