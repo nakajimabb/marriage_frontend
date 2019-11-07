@@ -63,8 +63,8 @@ const AdvancedTable = async(() => import("../pages/tables/AdvancedTable"));
 const Docs = async(() => import("../pages/docs/Documentation"));
 
 // Users
-const UserList = async(() => import("../pages/users/UserList"));
 const MemberList = async(() => import("../pages/users/MemberList"));
+const CourtshipList = async(() => import("../pages/users/CourtshipList"));
 const UserProfile = async(() => import("../pages/users/UserProfile"));
 
 const pagesRoutes = {
@@ -272,7 +272,7 @@ const matchmakerRoutes = {
     {
       path: "/courtships",
       name: 'views.user.courtships',
-      component: MemberList
+      component: CourtshipList
     },
   ]
 };
@@ -285,7 +285,7 @@ const headRoutes = {
     {
       path: "/users",
       name: 'views.user.list',
-      component: UserList
+      component: MemberList
     },
   ]
 };

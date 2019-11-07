@@ -9,22 +9,22 @@ import env from 'environment';
 import UserList from "./UserList";
 
 
-const MemberList = props => {
+const CourtshipList = props => {
   const { dispatch, session, history } = props;
   const [data, setData] = useState([]);
-  const title = i18next.t('views.user.list');
+  const title = i18next.t('views.user.courtships');
 
   useEffect(() => {
     const headers  = session.headers;
     if(headers && headers['access-token'] && headers['client'] && headers['uid']) {
-      const url = env.API_ORIGIN + 'api/users';
+      const url = env.API_ORIGIN + 'api/users/courtships';
       axios.get(url, {headers})
-          .then((results) => {
-            setData(results.data.users);
-          })
-          .catch((data) => {
-            alert('データの取得に失敗しました。');
-          });
+        .then((results) => {
+          setData(results.data.users);
+        })
+        .catch((data) => {
+          alert('データの取得に失敗しました。');
+        });
     }
     else {
       dispatch(logout());
@@ -58,9 +58,9 @@ const MemberList = props => {
 
   return (
     <React.Fragment>
-      <UserList title={title} data={data} new_user={true} updateUser={updateUser} />
+      <UserList title={title} data={data} new_user={true} all={true} updateUser={updateUser} />
     </React.Fragment>
   );
 };
 
-export default connect(store => ({ session: store.sessionReducer }))(withRouter(MemberList));
+export default connect(store => ({ session: store.sessionReducer }))(withRouter(CourtshipList));
