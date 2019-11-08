@@ -7,8 +7,6 @@ import {
   Grid,
   Box,
   Fab,
-  Divider as MuiDivider,
-  Typography,
   Card,
   CardMedia,
   CardContent,
@@ -31,8 +29,6 @@ import i18next from 'i18n'
 import { str } from 'helpers';
 import UserForm from "./UserForm";
 
-
-const Divider = styled(MuiDivider)(spacing);
 
 const useStyles = makeStyles(theme => ({
   grid: {
@@ -172,12 +168,6 @@ const UserList = props => {
           return (<UserForm user_id={user_id} open={open} onClose={closeUserForm} fullScreen maxWidth="md" />);
       })()
       }
-      <Typography variant="h3" gutterBottom display="inline">
-        { title }
-      </Typography>
-
-      <Divider my={6} />
-
       <Grid container spacing={6}>
         <Grid item>
           <FormControl className={classes.control} >
@@ -291,7 +281,7 @@ const UserList = props => {
                     <CardMedia
                       className={classes.media}
                       image={ avatar_url(user) }
-                      title="Paella dish"
+                      title={user.nickname}
                     />
                   </CardActionArea>
                   <CardContent className={classes.content} >

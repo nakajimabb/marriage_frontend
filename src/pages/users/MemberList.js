@@ -1,13 +1,18 @@
 import React, {useEffect, useState} from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
+import styled from "styled-components";
+import {spacing} from "@material-ui/system";
 import axios from 'axios'
 
 import i18next from 'i18n'
 import { logout } from "redux/actions/sessionActions";
 import env from 'environment';
 import UserList from "./UserList";
+import {Divider as MuiDivider, Typography} from "@material-ui/core";
 
+
+const Divider = styled(MuiDivider)(spacing);
 
 const MemberList = props => {
   const { dispatch, session, history } = props;
@@ -58,7 +63,11 @@ const MemberList = props => {
 
   return (
     <React.Fragment>
-      <UserList title={title} data={data} new_user={true} all={true} updateUser={updateUser} />
+      <Typography variant="h3" gutterBottom display="inline">
+        { title }
+      </Typography>
+      <Divider my={6} />
+      <UserList data={data} new_user all updateUser={updateUser} />
     </React.Fragment>
   );
 };

@@ -64,6 +64,8 @@ const Docs = async(() => import("../pages/docs/Documentation"));
 
 // Users
 const MemberList = async(() => import("../pages/users/MemberList"));
+const ViewableList = async(() => import("../pages/users/ViewableList"));
+const MatchmakerList = async(() => import("../pages/users/MatchmakerList"));
 const UserAll = async(() => import("../pages/users/UserAll"));
 const UserProfile = async(() => import("../pages/users/UserProfile"));
 
@@ -266,24 +268,34 @@ const userRoutes = {
 
 const matchmakerRoutes = {
   id: 'views.user.matchmaker_menu',
-  path: "/users",
+  path: "/matchmaker",
   icon: <FavoriteBorder />,
   children: [
     {
-      path: "/members",
+      path: "/matchmaker/members",
       name: 'views.user.members',
       component: MemberList
+    },
+    {
+      path: "/matchmaker/viewable",
+      name: 'views.user.viewable',
+      component: ViewableList
+    },
+    {
+      path: "/matchmaker/matchmakers",
+      name: 'views.user.matchmakers',
+      component: MatchmakerList
     },
   ]
 };
 
 const headRoutes = {
   id: 'views.user.head_menu',
-  path: "/users",
+  path: "/head",
   icon: <SupervisedUserCircle />,
   children: [
     {
-      path: "/users",
+      path: "/head/all",
       name: 'views.user.list',
       component: UserAll
     },

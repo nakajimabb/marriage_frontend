@@ -14,22 +14,22 @@ import {Divider as MuiDivider, Typography} from "@material-ui/core";
 
 const Divider = styled(MuiDivider)(spacing);
 
-const UserAll = props => {
+const ViewableList = props => {
   const { dispatch, session, history } = props;
   const [data, setData] = useState([]);
-  const title = i18next.t('views.user.list');
+  const title = i18next.t('views.user.viewable');
 
   useEffect(() => {
     const headers  = session.headers;
     if(headers && headers['access-token'] && headers['client'] && headers['uid']) {
-      const url = env.API_ORIGIN + 'api/users';
+      const url = env.API_ORIGIN + 'api/users/viewable';
       axios.get(url, {headers})
-          .then((results) => {
-            setData(results.data.users);
-          })
-          .catch((data) => {
-            alert('データの取得に失敗しました。');
-          });
+        .then((results) => {
+          setData(results.data.users);
+        })
+        .catch((data) => {
+          alert('データの取得に失敗しました。');
+        });
     }
     else {
       dispatch(logout());
@@ -67,9 +67,9 @@ const UserAll = props => {
         { title }
       </Typography>
       <Divider my={6} />
-      <UserList data={data} new_user updateUser={updateUser} />
+      <UserList data={data} all updateUser={updateUser} />
     </React.Fragment>
   );
 };
 
-export default connect(store => ({ session: store.sessionReducer }))(withRouter(UserAll));
+export default connect(store => ({ session: store.sessionReducer }))(withRouter(ViewableList));
