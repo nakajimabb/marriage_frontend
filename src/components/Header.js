@@ -228,22 +228,32 @@ class UserMenu extends Component {
 
 UserMenu = connect(store => ({ session: store.sessionReducer }))(withRouter(UserMenu));
 
-const Header = ({ onDrawerToggle }) => (
+const Header = ({ onDrawerToggle, onMobileToggle }) => (
   <React.Fragment>
     <AppBar position="sticky" elevation={0}>
       <Toolbar>
         <Grid container alignItems="center">
-          <Hidden mdUp>
             <Grid item>
-              <IconButton
-                color="inherit"
-                aria-label="Open drawer"
-                onClick={onDrawerToggle}
-              >
-                <MenuIcon />
-              </IconButton>
+              <Hidden mdUp>
+                <IconButton
+                  color="inherit"
+                  aria-label="Open drawer"
+                  onClick={onMobileToggle}
+                >
+                  <MenuIcon />
+                </IconButton>
+              </Hidden>
+              <Hidden smDown>
+                <IconButton
+                  color="inherit"
+                  aria-label="Open drawer"
+                  onClick={onDrawerToggle}
+                >
+                  <MenuIcon />
+                </IconButton>
+              </Hidden>
             </Grid>
-          </Hidden>
+
           <Grid item>
             <Search>
               <SearchIconWrapper>

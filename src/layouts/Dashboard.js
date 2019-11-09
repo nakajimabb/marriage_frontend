@@ -65,11 +65,16 @@ const MainContent = styled(Paper)`
 
 class Dashboard extends React.Component {
   state = {
-    mobileOpen: false
+    mobileOpen: false,
+    drawerOpen: true,
+  };
+
+  handleMobileToggle = () => {
+    this.setState(state => ({ mobileOpen: !state.mobileOpen }));
   };
 
   handleDrawerToggle = () => {
-    this.setState(state => ({ mobileOpen: !state.mobileOpen }));
+    this.setState(state => ({ drawerOpen: !state.drawerOpen }));
   };
 
   render() {
@@ -79,14 +84,14 @@ class Dashboard extends React.Component {
       <Root>
         <CssBaseline />
         <GlobalStyle />
-        <Drawer>
+        <Drawer hidden={!this.state.drawerOpen}>
           <Hidden mdUp implementation="js">
             <Sidebar
               routes={routes}
               PaperProps={{ style: { width: drawerWidth } }}
               variant="temporary"
               open={this.state.mobileOpen}
-              onClose={this.handleDrawerToggle}
+              onClose={this.handleMobileToggle}
             />
           </Hidden>
           <Hidden smDown implementation="css">
@@ -97,7 +102,7 @@ class Dashboard extends React.Component {
           </Hidden>
         </Drawer>
         <AppContent>
-          <Header onDrawerToggle={this.handleDrawerToggle} />
+          <Header onDrawerToggle={this.handleDrawerToggle} onMobileToggle={this.handleMobileToggle} />
           <MainContent p={isWidthUp("lg", width) ? 10 : 8}>
             {children}
           </MainContent>
