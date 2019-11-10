@@ -1,18 +1,16 @@
 import React, {useEffect, useState} from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import styled from "styled-components";
-import {spacing} from "@material-ui/system";
+import { Box } from "@material-ui/core";
+import { Users } from "react-feather";
 import axios from 'axios'
 
 import i18next from 'i18n'
 import { logout } from "redux/actions/sessionActions";
-import env from 'environment';
+import TitleBar from "pages/components/TitleBar";
 import UserList from "./UserList";
-import {Divider as MuiDivider, Typography} from "@material-ui/core";
+import env from 'environment';
 
-
-const Divider = styled(MuiDivider)(spacing);
 
 const UserAll = props => {
   const { dispatch, session, history } = props;
@@ -63,11 +61,10 @@ const UserAll = props => {
 
   return (
     <React.Fragment>
-      <Typography variant="h3" gutterBottom display="inline">
-        { title }
-      </Typography>
-      <Divider my={6} />
-      <UserList data={data} new_user updateUser={updateUser} />
+      <TitleBar title={title} icon={<Users />} />
+      <Box p={6}>
+        <UserList data={data} new_user updateUser={updateUser} />
+      </Box>
     </React.Fragment>
   );
 };

@@ -1,26 +1,16 @@
 import React, {useEffect, useState} from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import {
-  AppBar,
-  Tabs,
-  Tab,
-  Box,
-  Divider as MuiDivider,
-  Typography,
-} from "@material-ui/core";
-import { makeStyles } from '@material-ui/core/styles';
+import { Box, Tabs, Tab, Typography } from "@material-ui/core";
+import { AllInclusive } from "@material-ui/icons";
 import axios from 'axios'
 
 import i18next from 'i18n'
 import { logout } from "redux/actions/sessionActions";
-import env from 'environment';
+import TitleBar from "pages/components/TitleBar";
 import UserList from "./UserList";
-import styled from "styled-components";
-import {spacing} from "@material-ui/system";
+import env from 'environment';
 
-
-const Divider = styled(MuiDivider)(spacing);
 
 const TabPanel = props => {
   const { children, value, index, ...other } = props;
@@ -46,19 +36,11 @@ function a11yProps(index) {
   };
 }
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    flexGrow: 1,
-    backgroundColor: theme.palette.background.paper,
-  },
-}));
-
 const MatchmakerList = props => {
   const { dispatch, session, history } = props;
   const [data, setData] = useState([]);
   const title = i18next.t('views.user.matchmakers');
   const [tab, setTab] = React.useState(0);
-  const classes = useStyles();
 
   useEffect(() => {
     const headers  = session.headers;
@@ -111,8 +93,8 @@ const MatchmakerList = props => {
   }
 
   return (
-    <div className={classes.root}>
-      <AppBar position="static" color="inherit">
+    <React.Fragment>
+      <TitleBar title={title} icon={<AllInclusive />} >
         <Tabs
           value={tab}
           indicatorColor="primary"
@@ -120,21 +102,24 @@ const MatchmakerList = props => {
           onChange={tabChange}
           aria-label="simple tabs example"
         >
-          <Tab label={title} {...a11yProps(0)} />
+          <Tab label={i18next.t('views.app.list')} {...a11yProps(0)} />
           <Tab label={i18next.t('views.user.matchmaker_public')} {...a11yProps(1)} />
-          <Tab label={i18next.t('views.user.matchmaker_friend')} {...a11yProps(1)} />
+          <Tab label={i18next.t('views.user.matchmaker_friend')} {...a11yProps(2)} />
         </Tabs>
-      </AppBar>
-      <TabPanel value={tab} index={0}>
-        <UserList data={data} all updateUser={updateUser} />
-      </TabPanel>
-      <TabPanel value={tab} index={1}>
-        <UserList data={filterMatchMakers(data, {member_sharing: 'member_public'})} all updateUser={updateUser} />
-      </TabPanel>
-      <TabPanel value={tab} index={2}>
-        <UserList data={filterMatchMakers(data, {friend: true})} all updateUser={updateUser} />
-      </TabPanel>
-    </div>
+      </TitleBar>
+
+      <Box px={3}>
+        <TabPanel value={tab} index={0}>
+          <UserList data={data} all updateUser={updateUser} />
+        </TabPanel>
+        <TabPanel value={tab} index={1}>
+          <UserList data={filterMatchMakers(data, {member_sharing: 'member_public'})} all updateUser={updateUser} />
+        </TabPanel>
+        <TabPanel value={tab} index={2}>
+          <UserList data={filterMatchMakers(data, {friend: true})} all updateUser={updateUser} />
+        </TabPanel>
+      </Box>
+    </React.Fragment>
   );
 };
 

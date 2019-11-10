@@ -103,7 +103,7 @@ class Dashboard extends React.Component {
         </Drawer>
         <AppContent>
           <Header onDrawerToggle={this.handleDrawerToggle} onMobileToggle={this.handleMobileToggle} />
-          <MainContent p={isWidthUp("lg", width) ? 10 : 8}>
+          <MainContent>
             {children}
           </MainContent>
           <Footer />

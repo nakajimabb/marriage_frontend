@@ -233,26 +233,26 @@ const Header = ({ onDrawerToggle, onMobileToggle }) => (
     <AppBar position="sticky" elevation={0}>
       <Toolbar>
         <Grid container alignItems="center">
-            <Grid item>
-              <Hidden mdUp>
-                <IconButton
-                  color="inherit"
-                  aria-label="Open drawer"
-                  onClick={onMobileToggle}
-                >
-                  <MenuIcon />
-                </IconButton>
-              </Hidden>
-              <Hidden smDown>
-                <IconButton
-                  color="inherit"
-                  aria-label="Open drawer"
-                  onClick={onDrawerToggle}
-                >
-                  <MenuIcon />
-                </IconButton>
-              </Hidden>
-            </Grid>
+          <Grid item>
+            <Hidden mdUp>
+              <IconButton
+                color="inherit"
+                aria-label="Open drawer"
+                onClick={onMobileToggle}
+              >
+                <MenuIcon />
+              </IconButton>
+            </Hidden>
+            <Hidden smDown>
+              <IconButton
+                color="inherit"
+                aria-label="Open drawer"
+                onClick={onDrawerToggle}
+              >
+                <MenuIcon />
+              </IconButton>
+            </Hidden>
+          </Grid>
 
           <Grid item>
             <Search>

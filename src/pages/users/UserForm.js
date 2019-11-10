@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import axios from 'axios'
-
 import {
   Button,
   Dialog,
@@ -24,6 +22,7 @@ import {
   CardContent,
 } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
+import axios from 'axios'
 
 import i18next from 'i18n'
 import env from "environment";

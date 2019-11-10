@@ -10,11 +10,12 @@ import {
   Heart,
   Layout,
   List,
-  Users,
   User,
+  UserPlus,
+  Users,
 } from "react-feather";
 
-import { SupervisedUserCircle, FavoriteBorder } from "@material-ui/icons";
+import { SupervisedUserCircle, PeopleOutline, AllInclusive } from "@material-ui/icons";
 
 // Auth components
 const SignIn = async(() => import("../pages/auth/SignIn"));
@@ -258,49 +259,55 @@ const privateRoutes = {
   children: null
 };
 
-const userRoutes = {
-  id: 'views.user.profile',
-  path: "/",
-  icon: <User />,
-  component: UserProfile,
-  children: null
-};
+const commonRoutes = [
+  {
+    id: 'views.user.profile',
+    path: "/",
+    icon: <User />,
+    component: UserProfile,
+    children: null
+  },
+];
 
-const matchmakerRoutes = {
-  id: 'views.user.matchmaker_menu',
-  path: "/matchmaker",
-  icon: <FavoriteBorder />,
-  children: [
-    {
-      path: "/matchmaker/members",
-      name: 'views.user.members',
-      component: MemberList
-    },
-    {
-      path: "/matchmaker/viewable",
-      name: 'views.user.viewable',
-      component: ViewableList
-    },
-    {
-      path: "/matchmaker/matchmakers",
-      name: 'views.user.matchmakers',
-      component: MatchmakerList
-    },
-  ]
-};
+const matchmakerRoutes = [
+  {
+    id: 'views.user.members',
+    path: "/matchmaker/members",
+    icon: <UserPlus />,
+    component: MemberList,
+    children: null,
+  },
+  {
+    id: 'views.user.viewable',
+    path: "/matchmaker/viewable",
+    icon: <Users />,
+    component: ViewableList,
+    children: null,
+  },
+  {
+    id: 'views.user.matchmakers',
+    path: "/matchmaker/matchmakers",
+    icon: <AllInclusive />,
+    component: MatchmakerList,
+    children: null,
+  },
+];
 
-const headRoutes = {
-  id: 'views.user.head_menu',
-  path: "/head",
-  icon: <SupervisedUserCircle />,
-  children: [
-    {
-      path: "/head/all",
-      name: 'views.user.list',
-      component: UserAll
-    },
-  ]
-};
+const headRoutes = [
+  {
+    id: 'views.user.head_menu',
+    path: "/head",
+    icon: <SupervisedUserCircle />,
+    children: [
+      {
+        path: "/head/all",
+        name: 'views.user.list',
+        icon: <PeopleOutline />,
+        component: UserAll
+      },
+    ]
+  },
+];
 
 export const authRoutes = {
   id: "Auth",
@@ -336,21 +343,21 @@ export const authRoutes = {
 };
 
 export const getRoutes = (roles) => {
-  let routes = [userRoutes, componentsRoutes, pagesRoutes, formsRoutes];
+  let routes = commonRoutes;
   if(roles && ~roles.indexOf('matchmaker'))
-    routes.push(matchmakerRoutes);
+    routes = routes.concat(matchmakerRoutes);
   if(roles && ~roles.indexOf('head'))
-    routes.push(headRoutes);
+    routes = routes.concat(headRoutes);
 
   return routes;
 };
 
 export default (roles, lang) => {
-  let routes = [userRoutes, componentsRoutes, pagesRoutes, formsRoutes];
+  let routes = commonRoutes;
   if(roles && ~roles.indexOf('matchmaker'))
-    routes.push(matchmakerRoutes);
+    routes = routes.concat(matchmakerRoutes);
   if(roles && ~roles.indexOf('head'))
-    routes.push(headRoutes);
+    routes = routes.concat(headRoutes);
 
   return routes;
 };

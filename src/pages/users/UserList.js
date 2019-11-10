@@ -1,8 +1,6 @@
 import React, {useState} from "react";
-import styled from "styled-components";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-
 import {
   Grid,
   Box,
@@ -19,11 +17,8 @@ import {
   TextField,
   TablePagination,
 } from "@material-ui/core";
-import {
-  PersonAdd as AddIcon,
-} from '@material-ui/icons';
+import { PersonAdd as AddIcon } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
-import { spacing } from "@material-ui/system";
 
 import i18next from 'i18n'
 import { str } from 'helpers';
