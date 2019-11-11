@@ -1,4 +1,4 @@
-import {AppBar, Box, Grid, Tab, Tabs, Toolbar, Typography} from "@material-ui/core";
+import {AppBar, Box, Grid, Divider, Toolbar, Typography} from "@material-ui/core";
 import React from "react";
 
 
@@ -7,6 +7,7 @@ const TitleBar = props => {
 
 return (
   <AppBar position="static" color="inherit">
+    <Divider />
     <Grid container spacing={3}>
       <Grid item >
         <Toolbar variant="regular">
@@ -25,6 +26,7 @@ return (
         </Box>
       </Grid>
     </Grid>
+    <Divider />
   </AppBar>
   );
 };

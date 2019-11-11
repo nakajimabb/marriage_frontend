@@ -1,21 +1,9 @@
 import React from "react";
-import i18next from '../i18n'
+import { SupervisedUserCircle, PeopleOutline, AllInclusive } from "@material-ui/icons";
+import { User, UserPlus, Users, Settings } from "react-feather";
 
 import async from "../components/Async";
 
-import {
-  BookOpen,
-  CheckSquare,
-  Grid,
-  Heart,
-  Layout,
-  List,
-  User,
-  UserPlus,
-  Users,
-} from "react-feather";
-
-import { SupervisedUserCircle, PeopleOutline, AllInclusive } from "@material-ui/icons";
 
 // Auth components
 const SignIn = async(() => import("../pages/auth/SignIn"));
@@ -24,247 +12,20 @@ const ResetPassword = async(() => import("../pages/auth/ResetPassword"));
 const Page404 = async(() => import("../pages/auth/Page404"));
 const Page500 = async(() => import("../pages/auth/Page500"));
 
-// Components components
-const Avatars = async(() => import("../pages/components/Avatars"));
-const Badges = async(() => import("../pages/components/Badges"));
-const Buttons = async(() => import("../pages/components/Buttons"));
-const Cards = async(() => import("../pages/components/Cards"));
-const Chips = async(() => import("../pages/components/Chips"));
-const Dialogs = async(() => import("../pages/components/Dialogs"));
-const ExpPanels = async(() => import("../pages/components/ExpansionPanels"));
-const Lists = async(() => import("../pages/components/Lists"));
-const Menus = async(() => import("../pages/components/Menus"));
-const Progress = async(() => import("../pages/components/Progress"));
-const Snackbars = async(() => import("../pages/components/Snackbars"));
-const Tooltips = async(() => import("../pages/components/Tooltips"));
-
-// Forms components
-const Pickers = async(() => import("../pages/forms/Pickers"));
-const SelectionCtrls = async(() => import("../pages/forms/SelectionControls"));
-const Selects = async(() => import("../pages/forms/Selects"));
-const TextFields = async(() => import("../pages/forms/TextFields"));
-
-// Icons components
-const MaterialIcons = async(() => import("../pages/icons/MaterialIcons"));
-const FeatherIcons = async(() => import("../pages/icons/FeatherIcons"));
-
-// Pages components
-const Blank = async(() => import("../pages/pages/Blank"));
-const Invoice = async(() => import("../pages/pages/Invoice"));
-const Pricing = async(() => import("../pages/pages/Pricing"));
-const Settings = async(() => import("../pages/pages/Settings"));
-const Tasks = async(() => import("../pages/pages/Tasks"));
-const Projects = async(() => import("../pages/pages/Projects"));
-
-// Tables components
-const SimpleTable = async(() => import("../pages/tables/SimpleTable"));
-const AdvancedTable = async(() => import("../pages/tables/AdvancedTable"));
-
-// Documentation
-const Docs = async(() => import("../pages/docs/Documentation"));
-
 // Users
 const MemberList = async(() => import("../pages/users/MemberList"));
 const ViewableList = async(() => import("../pages/users/ViewableList"));
 const MatchmakerList = async(() => import("../pages/users/MatchmakerList"));
 const UserAll = async(() => import("../pages/users/UserAll"));
-const UserProfile = async(() => import("../pages/users/UserProfile"));
+const MyProfile = async(() => import("../pages/users/MyProfile"));
 
-const pagesRoutes = {
-  id: "Pages",
-  path: "/pages",
-  icon: <Layout />,
-  children: [
-    {
-      path: "/pages/settings",
-      name: "Settings",
-      component: Settings
-    },
-    {
-      path: "/pages/projects",
-      name: "Projects",
-      component: Projects,
-      badge: "New"
-    },
-    {
-      path: "/pages/invoice",
-      name: "Invoice",
-      component: Invoice
-    },
-    {
-      path: "/pages/pricing",
-      name: "Pricing",
-      component: Pricing
-    },
-    {
-      path: "/pages/tasks",
-      name: "Tasks",
-      component: Tasks,
-      badge: "New"
-    },
-    {
-      path: "/pages/blank",
-      name: "Blank Page",
-      component: Blank
-    }
-  ]
-};
-
-const documentationRoutes = {
-  id: "Documentation",
-  path: "/",
-  icon: <BookOpen />,
-  component: Docs,
-  children: null
-};
-
-const componentsRoutes = {
-  id: "Components",
-  path: "/components",
-  header: "Elements",
-  icon: <Grid />,
-  children: [
-    {
-      path: "/components/avatars",
-      name: "Avatars",
-      component: Avatars
-    },
-    {
-      path: "/components/badges",
-      name: "Badges",
-      component: Badges
-    },
-    {
-      path: "/components/buttons",
-      name: "Buttons",
-      component: Buttons
-    },
-    {
-      path: "/components/cards",
-      name: "Cards",
-      component: Cards
-    },
-    {
-      path: "/components/chips",
-      name: "Chips",
-      component: Chips
-    },
-    {
-      path: "/components/dialogs",
-      name: "Dialogs",
-      component: Dialogs
-    },
-    {
-      path: "/components/expansion-panels",
-      name: "Expansion Panels",
-      component: ExpPanels
-    },
-    {
-      path: "/components/lists",
-      name: "Lists",
-      component: Lists
-    },
-    {
-      path: "/components/menus",
-      name: "Menus",
-      component: Menus
-    },
-    {
-      path: "/components/progress",
-      name: "Progress",
-      component: Progress
-    },
-    {
-      path: "/components/snackbars",
-      name: "Snackbars",
-      component: Snackbars
-    },
-    {
-      path: "/components/tooltips",
-      name: "Tooltips",
-      component: Tooltips
-    }
-  ]
-};
-
-const formsRoutes = {
-  id: "Forms",
-  path: "/forms",
-  icon: <CheckSquare />,
-  children: [
-    {
-      path: "/forms/pickers",
-      name: "Pickers",
-      component: Pickers
-    },
-    {
-      path: "/forms/selection-controls",
-      name: "Selection Controls",
-      component: SelectionCtrls
-    },
-    {
-      path: "/forms/selects",
-      name: "Selects",
-      component: Selects
-    },
-    {
-      path: "/forms/text-fields",
-      name: "Text Fields",
-      component: TextFields
-    }
-  ]
-};
-
-const tablesRoutes = {
-  id: "Tables",
-  path: "/tables",
-  icon: <List />,
-  children: [
-    {
-      path: "/tables/simple-table",
-      name: "Simple Table",
-      component: SimpleTable
-    },
-    {
-      path: "/tables/advanced-table",
-      name: "Advanced Table",
-      component: AdvancedTable
-    }
-  ]
-};
-
-const iconsRoutes = {
-  id: "Icons",
-  path: "/icons",
-  icon: <Heart />,
-  children: [
-    {
-      path: "/icons/material-icons",
-      name: "Material Icons",
-      component: MaterialIcons
-    },
-    {
-      path: "/icons/feather-icons",
-      name: "Feather Icons",
-      component: FeatherIcons
-    }
-  ]
-};
-
-// This route is not visisble in the sidebar
-const privateRoutes = {
-  id: "Private",
-  path: "/private",
-  component: Blank,
-  children: null
-};
 
 const commonRoutes = [
   {
-    id: 'views.user.profile',
+    id: 'views.user.account',
     path: "/",
-    icon: <User />,
-    component: UserProfile,
+    icon: <Settings />,
+    component: MyProfile,
     children: null
   },
 ];
@@ -343,9 +104,10 @@ export const authRoutes = {
 };
 
 export const getRoutes = (roles) => {
-  let routes = commonRoutes;
+  let routes = [];
   if(roles && ~roles.indexOf('matchmaker'))
     routes = routes.concat(matchmakerRoutes);
+  routes = routes.concat(commonRoutes);
   if(roles && ~roles.indexOf('head'))
     routes = routes.concat(headRoutes);
 
@@ -353,9 +115,10 @@ export const getRoutes = (roles) => {
 };
 
 export default (roles, lang) => {
-  let routes = commonRoutes;
+  let routes = [];
   if(roles && ~roles.indexOf('matchmaker'))
     routes = routes.concat(matchmakerRoutes);
+  routes = routes.concat(commonRoutes);
   if(roles && ~roles.indexOf('head'))
     routes = routes.concat(headRoutes);
 
