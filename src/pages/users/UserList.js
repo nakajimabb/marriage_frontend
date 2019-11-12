@@ -5,6 +5,7 @@ import {
   Grid,
   Box,
   Fab,
+  Tooltip,
   Card,
   CardMedia,
   CardContent,
@@ -22,7 +23,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import i18next from 'i18n'
 import { str } from 'helpers';
-import UserForm from "./UserForm";
+import UserPage from "./UserPage";
 
 
 const useStyles = makeStyles(theme => ({
@@ -62,7 +63,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const UserList = props => {
-  const { data, title, new_user, updateUser, all } = props;
+  const { data, new_user, item_labels, updateUser, all, form, profile, action } = props;
   const [open, setOpen] = useState(false);
   const [user_id, setUserId] = useState(null);
   const [search, setSearch] = useState({});
@@ -73,6 +74,11 @@ const UserList = props => {
   const religions = i18next.data_list('enum', 'user', 'religion');
   const keys = ['sex', 'prefecture', 'religion'];
   const ages = [search.min_age, search.max_age];
+
+  const default_labels = [
+    (u => u.nickname),
+    (u => (i18next.age(u.age) + ' ' + (u.prefecture ? i18next.t('prefecture.' + u.prefecture) : ''))),
+  ];
 
   const columns = [ (n => str(n.last_name) + str(n.first_name)),
     (n => str(n.last_name_kana) + str(n.first_name_kana)),
@@ -108,12 +114,12 @@ const UserList = props => {
     setUserId(null);
   };
 
-  const openUserForm = (n) => () => {
+  const openUserPage = (n) => () => {
     setOpen(true);
     setUserId(n.id);
   };
 
-  const closeUserForm = (user_id) => {
+  const closeUserPage = (user_id) => {
     setOpen(false);
     if(user_id) updateUser(user_id)
   };
@@ -160,7 +166,18 @@ const UserList = props => {
     <React.Fragment>
       { (() => {
         if (open)
-          return (<UserForm user_id={user_id} open={open} onClose={closeUserForm} fullScreen maxWidth="md" />);
+          return (
+              <UserPage
+                user_id={user_id}
+                open={open}
+                onClose={closeUserPage}
+                fullScreen
+                form={form}
+                profile={profile}
+                action={action}
+                maxWidth="md"
+              />
+            );
       })()
       }
       <Grid container spacing={6}>
@@ -258,7 +275,9 @@ const UserList = props => {
             if(new_user) {
               return (
                 <Grid item>
-                  <Fab size="medium" onClick={openUserNewForm} ><AddIcon/></Fab>
+                  <Tooltip title={i18next.t('views.user.add_user')}>
+                    <Fab size="medium" onClick={openUserNewForm} ><AddIcon/></Fab>
+                  </Tooltip>
                 </Grid>
                 );
             }
@@ -272,7 +291,7 @@ const UserList = props => {
             return (
               <Grid item xs={6} md={4} lg={3} xl={2} className={classes.grid} >
                 <Card className={classes.card}>
-                  <CardActionArea onClick={openUserForm(user)}>
+                  <CardActionArea onClick={openUserPage(user)}>
                     <CardMedia
                       className={classes.media}
                       image={ avatar_url(user) }
@@ -280,21 +299,9 @@ const UserList = props => {
                     />
                   </CardActionArea>
                   <CardContent className={classes.content} >
-                    <Box>
-                      <Box component="span" display="inline" class={classes.full_name} >
-                        { str(user.last_name) + ' ' + str(user.first_name) }
-                      </Box>
-                      <Box component="span" display="inline" class={classes.prof_item} >
-                        ({ str(user.nickname) })
-                      </Box>
-                    </Box>
-                    &nbsp;
-                    <Box component="span" display="inline" class={classes.prof_item} >
-                      { i18next.age(user.age) }
-                    </Box>
-                    <Box component="span" display="inline" class={classes.prof_item} >
-                      { user.prefecture ? i18next.t('prefecture.' + user.prefecture) : '' }
-                    </Box>
+                    {
+                      (item_labels || default_labels).map(f => (<Box>{ f(user) }</Box>))
+                    }
                   </CardContent>
                 </Card>
               </Grid>

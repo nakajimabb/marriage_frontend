@@ -16,6 +16,10 @@ const UserAll = props => {
   const { dispatch, session, history } = props;
   const [data, setData] = useState([]);
   const title = i18next.t('views.user.list');
+  const item_labels = [
+                        (u => (u.last_name + ' ' + u.first_name + ' (' + u.nickname + ')')),
+                        (u => (i18next.age(u.age) + ' ' + (u.prefecture ? i18next.t('prefecture.' + u.prefecture) : ''))),
+                      ];
 
   useEffect(() => {
     const headers  = session.headers;
@@ -39,7 +43,7 @@ const UserAll = props => {
     if(user_id) {
       const headers  = session.headers;
       if(headers && headers['access-token'] && headers['client'] && headers['uid']) {
-        const url = env.API_ORIGIN + 'api/users/' + user_id;
+        const url = env.API_ORIGIN + 'api/users/' + user_id + '/get';
         axios.get(url, {headers})
           .then((results) => {
             let user = results.data.user;
@@ -63,7 +67,7 @@ const UserAll = props => {
     <React.Fragment>
       <TitleBar title={title} icon={<Users />} />
       <Box p={6}>
-        <UserList data={data} new_user updateUser={updateUser} />
+        <UserList data={data} item_labels={item_labels} new_user updateUser={updateUser} form profile action="edit" />
       </Box>
     </React.Fragment>
   );

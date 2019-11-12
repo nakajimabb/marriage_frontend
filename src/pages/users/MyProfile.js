@@ -12,13 +12,13 @@ import UserProfile from "./UserProfile";
 const MyProfile = props => {
   const { session } = props;
   const title = i18next.t('views.user.account');
-  const user_id = session.user.id;
+  const user = session.user;
 
   return (
     <React.Fragment>
       <TitleBar title={title} icon={<Settings />} />
       <Box p={6}>
-        <UserProfile user_id={user_id} open />
+        <UserProfile user={user} open />
       </Box>
     </React.Fragment>
   );

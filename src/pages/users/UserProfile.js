@@ -2,32 +2,20 @@ import React, { useState, useEffect, useRef } from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import {
-  FormControl,
   Grid,
-  FormControlLabel,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
   Avatar,
-  Checkbox,
   Card,
   CardHeader,
   CardContent,
-  Typography,
   List,
   ListItem,
   ListItemIcon,
-  ListSubheader,
   ListItemText,
 } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
-import axios from 'axios'
 
 import i18next from 'i18n'
-import env from "environment";
 import { str } from 'helpers';
-import CustomizedSnackbar from "pages/components/CustomizedSnackbar";
 
 
 const useStyles = makeStyles(theme => ({
@@ -55,60 +43,11 @@ const useStyles = makeStyles(theme => ({
 
 const UserProfile = props => {
 
-  const { user_id, session } = props;
-  const [user, setUser] = useState({});
-  const [errors, setErrors] = useState({});
-  const prefectures = i18next.data_list('prefecture');
-  const bloods = i18next.data_list('enum', 'user', 'blood');
-  const religions = i18next.data_list('enum', 'user', 'religion');
-  const drinkings = i18next.data_list('enum', 'user', 'drinking');
-  const smokings = i18next.data_list('enum', 'user', 'smoking');
+  const { user } = props;
   const classes = useStyles();
-
-  useEffect(() => {
-    if(user_id) {
-      const headers  = session.headers;
-      if(headers && headers['access-token'] && headers['client'] && headers['uid']) {
-        const url = env.API_ORIGIN + 'api/users/' + user_id;
-        axios.get(url, {headers})
-            .then((results) => {
-              setUser(results.data.user);
-              setErrors({})
-            })
-            .catch((data) => {
-              alert('データの取得に失敗しました。');
-            });
-      }
-    }
-  }, [user_id, session.headers]);
-
-  const handleChange = event => {
-    let user2 = Object.assign({}, user);
-    user2[event.target.name] = event.target.value;
-    setUser(user2);
-  };
-
-  const handleChangeChecked = event => {
-    let user2 = Object.assign({}, user);
-    user2[event.target.name] = event.target.checked;
-    setUser(user2);
-  };
 
   return (
     <React.Fragment>
-      { (Object.keys(errors).length > 0) ?
-        (<CustomizedSnackbar
-          variant="error"
-          message={
-            Object.keys(errors).map(key => {
-              return (
-                <div>{errors[key]}</div>
-              );
-            })
-          }
-        />) : null
-      }
-
       <Grid container spacing={6}>
         <Grid item xs={12} md={6} lg={4}>
           <Card className={classes.card}>
@@ -133,10 +72,8 @@ const UserProfile = props => {
                 <ListItemText
                   inset
                   primary={ user.nickname }
-                  className={classes.list_text}
+                  className={classes.text_half}
                 />
-              </ListItem>
-              <ListItem button>
                 <ListItemIcon>
                   { i18next.attr('user', 'sex') }
                 </ListItemIcon>
@@ -145,12 +82,22 @@ const UserProfile = props => {
                   primary={ user.sex ? i18next.enum('user', 'sex', user.sex) : null }
                   className={classes.text_half}
                 />
+              </ListItem>
+              <ListItem button>
                 <ListItemIcon>
                   { i18next.attr('user', 'age') }
                 </ListItemIcon>
                 <ListItemText
                   inset
                   primary={ user.age ? str(user.age) + i18next.t('views.app.age_year') : null }
+                  className={classes.text_half}
+                />
+                <ListItemIcon>
+                  { i18next.attr('user', 'marital_status') }
+                </ListItemIcon>
+                <ListItemText
+                  inset
+                  primary={ user.marital_status ? i18next.enum('user', 'marital_status', user.marital_status) : null }
                   className={classes.text_half}
                 />
               </ListItem>

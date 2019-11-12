@@ -35,35 +35,11 @@ const ViewableList = props => {
     }
   }, [session.headers]);
 
-  function updateUser(user_id) {
-    if(user_id) {
-      const headers  = session.headers;
-      if(headers && headers['access-token'] && headers['client'] && headers['uid']) {
-        const url = env.API_ORIGIN + 'api/users/' + user_id;
-        axios.get(url, {headers})
-          .then((results) => {
-            let user = results.data.user;
-            let data2 = Array.from(data);
-            const index = data.findIndex(u => u.id == user.id)
-            if(~index) {
-              data2[index] = user;
-            } else {
-              data2.push(user)
-            }
-            setData(data2);
-          })
-          .catch((data) => {
-            alert('データの取得に失敗しました。');
-          });
-      }
-    }
-  }
-
   return (
     <React.Fragment>
       <TitleBar title={title} icon={<Users />} />
       <Box p={6}>
-        <UserList data={data} all updateUser={updateUser} />
+        <UserList data={data} all profile action="" />
       </Box>
     </React.Fragment>
   );
