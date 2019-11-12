@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import {
@@ -15,7 +15,7 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 
 import i18next from 'i18n'
-import { str } from 'helpers';
+import { str, age } from 'helpers';
 
 
 const useStyles = makeStyles(theme => ({
@@ -45,6 +45,7 @@ const UserProfile = props => {
 
   const { user } = props;
   const classes = useStyles();
+  const user_age = age(user.birthday) || user.age;
 
   return (
     <React.Fragment>
@@ -89,7 +90,7 @@ const UserProfile = props => {
                 </ListItemIcon>
                 <ListItemText
                   inset
-                  primary={ user.age ? str(user.age) + i18next.t('views.app.age_year') : null }
+                  primary={ user_age ? user_age + i18next.t('views.app.age_year') : null }
                   className={classes.text_half}
                 />
                 <ListItemIcon>
