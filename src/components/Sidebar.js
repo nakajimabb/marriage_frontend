@@ -287,6 +287,7 @@ class Sidebar extends React.Component {
 
   render() {
     const { classes, staticContext, session, ...other } = this.props;
+    const user = session.user;
 
     return (
       <Drawer variant="permanent" {...other}>
@@ -352,8 +353,14 @@ class Sidebar extends React.Component {
         <SidebarFooter>
           <Grid container spacing={2}>
             <Grid item>
+              <Avatar
+                alt={ user.nickname }
+                src={ user.avatar_url }
+              />
+            </Grid>
+            <Grid item>
               <SidebarFooterText variant="body2">
-                { session.user.last_name } { session.user.first_name }
+                { user.last_name } { user.first_name }
               </SidebarFooterText>
               <SidebarFooterText variant="body2">
                 <Dot />
