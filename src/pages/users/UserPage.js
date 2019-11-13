@@ -124,7 +124,7 @@ const UserPage = props => {
           {
             form ?
               (<TabPanel value={tab} index={tab_indexes.form} >
-                <UserForm user={user} matchmakers={matchmakers} setUser={setUser} onClose={onClose2} />
+                <UserForm user={user} matchmakers={matchmakers} setUser={setUser} onClose={onClose} />
               </TabPanel>) : null
           }
           {
