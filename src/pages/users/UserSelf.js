@@ -38,10 +38,10 @@ const useStyles = makeStyles(theme => ({
     marginBottom: 10,
   },
   list_text: {
-    padding: 0,
+    paddingLeft: 5,
   },
   text_half: {
-    padding: 0,
+    paddingLeft: 5,
     width: '30%',
   },
   appBar: {

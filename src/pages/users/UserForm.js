@@ -454,7 +454,7 @@ const UserForm = props => {
         <Grid item xs={12} md={6} lg={4}>
           <Card className={classes.card}>
             <CardHeader
-                title={ i18next.t('views.user.members') }
+                title={ i18next.t('views.user.roles') }
             />
             <CardContent>
               <Grid fullWidth container spacing={2} >
@@ -888,7 +888,7 @@ const UserForm = props => {
           <Grid container spacing={6}>
             <Grid item xs />
             <Grid item>
-              <Button onClick={onClose} color="primary">
+              <Button onClick={() => onClose(null)} color="primary">
                 { i18next.t('views.app.cancel') }
               </Button>
               <Button onClick={onSave} color="primary">

@@ -33,10 +33,10 @@ const useStyles = makeStyles(theme => ({
     paddingTop: 5,
   },
   list_text: {
-    padding: 0,
+    paddingLeft: 5,
   },
   text_half: {
-    padding: 0,
+    paddingLeft: 5,
     width: '30%',
   },
 }));
@@ -46,6 +46,9 @@ const UserProfile = props => {
   const { user } = props;
   const classes = useStyles();
   const user_age = age(user.birthday) || user.age;
+  let roles = [];
+  if(user.role_courtship) roles.push(i18next.attr('user', 'role_courtship'));
+  if(user.role_matchmaker) roles.push(i18next.attr('user', 'role_matchmaker'));
 
   return (
     <React.Fragment>
@@ -102,6 +105,39 @@ const UserProfile = props => {
                   className={classes.text_half}
                 />
               </ListItem>
+              <ListItem button>
+                <ListItemIcon>
+                  { i18next.t('views.user.roles') }
+                </ListItemIcon>
+                <ListItemText
+                  inset
+                  primary={ roles.join(', ') }
+                  className={classes.list_text}
+                />
+              </ListItem>
+              {
+                user.role_matchmaker ?
+                  (
+                    <ListItem button >
+                      <ListItemIcon>
+                        { i18next.attr('user', 'courtships_size') }
+                      </ListItemIcon>
+                      <ListItemText
+                        inset
+                        primary={ user.courtships_size }
+                        className={classes.text_half}
+                      />
+                      <ListItemIcon>
+                        { i18next.attr('user', 'member_sharing') }
+                      </ListItemIcon>
+                      <ListItemText
+                        inset
+                        primary={ user.member_sharing ? i18next.enum('user', 'member_sharing', user.member_sharing) : '' }
+                        className={classes.text_half}
+                      />
+                    </ListItem>
+                  ) : null
+              }
             </List>
           </Card>
 
