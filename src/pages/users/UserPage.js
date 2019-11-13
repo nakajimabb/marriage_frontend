@@ -3,9 +3,7 @@ import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import {
   Box,
-  Button,
   Dialog,
-  DialogActions,
   DialogContent,
   Tab,
   Tabs,
@@ -16,7 +14,7 @@ import axios from 'axios'
 
 import i18next from 'i18n'
 import DialogTitle from "pages/components/DialogTitle";
-import { str, collectErrors, createFormData } from 'helpers';
+import { str } from 'helpers';
 import UserForm from "./UserForm";
 import UserProfile from "./UserProfile";
 import env from 'environment';
@@ -48,7 +46,6 @@ const UserPage = props => {
   const { open, user_id, session, onClose, maxWidth, form, profile, action } = props;
   const [user, setUser] = useState({});
   const [matchmakers, setMatchmakers] = useState([]);
-  const [errors, setErrors] = useState({});
   const [fullScreen, setFullScreen] = useState(props.fullScreen);
   const [tab, setTab] = React.useState(0);
   const classes = useStyles();
@@ -67,7 +64,6 @@ const UserPage = props => {
           .then((results) => {
             setUser(results.data.user);
             setMatchmakers(results.data.matchmakers);
-            setErrors({})
           })
           .catch((data) => {
             alert('データの取得に失敗しました。');
@@ -92,38 +88,6 @@ const UserPage = props => {
 
   const tabChange = (event, newValue) => {
     setTab(newValue);
-  };
-
-  const onSave = async () => {
-    const headers  = session.headers;
-
-    if(headers && headers['access-token'] && headers['client'] && headers['uid']) {
-      let url = env.API_ORIGIN + 'api/users/';
-      if(user_id) url += user_id;
-
-      let promise;
-      let user_params = createFormData(user, 'user');
-
-      const avatar = document.getElementById('avatar');
-      if(avatar.files.length > 0) {
-        user_params.append('user[avatar]', avatar.files[0]);
-      }
-
-      if(user_id) {
-        promise = axios.patch(url, user_params, { headers });
-      } else {
-        promise = axios.post(url, user_params, { headers });
-      }
-
-      promise
-        .then((results) => {
-          setErrors({});
-          onClose(results.data.user.id);
-        })
-        .catch((data) => {
-          setErrors(collectErrors(data.response));
-        });
-    }
   };
 
   const onClose2 = () => {
@@ -160,7 +124,7 @@ const UserPage = props => {
           {
             form ?
               (<TabPanel value={tab} index={tab_indexes.form} >
-                <UserForm user={user} errors={errors} matchmakers={matchmakers} setUser={setUser} />
+                <UserForm user={user} matchmakers={matchmakers} setUser={setUser} onClose={onClose2} />
               </TabPanel>) : null
           }
           {
@@ -170,18 +134,6 @@ const UserPage = props => {
               </TabPanel>) : null
           }
         </DialogContent>
-        <DialogActions>
-          <Button onClick={onClose2} color="primary">
-            { i18next.t('views.app.cancel') }
-          </Button>
-          {
-            form ? (
-              <Button onClick={onSave} color="primary">
-                { i18next.t('views.app.save') }
-              </Button>
-            ) : null
-          }
-        </DialogActions>
       </Dialog>
     </React.Fragment>
   );

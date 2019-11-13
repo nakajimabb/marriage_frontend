@@ -7,7 +7,7 @@ import InfoIcon from '@material-ui/icons/Info';
 import CloseIcon from '@material-ui/icons/Close';
 import { amber, green } from '@material-ui/core/colors';
 import IconButton from '@material-ui/core/IconButton';
-import SnackbarContent from '@material-ui/core/SnackbarContent';
+import { Snackbar, SnackbarContent } from '@material-ui/core';
 import WarningIcon from '@material-ui/icons/Warning';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -44,34 +44,43 @@ const useStyles1 = makeStyles(theme => ({
   },
 }));
 
-export default function CustomizedSnackbar(props) {
+const CustomizedSnackbar = props => {
   const classes = useStyles1();
-  const { className, message, onClose, variant, ...other } = props;
+  const { className, message, variant, open, onClose, ...other } = props;
   const Icon = variantIcon[variant];
 
   return (
-      <SnackbarContent
-      className={clsx(classes[variant], className)}
-      aria-describedby="client-snackbar"
-      message={
-        <span id="client-snackbar" className={classes.message}>
-          <div>
-            <Icon className={clsx(classes.icon, classes.iconVariant)} />
-          </div>
-          <div>
-            {message}
-          </div>
-        </span>
-      }
-      action={[
-        <IconButton key="close" aria-label="Close" color="inherit" onClick={onClose}>
-          <CloseIcon className={classes.icon} />
-        </IconButton>,
-      ]}
-      {...other}
-    />
+      <Snackbar
+        open={open}
+        onClose={onClose}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+      >
+        <SnackbarContent
+          className={clsx(classes[variant], className)}
+          aria-describedby="client-snackbar"
+          message={
+            <span id="client-snackbar" className={classes.message}>
+              <div>
+                <Icon className={clsx(classes.icon, classes.iconVariant)} />
+              </div>
+              <div>
+                {message}
+              </div>
+            </span>
+          }
+          action={[
+            <IconButton key="close" aria-label="Close" color="inherit" onClick={onClose}>
+              <CloseIcon className={classes.icon} />
+            </IconButton>,
+          ]}
+          {...other}
+      />
+    </Snackbar>
   );
-}
+};
 
 CustomizedSnackbar.propTypes = {
   className: PropTypes.string,
@@ -79,3 +88,5 @@ CustomizedSnackbar.propTypes = {
   onClose: PropTypes.func,
   variant: PropTypes.oneOf(['success', 'warning', 'error', 'info']).isRequired,
 };
+
+export default CustomizedSnackbar;

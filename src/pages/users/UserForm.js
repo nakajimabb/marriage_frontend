@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, {useRef, useState} from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import {
@@ -15,25 +15,36 @@ import {
   Box,
   Card,
   CardHeader,
-  CardContent,
+  CardContent, AppBar, Toolbar, Button,
 } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
+import axios from "axios";
 
 import i18next from 'i18n'
-import { str } from 'helpers';
+import { str, collectErrors, createFormData } from 'helpers';
 import CustomizedSnackbar from "pages/components/CustomizedSnackbar";
+import env from 'environment';
 
 
 const useStyles = makeStyles(theme => ({
   card: {
     marginTop: 10,
     marginBottom: 10,
-  }
+  },
+  appBar: {
+    top: 'auto',
+    bottom: 0,
+  },
+  toolbar: {
+    minHeight: 'initial',
+    padding: theme.spacing(2),
+  },
 }));
 
 const UserForm = props => {
 
-  const { user, session, errors, matchmakers, setUser } = props;
+  const { user, session, matchmakers, setUser, onClose } = props;
+  const [errors, setErrors] = useState({});
   const avatar = useRef();
   const prefectures = i18next.data_list('prefecture');
   const bloods = i18next.data_list('enum', 'user', 'blood');
@@ -44,6 +55,39 @@ const UserForm = props => {
   const marital_statuses = i18next.data_list('enum', 'user', 'marital_status');
   const classes = useStyles();
   const is_head = ~session.roles.indexOf('head');
+  const user_id = user.id;
+
+  const onSave = async () => {
+    const headers  = session.headers;
+
+    if(headers && headers['access-token'] && headers['client'] && headers['uid']) {
+      let url = env.API_ORIGIN + 'api/users/';
+      if(user_id) url += user_id;
+
+      let promise;
+      let user_params = createFormData(user, 'user');
+
+      const avatar = document.getElementById('avatar');
+      if(avatar.files.length > 0) {
+        user_params.append('user[avatar]', avatar.files[0]);
+      }
+
+      if(user_id) {
+        promise = axios.patch(url, user_params, { headers });
+      } else {
+        promise = axios.post(url, user_params, { headers });
+      }
+
+      promise
+        .then((results) => {
+          setErrors({});
+          onClose(results.data.user.id);
+        })
+        .catch((data) => {
+          setErrors(collectErrors(data.response));
+        });
+    }
+  };
 
   const handleChange = event => {
     let user2 = Object.assign({}, user);
@@ -59,18 +103,18 @@ const UserForm = props => {
 
   return (
     <React.Fragment>
-      { (Object.keys(errors).length > 0) ?
-        (<CustomizedSnackbar
-          variant="error"
-          message={
-            Object.keys(errors).map(key => {
-              return (
-                <div>{errors[key]}</div>
-              );
-            })
-          }
-        />) : null
-      }
+      <CustomizedSnackbar
+        open={ Object.keys(errors).length > 0 }
+        variant="error"
+        message={
+          Object.keys(errors).map(key => {
+            return (
+              <div>{errors[key]}</div>
+            );
+          })
+        }
+        onClose={() => setErrors({})}
+      />
 
       <Grid container spacing={6}>
         <Grid item xs={12} md={6} lg={4}>
@@ -839,6 +883,21 @@ const UserForm = props => {
           </Card>
         </Grid>
       </Grid>
+      <AppBar position="fixed" color="default" className={classes.appBar} >
+        <Toolbar className={classes.toolbar} >
+          <Grid container spacing={6}>
+            <Grid item xs />
+            <Grid item>
+              <Button onClick={onClose} color="primary">
+                { i18next.t('views.app.cancel') }
+              </Button>
+              <Button onClick={onSave} color="primary">
+                { i18next.t('views.app.save') }
+              </Button>
+            </Grid>
+          </Grid>
+        </Toolbar>
+      </AppBar>
     </React.Fragment>
   );
 };
