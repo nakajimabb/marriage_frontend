@@ -26,6 +26,7 @@ import {
 } from "react-feather";
 
 import { logout } from "../redux/actions/sessionActions";
+import Settings from "./Settings";
 
 
 const AppBar = styled(MuiAppBar)`
@@ -98,73 +99,6 @@ const Flag = styled.img`
   width: 22px;
   height: 22px;
 `;
-
-class LanguageMenu extends Component {
-  state = {
-    anchorMenu: null
-  };
-
-  toggleMenu = event => {
-    this.setState({ anchorMenu: event.currentTarget });
-  };
-
-  closeMenu = () => {
-    this.setState({ anchorMenu: null });
-  };
-
-  render() {
-    const { anchorMenu } = this.state;
-    const open = Boolean(anchorMenu);
-
-    return (
-      <React.Fragment>
-        <IconButton
-          aria-owns={open ? "menu-appbar" : undefined}
-          aria-haspopup="true"
-          onClick={this.toggleMenu}
-          color="inherit"
-        >
-          <Flag src="/static/img/flags/us.png" alt="English" />
-        </IconButton>
-        <Menu
-          id="menu-appbar"
-          anchorEl={anchorMenu}
-          open={open}
-          onClose={this.closeMenu}
-        >
-          <MenuItem
-            onClick={() => {
-              this.closeMenu();
-            }}
-          >
-            English
-          </MenuItem>
-          <MenuItem
-            onClick={() => {
-              this.closeMenu();
-            }}
-          >
-            French
-          </MenuItem>
-          <MenuItem
-            onClick={() => {
-              this.closeMenu();
-            }}
-          >
-            German
-          </MenuItem>
-          <MenuItem
-            onClick={() => {
-              this.closeMenu();
-            }}
-          >
-            Dutch
-          </MenuItem>
-        </Menu>
-      </React.Fragment>
-    );
-  }
-}
 
 class UserMenu extends Component {
   state = {
@@ -274,7 +208,7 @@ const Header = ({ onDrawerToggle, onMobileToggle }) => (
                 <Bell />
               </Indicator>
             </IconButton>
-            <LanguageMenu />
+            <Settings />
             <UserMenu />
           </Grid>
         </Grid>

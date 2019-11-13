@@ -4,7 +4,6 @@ import styled, { createGlobalStyle } from "styled-components";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import Settings from "../components/Settings";
 
 import { spacing } from "@material-ui/system";
 import {
@@ -13,8 +12,6 @@ import {
   Paper as MuiPaper,
   withWidth
 } from "@material-ui/core";
-
-import { isWidthUp } from "@material-ui/core/withWidth";
 
 const drawerWidth = 260;
 
@@ -108,7 +105,6 @@ class Dashboard extends React.Component {
           </MainContent>
           <Footer />
         </AppContent>
-        <Settings />
       </Root>
     );
   }

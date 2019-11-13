@@ -7,7 +7,7 @@ import {
   Typography,
   Drawer,
   ListItem,
-  Fab as MuiFab,
+  IconButton,
   Paper as MuiPaper
 } from "@material-ui/core";
 
@@ -21,12 +21,6 @@ const Demo = styled(Paper)`
   cursor: pointer;
   text-align: center;
   box-shadow: none;
-`;
-
-const Fab = styled(MuiFab)`
-  position: fixed;
-  right: ${props => props.theme.spacing(8)}px;
-  bottom: ${props => props.theme.spacing(8)}px;
 `;
 
 const Wrapper = styled.div`
@@ -121,9 +115,9 @@ export default function Settings() {
 
   return (
     <React.Fragment>
-      <Fab color="primary" aria-label="Edit" onClick={toggleDrawer(true)}>
-        <PaletteIcon />
-      </Fab>
+      <IconButton color="inherit" aria-label="Edit" onClick={toggleDrawer(true)}>
+        <PaletteIcon fontSize="small" color="primary" />
+      </IconButton>
       <Drawer anchor="right" open={state.isOpen} onClose={toggleDrawer(false)}>
         <Demos />
       </Drawer>

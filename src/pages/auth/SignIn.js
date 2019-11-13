@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
 import { login } from "../../redux/actions/sessionActions";
+import { setTheme } from "../../redux/actions/themeActions";
 
 import {
   Checkbox,
@@ -18,6 +19,7 @@ import {
 import { spacing } from "@material-ui/system";
 
 import env from '../../environment';
+import Cookies from "js-cookie";
 
 
 const Button = styled(MuiButton)(spacing);
@@ -63,6 +65,8 @@ class SignIn extends Component {
       let json = await response.json();
       const user = json.data;
       dispatch(login({headers, user}));
+      const theme = Cookies.get('theme') || 0;
+      dispatch(setTheme(theme));
       history.push('/');
     } else {
       alert("ログインに失敗しました。(" + response.status + ' ' + response.statusText + ')');

@@ -4,6 +4,7 @@ import {connect} from "react-redux";
 import { withRouter } from "react-router-dom";
 
 import { login, logout } from "../redux/actions/sessionActions";
+import { setTheme } from "../redux/actions/themeActions";
 import env from '../environment';
 
 
@@ -42,6 +43,8 @@ class AuthGuard extends Component {
         let json = await response.json();
         const user = json.data;
         dispatch(login({headers, user}));
+        const theme = Cookies.get('theme') || 0;
+        dispatch(setTheme(theme));
       } else {
         this.redirectSignIn();
       }

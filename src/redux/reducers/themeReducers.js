@@ -7,9 +7,9 @@ export default function reducer(state={ currentTheme: 0 }, actions) {
       return {
         ...state,
         currentTheme: actions.payload
-      }
+      };
 
     default:
-      return state
+      return state;
   }
 }
