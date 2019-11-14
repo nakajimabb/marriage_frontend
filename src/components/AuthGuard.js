@@ -1,66 +1,79 @@
-import React, { Component, Fragment } from 'react';
+import React, {Component, Fragment, useEffect, useState} from 'react';
 import Cookies from "js-cookie";
 import {connect} from "react-redux";
 import { withRouter } from "react-router-dom";
+import axios from "axios";
 
 import { login, logout } from "../redux/actions/sessionActions";
 import { setTheme } from "../redux/actions/themeActions";
+import { setNotification } from "../redux/actions/notificationActions";
 import env from '../environment';
 
 
-class AuthGuard extends Component {
-  constructor(props) {
-    super(props);
+const AuthGuard = props => {
+  const { location, history, session, notification, dispatch } = props;
+  const [user, setUser] = useState(session.user);
+  const [count, setCount] = useState(notification.count);
+  const str_headers = Cookies.get('headers');
+  const headers  = (str_headers ? JSON.parse(str_headers) : null);
+  const theme = Cookies.get('theme') || 0;
 
-    this.redirectSignIn = this.redirectSignIn.bind(this);
-    this.initSession = this.initSession.bind(this);
-  }
-
-  redirectSignIn = () => {
-    const { location, history, dispatch } = this.props;
-
+  const redirectSignIn = () => {
     if(location.pathname !== '/auth/sign-in') {
       dispatch(logout());
       history.push('/auth/sign-in');
     }
   };
 
-  initSession = async () => {
-    const { dispatch } = this.props;
+  function diff_user(user1, user2) {
+    const keys = Object.keys(user1);
+    return keys.filter(key => user1[key] != user2[key])
+  }
 
-    let headers = Cookies.get('headers');
+  const initSession = () => {
     if(headers) {
       const url = env.API_ORIGIN + 'auth/validate_token';
-      headers = JSON.parse(headers);
-
-      let response = await fetch(url, {method: 'GET', headers});
-      if(response.ok) {
-        headers = {
-          'access-token': response.headers.get('access-token'),
-          'client': response.headers.get('client'),
-          'uid': response.headers.get('uid'),
-        };
-        let json = await response.json();
-        const user = json.data;
-        dispatch(login({headers, user}));
-        const theme = Cookies.get('theme') || 0;
-        dispatch(setTheme(theme));
-      } else {
-        this.redirectSignIn();
-      }
+      axios.get(url, { headers })
+        .then((results) => {
+          let user2 = results.data.data;
+          if(diff_user(user2, user).length > 0) {
+            setUser(user2);
+          }
+          setCount(+user2.notification_count || 0);
+        })
+        .catch((data) => {
+          redirectSignIn();
+        });
     } else {
-      this.redirectSignIn();
+      redirectSignIn();
     }
   };
 
-  componentDidMount() {
-    this.initSession();
-  }
+  useEffect(() => {
+    initSession();
+  });
 
-  render() {
-    const { children, session } = this.props;
-    return (!session.loggedIn || !session.user) ? null : <Fragment>{children}</Fragment>;
-  }
+  useEffect(() => {
+    dispatch(setNotification({count}));
+  }, [count]);
+
+  useEffect(() => {
+    if(Object.keys(user).length > 0) {
+      dispatch(login({headers, user}));
+    }
+  }, [user]);
+
+  useEffect(() => {
+    dispatch(setTheme(theme));
+  }, []);
+
+  return (!session.loggedIn || !session.user) ? null : <Fragment>{ props.children }</Fragment>;
 };
 
-export default connect(store => ({ session: store.sessionReducer }))(withRouter(AuthGuard));
+export default connect(store => (
+    { session: store.sessionReducer,
+      notification: store.notificationReducer
+    }
+  )
+)(withRouter(AuthGuard));
+
