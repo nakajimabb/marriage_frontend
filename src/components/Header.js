@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, {Component, useState} from "react";
 import styled, { withTheme } from "styled-components";
 import { connect } from "react-redux";
 import { darken } from "polished";
@@ -27,6 +27,7 @@ import {
 
 import { logout } from "../redux/actions/sessionActions";
 import Settings from "./Settings";
+import NotificationList from "./NotificationList";
 
 
 const AppBar = styled(MuiAppBar)`
@@ -162,59 +163,70 @@ class UserMenu extends Component {
 
 UserMenu = connect(store => ({ session: store.sessionReducer }))(withRouter(UserMenu));
 
-const Header = ({ onDrawerToggle, onMobileToggle }) => (
-  <React.Fragment>
-    <AppBar position="sticky" elevation={0}>
-      <Toolbar>
-        <Grid container alignItems="center">
-          <Grid item>
-            <Hidden mdUp>
-              <IconButton
-                color="inherit"
-                aria-label="Open drawer"
-                onClick={onMobileToggle}
-              >
-                <MenuIcon />
-              </IconButton>
-            </Hidden>
-            <Hidden smDown>
-              <IconButton
-                color="inherit"
-                aria-label="Open drawer"
-                onClick={onDrawerToggle}
-              >
-                <MenuIcon />
-              </IconButton>
-            </Hidden>
-          </Grid>
+const Header = ({ onDrawerToggle, onMobileToggle, notification }) => {
+  const [open_notification, setOpenNotification] = useState(false);
 
-          <Grid item>
-            <Search>
-              <SearchIconWrapper>
-                <SearchIcon />
-              </SearchIconWrapper>
-              <Input placeholder="Search projects…" />
-            </Search>
-          </Grid>
-          <Grid item xs />
-          <Grid item>
-            <IconButton color="inherit">
-              <Indicator badgeContent={3}>
-                <MessageSquare />
-              </Indicator>
-            </IconButton>
-            <IconButton color="inherit">
-              <Indicator badgeContent={7}>
-                <Bell />
-              </Indicator>
-            </IconButton>
-            <Settings />
-            <UserMenu />
-          </Grid>
-        </Grid>
-      </Toolbar>
-    </AppBar>
-  </React.Fragment>
-);
+  return (
+    <React.Fragment>
+      <NotificationList open={open_notification} onClose={() => setOpenNotification(false)} />
+      <AppBar position="sticky" elevation={0}>
+        <Toolbar>
+          <Grid container alignItems="center">
+            <Grid item>
+              <Hidden mdUp>
+                <IconButton
+                  color="inherit"
+                  aria-label="Open drawer"
+                  onClick={onMobileToggle}
+                >
+                  <MenuIcon/>
+                </IconButton>
+              </Hidden>
+              <Hidden smDown>
+                <IconButton
+                  color="inherit"
+                  aria-label="Open drawer"
+                  onClick={onDrawerToggle}
+                >
+                  <MenuIcon/>
+                </IconButton>
+              </Hidden>
+            </Grid>
 
-export default connect()(withTheme(Header));
+            <Grid item>
+              <Search>
+                <SearchIconWrapper>
+                  <SearchIcon/>
+                </SearchIconWrapper>
+                <Input placeholder="Search projects…"/>
+              </Search>
+            </Grid>
+            <Grid item xs/>
+            <Grid item>
+              <IconButton color="inherit">
+                <Indicator badgeContent={0}>
+                  <MessageSquare/>
+                </Indicator>
+              </IconButton>
+              <IconButton color="inherit" onClick={() => setOpenNotification(true)}>
+                <Indicator badgeContent={notification.count} >
+                  <Bell/>
+                </Indicator>
+              </IconButton>
+              <Settings/>
+              <UserMenu/>
+            </Grid>
+          </Grid>
+        </Toolbar>
+      </AppBar>
+    </React.Fragment>
+  );
+};
+
+// export default connect()(withTheme(Header));
+export default connect(store => (
+    { session: store.sessionReducer,
+      notification: store.notificationReducer
+    }
+  )
+)(withRouter(Header));

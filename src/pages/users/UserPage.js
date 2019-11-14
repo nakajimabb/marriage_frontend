@@ -7,7 +7,8 @@ import {
   DialogContent,
   Tab,
   Tabs,
-  makeStyles, Typography,
+  Typography,
+  makeStyles,
 } from "@material-ui/core";
 import { User } from "react-feather";
 import axios from 'axios'
@@ -45,6 +46,7 @@ const TabPanel = props => {
 const UserPage = props => {
   const { open, user_id, session, onClose, maxWidth, form, profile, action } = props;
   const [user, setUser] = useState({});
+  const [user_friend, setUserFriend] = useState({});
   const [matchmakers, setMatchmakers] = useState([]);
   const [fullScreen, setFullScreen] = useState(props.fullScreen);
   const [tab, setTab] = React.useState(0);
@@ -63,6 +65,7 @@ const UserPage = props => {
         axios.get(url, {headers})
           .then((results) => {
             setUser(results.data.user);
+            setUserFriend(results.data.user_friend);
             setMatchmakers(results.data.matchmakers);
           })
           .catch((data) => {
@@ -130,7 +133,7 @@ const UserPage = props => {
           {
             profile ?
               (<TabPanel value={tab} index={tab_indexes.profile}>
-                <UserProfile user={user}/>
+                <UserProfile user={user} user_friend={user_friend} setUserFriend={setUserFriend} />
               </TabPanel>) : null
           }
         </DialogContent>

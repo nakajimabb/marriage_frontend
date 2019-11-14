@@ -55,16 +55,16 @@ const MyProfile = props => {
           onChange={tabChange}
           aria-label="simple tabs example"
         >
-          <Tab label={i18next.t('views.user.public_profile')} {...a11yProps(0)} />
-          <Tab label={i18next.t('views.user.edit_self')} {...a11yProps(1)} />
+          <Tab label={i18next.t('views.user.edit_self')} {...a11yProps(0)} />
+          <Tab label={i18next.t('views.user.public_profile')} {...a11yProps(1)} />
         </Tabs>
       </TitleBar>
       <Box p={6}>
         <TabPanel value={tab} index={0}>
-          <UserProfile user={user} open />
+          <UserSelf user={user} matchmakers={matchmakers} setUser={setUser} />
         </TabPanel>
         <TabPanel value={tab} index={1}>
-          <UserSelf user={user} matchmakers={matchmakers} setUser={setUser} />
+          <UserProfile user={user} open />
         </TabPanel>
       </Box>
     </React.Fragment>

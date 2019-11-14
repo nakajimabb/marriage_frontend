@@ -5,5 +5,6 @@ import message from './ja/message.yml';
 import prefecture from './ja/prefecture.yml';
 import app from './ja/app.yml';
 import user from './ja/user.yml';
+import user_friend from './ja/user_friend.yml';
 
-export const ja = merge.all([country, lang, message, prefecture, app, user]).ja;
+export const ja = merge.all([country, lang, message, prefecture, app, user, user_friend]).ja;

@@ -48,9 +48,12 @@ const DialogTitle = props => {
           <Grid item xs />
           <Grid item>
             <Box className={classes.item_button} >
-              <IconButton size="small" aria-label="resize" onClick={onResize} className={classes.closeButton} >
-                { fullScreen ? <MinimizeIcon fontSize="small" /> : <MaximizeIcon fontSize="small" /> }
-              </IconButton>
+              { onResize ? (
+                <IconButton size="small" aria-label="resize" onClick={onResize} className={classes.closeButton} >
+                  { fullScreen ? <MinimizeIcon fontSize="small" /> : <MaximizeIcon fontSize="small" /> }
+                </IconButton>
+                ) : null
+              }
               <IconButton size="small" aria-label="close" onClick={onClose} className={classes.closeButton} >
                 <CloseIcon fontSize="small" />
               </IconButton>

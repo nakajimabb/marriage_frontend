@@ -11,11 +11,15 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  Button,
+  Typography,
+  makeStyles,
 } from "@material-ui/core";
-import { makeStyles } from '@material-ui/core/styles';
+import axios from "axios";
 
 import i18next from 'i18n'
 import { str, age } from 'helpers';
+import env from 'environment';
 
 
 const useStyles = makeStyles(theme => ({
@@ -31,6 +35,7 @@ const useStyles = makeStyles(theme => ({
   },
   card_content: {
     paddingTop: 5,
+    paddingBottom: 5,
   },
   list_text: {
     paddingLeft: 5,
@@ -41,14 +46,68 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+const UserFriend = props => {
+  const { user, user_friend, session, onRequest } = props;
+  const me = session.user;
+  const request_ok = me.role_matchmaker && user.role_matchmaker && me.id != user.id;
+
+  if(request_ok) {
+    if(user_friend) {
+      let label = '';
+      if(user_friend.status == 'accepted') {
+        label = i18next.t('views.user_friend.friend');
+      } else {
+        label = i18next.t('views.user_friend.sent');
+      }
+      return (
+        <Grid container justify = "center">
+          <Button disabled size="small" variant="contained" color="primary">
+            { label }
+          </Button>
+        </Grid>
+      );
+    } else {
+      return (
+        <Grid container justify = "center">
+          <Button onClick={onRequest} size="small" variant="contained" color="primary">
+            { i18next.t('views.user.request_sharing') }
+          </Button>
+        </Grid>
+      );
+    }
+  } else {
+    return null;
+  }
+};
+
 const UserProfile = props => {
 
-  const { user } = props;
+  const { user, user_friend, setUserFriend, session } = props;
   const classes = useStyles();
   const user_age = age(user.birthday) || user.age;
+  const me = session.user;
   let roles = [];
   if(user.role_courtship) roles.push(i18next.attr('user', 'role_courtship'));
   if(user.role_matchmaker) roles.push(i18next.attr('user', 'role_matchmaker'));
+
+  const onRequest = async () => {
+    const headers  = session.headers;
+
+    if(headers && headers['access-token'] && headers['client'] && headers['uid']) {
+      let url = env.API_ORIGIN + 'api/user_friends/request_sharing';
+      let user_params = {user_id: me.id, companion_id: user.id};
+
+      let promise = axios.post(url, user_params, { headers });
+      promise
+        .then((results) => {
+          const user_friend = results.data.user_friend;
+          setUserFriend(user_friend);
+        })
+        .catch((data) => {
+          alert('共有リクエストに失敗しました。');
+        });
+    }
+  };
 
   return (
     <React.Fragment>
@@ -68,6 +127,7 @@ const UserProfile = props => {
                 />
               </Grid>
             </CardContent>
+            <UserFriend user={user} user_friend={user_friend} session={session} onRequest={onRequest} />
             <List component="nav">
               <ListItem button>
                 <ListItemIcon>
