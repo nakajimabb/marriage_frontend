@@ -18,6 +18,7 @@ import DialogTitle from "pages/components/DialogTitle";
 import { str } from 'helpers';
 import UserForm from "./UserForm";
 import UserProfile from "./UserProfile";
+import UserRequirement from "./UserRequirement";
 import env from 'environment';
 
 const useStyles = makeStyles(theme => ({
@@ -44,7 +45,7 @@ const TabPanel = props => {
 };
 
 const UserPage = props => {
-  const { open, user_id, session, onClose, maxWidth, form, profile, action } = props;
+  const { open, user_id, session, onClose, maxWidth, form, profile, requirement, action } = props;
   const [user, setUser] = useState({});
   const [user_friend, setUserFriend] = useState({});
   const [matchmakers, setMatchmakers] = useState([]);
@@ -56,6 +57,7 @@ const UserPage = props => {
   let index = 0, tab_indexes = {};
   if(form) tab_indexes.form = index++;
   if(profile) tab_indexes.profile = index++;
+  if(requirement) tab_indexes.requirement = index++;
 
   useEffect(() => {
     if(user_id) {
@@ -121,6 +123,7 @@ const UserPage = props => {
           >
             { form ? (<Tab label={i18next.t('views.app.edit')} {...a11yProps(tab_indexes.form)} />) : null } }
             { profile ? (<Tab label={i18next.t('views.user.public_profile')} {...a11yProps(tab_indexes.profile)} />) : null }
+            { requirement ? (<Tab label={i18next.model('requirement')} {...a11yProps(tab_indexes.requirement)} />) : null }
           </Tabs>
         </DialogTitle>
         <DialogContent className={classes.content}>
@@ -134,6 +137,12 @@ const UserPage = props => {
             profile ?
               (<TabPanel value={tab} index={tab_indexes.profile}>
                 <UserProfile user={user} user_friend={user_friend} setUserFriend={setUserFriend} />
+              </TabPanel>) : null
+          }
+          {
+            requirement ?
+              (<TabPanel value={tab} index={tab_indexes.requirement}>
+                <UserRequirement user={user} />
               </TabPanel>) : null
           }
         </DialogContent>

@@ -63,7 +63,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const UserList = props => {
-  const { data, new_user, item_labels, updateUser, all, form, profile, action } = props;
+  const { data, new_user, item_labels, updateUser, all, form, profile, requirement, action } = props;
   const [open, setOpen] = useState(false);
   const [user_id, setUserId] = useState(null);
   const [search, setSearch] = useState({});
@@ -174,6 +174,7 @@ const UserList = props => {
                 fullScreen
                 form={form}
                 profile={profile}
+                requirement={requirement}
                 action={action}
                 maxWidth="md"
               />

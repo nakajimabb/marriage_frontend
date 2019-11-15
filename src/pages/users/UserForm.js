@@ -15,7 +15,10 @@ import {
   Box,
   Card,
   CardHeader,
-  CardContent, AppBar, Toolbar, Button,
+  CardContent,
+  AppBar,
+  Toolbar,
+  Button,
 } from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
 import axios from "axios";
@@ -84,7 +87,7 @@ const UserForm = props => {
           onClose(results.data.user.id);
         })
         .catch((data) => {
-          setErrors(collectErrors(data.response));
+          setErrors(collectErrors(data.response, 'user'));
         });
     }
   };

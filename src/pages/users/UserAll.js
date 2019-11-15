@@ -67,7 +67,7 @@ const UserAll = props => {
     <React.Fragment>
       <TitleBar title={title} icon={<Users />} />
       <Box p={6}>
-        <UserList data={data} item_labels={item_labels} new_user updateUser={updateUser} form profile action="edit" />
+        <UserList data={data} item_labels={item_labels} new_user updateUser={updateUser} form profile requirement action="edit" />
       </Box>
     </React.Fragment>
   );
