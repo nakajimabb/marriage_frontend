@@ -12,7 +12,6 @@ import {
   ListItemIcon,
   ListItemText,
   Button,
-  Typography,
   makeStyles,
 } from "@material-ui/core";
 import axios from "axios";

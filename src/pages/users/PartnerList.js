@@ -4,8 +4,6 @@ import { connect } from "react-redux";
 import {
   Grid,
   Box,
-  Fab,
-  Tooltip,
   Card,
   CardMedia,
   CardContent,
@@ -19,6 +17,7 @@ import {
   TablePagination,
   makeStyles,
 } from "@material-ui/core";
+import { Favorite, FavoriteBorder } from "@material-ui/icons";
 import axios from "axios";
 
 import i18next from 'i18n'
@@ -108,6 +107,33 @@ const PartnerList = props => {
       }
     }
   }, [user_id, session.headers]);
+
+  const onPermit = (partner, permitted) => () => {
+    if(user_id) {
+      const headers  = session.headers;
+      if(headers && headers['access-token'] && headers['client'] && headers['uid']) {
+        const url = env.API_ORIGIN + 'api/eval_partners/permit';
+        let form_data = new FormData();
+        form_data.append('user_id', user_id);
+        form_data.append('partner_id', partner.id);
+        form_data.append('permitted', permitted);
+        axios.post(url, form_data, {headers})
+          .then((results) => {
+            const eval_partner = results.data.eval_partner
+            let data2 = Array.from(data);
+            const index = data.findIndex(u => u.id == eval_partner.partner_id)
+            if(~index) {
+              data2[index].permitted = eval_partner.permitted;
+              data2[index].requirement_score = eval_partner.requirement_score;
+              setData(data2);
+            }
+          })
+          .catch((data) => {
+            alert('データの更新に失敗しました。');
+          });
+      }
+    }
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -270,9 +296,19 @@ const PartnerList = props => {
                     />
                   </CardActionArea>
                   <CardContent className={classes.content} >
-                    {
-                      (item_labels || default_labels).map(f => (<Box>{ f(user) }</Box>))
-                    }
+                    <Grid container spacing={6}>
+                      <Grid item>
+                        {
+                          (item_labels || default_labels).map(f => (<Box>{ f(user) }</Box>))
+                        }
+                      </Grid>
+                      <Grid item xs />
+                      <Grid item>
+                        {
+                          user.permitted ? <Favorite color="primary" onClick={onPermit(user, false)} /> : <FavoriteBorder color="primary"  onClick={onPermit(user, true)} />
+                        }
+                      </Grid>
+                    </Grid>
                   </CardContent>
                 </Card>
               </Grid>

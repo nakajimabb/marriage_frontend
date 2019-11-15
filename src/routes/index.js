@@ -1,6 +1,6 @@
 import React from "react";
 import { SupervisedUserCircle, PeopleOutline, AllInclusive } from "@material-ui/icons";
-import { User, UserPlus, Users, Settings } from "react-feather";
+import { Heart, UserPlus, Users, Settings } from "react-feather";
 
 import async from "../components/Async";
 
@@ -18,6 +18,17 @@ const ViewableList = async(() => import("../pages/users/ViewableList"));
 const MatchmakerList = async(() => import("../pages/users/MatchmakerList"));
 const UserAll = async(() => import("../pages/users/UserAll"));
 const MyProfile = async(() => import("../pages/users/MyProfile"));
+const PermittedList = async(() => import("../pages/users/PermittedList"));
+
+const courtshipRoutes = [
+  {
+    id: 'views.user.permitted_users',
+    path: "/courtship/permitted_users",
+    icon: <Heart />,
+    component: PermittedList,
+    children: null
+  },
+];
 
 
 const commonRoutes = [
@@ -105,6 +116,8 @@ export const authRoutes = {
 
 export const getRoutes = (roles) => {
   let routes = [];
+  if(roles && ~roles.indexOf('courtship'))
+    routes = routes.concat(courtshipRoutes);
   if(roles && ~roles.indexOf('matchmaker'))
     routes = routes.concat(matchmakerRoutes);
   routes = routes.concat(commonRoutes);
@@ -116,6 +129,8 @@ export const getRoutes = (roles) => {
 
 export default (roles, lang) => {
   let routes = [];
+  if(roles && ~roles.indexOf('courtship'))
+    routes = routes.concat(courtshipRoutes);
   if(roles && ~roles.indexOf('matchmaker'))
     routes = routes.concat(matchmakerRoutes);
   routes = routes.concat(commonRoutes);

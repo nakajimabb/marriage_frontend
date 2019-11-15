@@ -19,8 +19,8 @@ import {
   AppBar,
   Toolbar,
   Button,
+  makeStyles,
 } from "@material-ui/core";
-import { makeStyles } from '@material-ui/core/styles';
 import axios from "axios";
 
 import i18next from 'i18n'
