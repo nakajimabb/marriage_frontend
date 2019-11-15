@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import {
@@ -17,13 +17,13 @@ import {
   MenuItem,
   TextField,
   TablePagination,
+  makeStyles,
 } from "@material-ui/core";
-import { PersonAdd as AddIcon } from '@material-ui/icons';
-import { makeStyles } from '@material-ui/core/styles';
+import axios from "axios";
 
 import i18next from 'i18n'
 import { str } from 'helpers';
-import UserPage from "./UserPage";
+import env from 'environment';
 
 
 const useStyles = makeStyles(theme => ({
@@ -62,10 +62,9 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const UserList = props => {
-  const { data, new_user, item_labels, updateUser, all, form, profile, requirement, partners, action } = props;
-  const [open, setOpen] = useState(false);
-  const [user_id, setUserId] = useState(null);
+const PartnerList = props => {
+  const { session, item_labels, user, all } = props;
+  const [data, setData] = React.useState([]);
   const [search, setSearch] = useState({});
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(all ? -1 : 12);
@@ -74,6 +73,7 @@ const UserList = props => {
   const religions = i18next.data_list('enum', 'user', 'religion');
   const keys = ['sex', 'prefecture', 'religion'];
   const ages = [search.min_age, search.max_age];
+  const user_id = user.id;
 
   const default_labels = [
     (u => u.nickname),
@@ -93,6 +93,22 @@ const UserList = props => {
     target_array = array.slice(index, index + rowsPerPage)
   }
 
+  useEffect(() => {
+    if(user_id) {
+      const headers  = session.headers;
+      if(headers && headers['access-token'] && headers['client'] && headers['uid']) {
+        const url = env.API_ORIGIN + 'api/users/' + user_id + '/partner_matches';
+        axios.get(url, {headers})
+          .then((results) => {
+            setData(results.data.users || []);
+          })
+          .catch((data) => {
+            alert('データの取得に失敗しました。');
+          });
+      }
+    }
+  }, [user_id, session.headers]);
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -107,21 +123,6 @@ const UserList = props => {
     search2[event.target.name] = event.target.value;
     setSearch(search2);
     setPage(0);
-  };
-
-  const openUserNewForm = () => {
-    setOpen(true);
-    setUserId(null);
-  };
-
-  const openUserPage = (n) => () => {
-    setOpen(true);
-    setUserId(n.id);
-  };
-
-  const closeUserPage = (user_id) => {
-    setOpen(false);
-    if(user_id) updateUser(user_id)
   };
 
   function filterUser(array, search, columns, keys, ages) {
@@ -164,24 +165,6 @@ const UserList = props => {
 
   return (
     <React.Fragment>
-      { (() => {
-        if (open)
-          return (
-              <UserPage
-                user_id={user_id}
-                open={open}
-                onClose={closeUserPage}
-                fullScreen
-                form={form}
-                profile={profile}
-                requirement={requirement}
-                partners={partners}
-                action={action}
-                maxWidth="md"
-              />
-            );
-      })()
-      }
       <Grid container spacing={6}>
         <Grid item>
           <FormControl className={classes.control} >
@@ -271,20 +254,6 @@ const UserList = props => {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs />
-        {
-          (() => {
-            if(new_user) {
-              return (
-                <Grid item>
-                  <Tooltip title={i18next.t('views.user.add_user')}>
-                    <Fab size="medium" onClick={openUserNewForm} ><AddIcon/></Fab>
-                  </Tooltip>
-                </Grid>
-                );
-            }
-          })()
-        }
       </Grid>
 
       <Grid container spacing={6}>
@@ -293,7 +262,7 @@ const UserList = props => {
             return (
               <Grid item xs={6} md={4} lg={3} xl={2} className={classes.grid} >
                 <Card className={classes.card}>
-                  <CardActionArea onClick={openUserPage(user)}>
+                  <CardActionArea>
                     <CardMedia
                       className={classes.media}
                       image={ avatar_url(user) }
@@ -340,4 +309,4 @@ const UserList = props => {
   );
 };
 
-export default connect(store => ({ session: store.sessionReducer }))(withRouter(UserList));
+export default connect(store => ({ session: store.sessionReducer }))(withRouter(PartnerList));

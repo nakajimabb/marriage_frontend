@@ -67,7 +67,7 @@ const MemberList = props => {
     <React.Fragment>
       <TitleBar title={title} icon={<UserPlus />} />
       <Box p={6}>
-        <UserList data={data} item_labels={item_labels} new_user all updateUser={updateUser} form profile requirement action="edit" />
+        <UserList data={data} item_labels={item_labels} new_user all updateUser={updateUser} form profile requirement partners action="edit" />
       </Box>
     </React.Fragment>
   );

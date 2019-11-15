@@ -19,6 +19,7 @@ import { str } from 'helpers';
 import UserForm from "./UserForm";
 import UserProfile from "./UserProfile";
 import UserRequirement from "./UserRequirement";
+import PartnerList from "./PartnerList";
 import env from 'environment';
 
 const useStyles = makeStyles(theme => ({
@@ -45,7 +46,7 @@ const TabPanel = props => {
 };
 
 const UserPage = props => {
-  const { open, user_id, session, onClose, maxWidth, form, profile, requirement, action } = props;
+  const { open, user_id, session, onClose, maxWidth, form, profile, requirement, partners, action } = props;
   const [user, setUser] = useState({});
   const [user_friend, setUserFriend] = useState({});
   const [matchmakers, setMatchmakers] = useState([]);
@@ -58,6 +59,7 @@ const UserPage = props => {
   if(form) tab_indexes.form = index++;
   if(profile) tab_indexes.profile = index++;
   if(requirement) tab_indexes.requirement = index++;
+  if(partners) tab_indexes.partners = index++;
 
   useEffect(() => {
     if(user_id) {
@@ -124,6 +126,7 @@ const UserPage = props => {
             { form ? (<Tab label={i18next.t('views.app.edit')} {...a11yProps(tab_indexes.form)} />) : null } }
             { profile ? (<Tab label={i18next.t('views.user.public_profile')} {...a11yProps(tab_indexes.profile)} />) : null }
             { requirement ? (<Tab label={i18next.model('requirement')} {...a11yProps(tab_indexes.requirement)} />) : null }
+            { partners ? (<Tab label={i18next.t('views.user.partner_matches')} {...a11yProps(tab_indexes.partners)} />) : null }
           </Tabs>
         </DialogTitle>
         <DialogContent className={classes.content}>
@@ -143,6 +146,12 @@ const UserPage = props => {
             requirement ?
               (<TabPanel value={tab} index={tab_indexes.requirement}>
                 <UserRequirement user={user} />
+              </TabPanel>) : null
+          }
+          {
+            partners ?
+              (<TabPanel value={tab} index={tab_indexes.partners}>
+                <PartnerList user={user} all />
               </TabPanel>) : null
           }
         </DialogContent>
