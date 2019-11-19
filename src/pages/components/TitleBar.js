@@ -1,33 +1,49 @@
-import {AppBar, Box, Grid, Divider, Toolbar, Typography} from "@material-ui/core";
 import React from "react";
+import {
+  AppBar,
+  Box,
+  Grid,
+  Divider,
+  Toolbar,
+  Typography,
+} from "@material-ui/core";
 
 
 const TitleBar = props => {
-  const {title, icon, children} = props;
+  const {title, icon, children, variant, sub_menu} = props;
 
-return (
-  <AppBar position="static" color="inherit">
-    <Divider />
-    <Grid container spacing={3}>
-      <Grid item >
-        <Toolbar variant="regular">
-          <Box pt={2} px={4} >
-            { icon }
-          </Box>
-          <Typography variant="h4">
-            { title }
-          </Typography>
-          <Box pr={10} />
-        </Toolbar>
-      </Grid>
-      <Grid item>
-        <Box p={2}>
+  return (
+    <AppBar position="static" color="inherit">
+      <Divider />
+      <Grid container spacing={3}>
+        <Grid item >
+          <Toolbar variant={variant} >
+            {
+              icon ? (
+                <Box pt={1} px={2} >
+                  { icon }
+                </Box>
+              ) : null
+            }
+            <Box px={2} >
+              <Typography variant="h5">
+                { title }
+              </Typography>
+            </Box>
+          </Toolbar>
+        </Grid>
+        <Grid item>
           { children }
-        </Box>
+        </Grid>
+        <Grid item xs />
+        <Grid item>
+          <Box pt={4} px={4} >
+            { sub_menu }
+          </Box>
+        </Grid>
       </Grid>
-    </Grid>
-    <Divider />
-  </AppBar>
+      <Divider />
+    </AppBar>
   );
 };
 

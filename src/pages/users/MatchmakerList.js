@@ -70,31 +70,13 @@ const MatchmakerList = props => {
 
   return (
     <React.Fragment>
-      <TitleBar title={title} icon={<AllInclusive />} >
-        <Tabs
-          value={tab}
-          indicatorColor="primary"
-          textColor="primary"
-          onChange={tabChange}
-          aria-label="simple tabs example"
-        >
-          <Tab label={i18next.t('views.app.list')} {...a11yProps(0)} />
-          <Tab label={i18next.t('views.user.matchmaker_public')} {...a11yProps(1)} />
-          <Tab label={i18next.t('views.user.matchmaker_friend')} {...a11yProps(2)} />
-        </Tabs>
-      </TitleBar>
-
-      <Box px={3}>
-        <TabPanel value={tab} index={0}>
-          <UserList data={data} all profile />
-        </TabPanel>
-        <TabPanel value={tab} index={1}>
-          <UserList data={filterMatchMakers(data, {member_sharing: 'member_public'})} all profile />
-        </TabPanel>
-        <TabPanel value={tab} index={2}>
-          <UserList data={filterMatchMakers(data, {friend: true})} all profile />
-        </TabPanel>
-      </Box>
+      <UserList
+        title={title}
+        icon={<AllInclusive />}
+        data={data}
+        all
+        profile
+      />
     </React.Fragment>
   );
 };

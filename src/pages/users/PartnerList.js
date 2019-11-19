@@ -2,6 +2,9 @@ import React, {useEffect, useState} from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import {
+  AppBar,
+  Toolbar,
+  Button,
   Grid,
   Box,
   Card,
@@ -58,11 +61,19 @@ const useStyles = makeStyles(theme => ({
   },
   control: {
     margin: 5,
-  }
+  },
+  appBar: {
+    top: 'auto',
+    bottom: 0,
+  },
+  toolbar: {
+    minHeight: 'initial',
+    padding: theme.spacing(2),
+  },
 }));
 
 const PartnerList = props => {
-  const { session, item_labels, user, all } = props;
+  const { session, item_labels, user, all, onClose } = props;
   const [data, setData] = React.useState([]);
   const [search, setSearch] = useState({});
   const [page, setPage] = React.useState(0);
@@ -341,6 +352,22 @@ const PartnerList = props => {
           }
         })()
       }
+      <AppBar position="fixed" color="default" className={classes.appBar} >
+        <Toolbar className={classes.toolbar} >
+          <Grid container spacing={6}>
+            <Grid item xs />
+            {
+              onClose ? (
+                <Grid item>
+                  <Button onClick={() => onClose(null)} color="primary">
+                    { i18next.t('views.user.back') }
+                  </Button>
+                </Grid>
+              ) : null
+            }
+          </Grid>
+        </Toolbar>
+      </AppBar>
     </React.Fragment>
   );
 };

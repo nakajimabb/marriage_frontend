@@ -1,13 +1,11 @@
 import React, {useEffect, useState} from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import { Box } from "@material-ui/core";
 import { Users } from "react-feather";
 import axios from 'axios'
 
 import i18next from 'i18n'
 import { logout } from "redux/actions/sessionActions";
-import TitleBar from "pages/components/TitleBar";
 import UserList from "./UserList";
 import env from 'environment';
 
@@ -65,10 +63,19 @@ const UserAll = props => {
 
   return (
     <React.Fragment>
-      <TitleBar title={title} icon={<Users />} />
-      <Box p={6}>
-        <UserList data={data} item_labels={item_labels} new_user updateUser={updateUser} form profile requirement partners action="edit" />
-      </Box>
+      <UserList
+        title={title}
+        icon={<Users />}
+        data={data}
+        item_labels={item_labels}
+        new_user
+        form
+        profile
+        requirement
+        partners
+        action="edit"
+        updateUser={updateUser}
+      />
     </React.Fragment>
   );
 };

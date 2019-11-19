@@ -7,7 +7,6 @@ import axios from 'axios'
 
 import i18next from 'i18n'
 import { logout } from "redux/actions/sessionActions";
-import TitleBar from "pages/components/TitleBar";
 import UserList from "./UserList";
 import env from 'environment';
 
@@ -37,10 +36,14 @@ const ViewableList = props => {
 
   return (
     <React.Fragment>
-      <TitleBar title={title} icon={<Users />} />
-      <Box p={6}>
-        <UserList data={data} all profile action="" />
-      </Box>
+      <UserList
+        title={title}
+        icon={<Users />}
+        data={data}
+        all
+        profile
+        action=""
+      />
     </React.Fragment>
   );
 };

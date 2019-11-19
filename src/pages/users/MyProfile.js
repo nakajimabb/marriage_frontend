@@ -48,7 +48,7 @@ const MyProfile = props => {
 
   return (
     <React.Fragment>
-      <TitleBar title={title} icon={<Settings />} >
+      <TitleBar title={title} icon={<Settings />} variant="dense" >
         <Tabs
           value={tab}
           indicatorColor="primary"

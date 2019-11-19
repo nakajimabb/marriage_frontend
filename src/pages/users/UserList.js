@@ -17,12 +17,16 @@ import {
   MenuItem,
   TextField,
   TablePagination,
+  Breadcrumbs,
+  Typography,
+  Link,
+  makeStyles,
 } from "@material-ui/core";
 import { PersonAdd as AddIcon } from '@material-ui/icons';
-import { makeStyles } from '@material-ui/core/styles';
 
 import i18next from 'i18n'
 import { str } from 'helpers';
+import TitleBar from "pages/components/TitleBar";
 import UserPage from "./UserPage";
 
 
@@ -59,21 +63,52 @@ const useStyles = makeStyles(theme => ({
   },
   control: {
     margin: 5,
-  }
+  },
+  link: {
+    cursor: 'pointer',
+  },
 }));
 
+const UserBreadcrumbs = props => {
+  const { items } = props;
+  const classes = useStyles();
+
+  return (
+    <Breadcrumbs aria-label="Breadcrumb" mt={2}>
+      {
+        (items || []).map(
+          item => {
+            if(item[1]) {
+              return (
+                <Link to="#" onClick={ item[1] } className={classes.link} >
+                  { item[0] }
+                </Link>
+              );
+            } else {
+              return (<Typography>{ item[0] }</Typography>);
+            }
+          }
+        )
+      }
+    </Breadcrumbs>
+  );
+};
+
 const UserList = props => {
-  const { data, new_user, item_labels, updateUser, all, form, profile, requirement, partners, action } = props;
+  const { title, icon, data, new_user, item_labels, updateUser, all, form, profile, requirement, partners, action } = props;
   const [open, setOpen] = useState(false);
   const [user_id, setUserId] = useState(null);
   const [search, setSearch] = useState({});
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(all ? -1 : 12);
+  const [page_title, setPageTitle] = useState(false);
   const classes = useStyles();
   const prefectures = i18next.data_list('prefecture');
   const religions = i18next.data_list('enum', 'user', 'religion');
   const keys = ['sex', 'prefecture', 'religion'];
   const ages = [search.min_age, search.max_age];
+  const items =[[title, (() => setOpen(false))],
+                [page_title, null]];
 
   const default_labels = [
     (u => u.nickname),
@@ -121,6 +156,7 @@ const UserList = props => {
 
   const closeUserPage = (user_id) => {
     setOpen(false);
+    setPageTitle(null);
     if(user_id) updateUser(user_id)
   };
 
@@ -162,160 +198,163 @@ const UserList = props => {
     }
   }
 
+  if(open) {
+    return (
+      <React.Fragment>
+        <TitleBar title={page_title} variant="dense" sub_menu={ <UserBreadcrumbs items={items} /> } />
+        <UserPage
+          user_id={user_id}
+          open={open}
+          fullScreen
+          form={form}
+          profile={profile}
+          requirement={requirement}
+          partners={partners}
+          action={action}
+          maxWidth="md"
+          onClose={closeUserPage}
+          setTitle={setPageTitle}
+        />
+      </React.Fragment>
+    );
+  }
+
   return (
     <React.Fragment>
-      { (() => {
-        if (open)
-          return (
-              <UserPage
-                user_id={user_id}
-                open={open}
-                onClose={closeUserPage}
-                fullScreen
-                form={form}
-                profile={profile}
-                requirement={requirement}
-                partners={partners}
-                action={action}
-                maxWidth="md"
+      <TitleBar title={title} icon={icon} variant="dense" />
+      <Box p={6}>
+        <Grid container spacing={6} >
+          <Grid item>
+            <FormControl className={classes.control} >
+              <InputLabel htmlFor="search">{ i18next.t('views.app.search') }</InputLabel>
+              <Input id="search_name"
+                     name="name"
+                     defaultValue=""
+                     value={search.name}
+                     placeholder={ i18next.attr('user', 'name') + '(' + i18next.attr('user', 'kana') + ') or ' + i18next.attr('user', 'nickname') }
+                     onChange={handleSearchChange} />
+            </FormControl>
+            <FormControl className={classes.control} style={{width: 60}} >
+              <InputLabel htmlFor="sex">{ i18next.attr('user', 'sex') }</InputLabel>
+              <Select
+                value={search.sex}
+                name="sex"
+                onChange={handleSearchChange}
+                inputProps={{
+                  name: "sex",
+                  id: "user_sex"
+                }}
+              >
+                <MenuItem value="">
+                  <em></em>
+                </MenuItem>
+                <MenuItem value='male'>{ i18next.enum('user', 'sex', 'male') }</MenuItem>
+                <MenuItem value='female'>{ i18next.enum('user', 'sex', 'female') }</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl className={classes.control} style={{width: 100}} >
+              <InputLabel htmlFor="prefecture">{ i18next.attr('user', 'prefecture') }</InputLabel>
+              <Select
+                value={ str(search.prefecture) }
+                name="prefecture"
+                onChange={handleSearchChange}
+                inputProps={{
+                  name: "prefecture",
+                }}
+                fullWidth
+              >
+                <MenuItem value="">
+                  <em></em>
+                </MenuItem>
+                {
+                  Object.keys(prefectures).map(prefecture => <MenuItem value={prefecture}>{ prefectures[prefecture] }</MenuItem>)
+                }
+              </Select>
+            </FormControl>
+            <FormControl className={classes.control} style={{width: 50}} >
+              <TextField
+                name="min_age"
+                type="number"
+                label={ i18next.attr('user', 'age') + '~' }
+                autoComplete="off"
+                defaultValue=""
+                value={ str(search.min_age) }
+                onChange={handleSearchChange}
               />
-            );
-      })()
-      }
-      <Grid container spacing={6}>
-        <Grid item>
-          <FormControl className={classes.control} >
-            <InputLabel htmlFor="search">{ i18next.t('views.app.search') }</InputLabel>
-            <Input id="search_name"
-                   name="name"
-                   defaultValue=""
-                   value={search.name}
-                   placeholder={ i18next.attr('user', 'name') + '(' + i18next.attr('user', 'kana') + ') or ' + i18next.attr('user', 'nickname') }
-                   onChange={handleSearchChange} />
-          </FormControl>
-          <FormControl className={classes.control} style={{width: 60}} >
-            <InputLabel htmlFor="sex">{ i18next.attr('user', 'sex') }</InputLabel>
-            <Select
-              value={search.sex}
-              name="sex"
-              onChange={handleSearchChange}
-              inputProps={{
-                name: "sex",
-                id: "user_sex"
-              }}
-            >
-              <MenuItem value="">
-                <em></em>
-              </MenuItem>
-              <MenuItem value='male'>{ i18next.enum('user', 'sex', 'male') }</MenuItem>
-              <MenuItem value='female'>{ i18next.enum('user', 'sex', 'female') }</MenuItem>
-            </Select>
-          </FormControl>
-          <FormControl className={classes.control} style={{width: 100}} >
-            <InputLabel htmlFor="prefecture">{ i18next.attr('user', 'prefecture') }</InputLabel>
-            <Select
-              value={ str(search.prefecture) }
-              name="prefecture"
-              onChange={handleSearchChange}
-              inputProps={{
-                name: "prefecture",
-              }}
-              fullWidth
-            >
-              <MenuItem value="">
-                <em></em>
-              </MenuItem>
-              {
-                Object.keys(prefectures).map(prefecture => <MenuItem value={prefecture}>{ prefectures[prefecture] }</MenuItem>)
+            </FormControl>
+            <FormControl className={classes.control} style={{width: 50}} >
+              <TextField
+                name="max_age"
+                type="number"
+                label={ '~' + i18next.attr('user', 'age') }
+                autoComplete="off"
+                defaultValue=""
+                value={ str(search.max_age) }
+                onChange={handleSearchChange}
+              />
+            </FormControl>
+            <FormControl className={classes.control} style={{width: 100}} >
+              <InputLabel htmlFor="religion">{ i18next.attr('user', 'religion') }</InputLabel>
+              <Select
+                value={ str(search.religion) }
+                onChange={handleSearchChange}
+                inputProps={{
+                  name: "religion",
+                }}
+                fullWidth
+              >
+                <MenuItem value="">
+                  <em></em>
+                </MenuItem>
+                {
+                  Object.keys(religions).map(religion => <MenuItem value={religion}>{ religions[religion] }</MenuItem>)
+                }
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs />
+          {
+            (() => {
+              if(new_user) {
+                return (
+                  <Grid item>
+                    <Tooltip title={i18next.t('views.user.add_user')}>
+                      <Fab size="medium" onClick={openUserNewForm} ><AddIcon/></Fab>
+                    </Tooltip>
+                  </Grid>
+                  );
               }
-            </Select>
-          </FormControl>
-          <FormControl className={classes.control} style={{width: 50}} >
-            <TextField
-              name="min_age"
-              type="number"
-              label={ i18next.attr('user', 'age') + '~' }
-              autoComplete="off"
-              defaultValue=""
-              value={ str(search.min_age) }
-              onChange={handleSearchChange}
-            />
-          </FormControl>
-          <FormControl className={classes.control} style={{width: 50}} >
-            <TextField
-              name="max_age"
-              type="number"
-              label={ '~' + i18next.attr('user', 'age') }
-              autoComplete="off"
-              defaultValue=""
-              value={ str(search.max_age) }
-              onChange={handleSearchChange}
-            />
-          </FormControl>
-          <FormControl className={classes.control} style={{width: 100}} >
-            <InputLabel htmlFor="religion">{ i18next.attr('user', 'religion') }</InputLabel>
-            <Select
-              value={ str(search.religion) }
-              onChange={handleSearchChange}
-              inputProps={{
-                name: "religion",
-              }}
-              fullWidth
-            >
-              <MenuItem value="">
-                <em></em>
-              </MenuItem>
-              {
-                Object.keys(religions).map(religion => <MenuItem value={religion}>{ religions[religion] }</MenuItem>)
-              }
-            </Select>
-          </FormControl>
+            })()
+          }
         </Grid>
-        <Grid item xs />
-        {
-          (() => {
-            if(new_user) {
+
+        <Grid container spacing={6} className={classes.main} >
+          {
+            target_array.map(user => {
               return (
-                <Grid item>
-                  <Tooltip title={i18next.t('views.user.add_user')}>
-                    <Fab size="medium" onClick={openUserNewForm} ><AddIcon/></Fab>
-                  </Tooltip>
+                <Grid item xs={6} md={4} lg={3} xl={2} className={classes.grid} >
+                  <Card className={classes.card}>
+                    <CardActionArea onClick={openUserPage(user)}>
+                      <CardMedia
+                        className={classes.media}
+                        image={ avatar_url(user) }
+                        title={user.nickname}
+                      />
+                    </CardActionArea>
+                    <CardContent className={classes.content} >
+                      {
+                        (item_labels || default_labels).map(f => (<Box>{ f(user) }</Box>))
+                      }
+                    </CardContent>
+                  </Card>
                 </Grid>
-                );
-            }
-          })()
-        }
-      </Grid>
+              );
+            })
+          }
+        </Grid>
 
-      <Grid container spacing={6}>
         {
-          target_array.map(user => {
-            return (
-              <Grid item xs={6} md={4} lg={3} xl={2} className={classes.grid} >
-                <Card className={classes.card}>
-                  <CardActionArea onClick={openUserPage(user)}>
-                    <CardMedia
-                      className={classes.media}
-                      image={ avatar_url(user) }
-                      title={user.nickname}
-                    />
-                  </CardActionArea>
-                  <CardContent className={classes.content} >
-                    {
-                      (item_labels || default_labels).map(f => (<Box>{ f(user) }</Box>))
-                    }
-                  </CardContent>
-                </Card>
-              </Grid>
-            );
-          })
-        }
-      </Grid>
-
-      {
-        (() => {
-          if(!all) {
-            return (
+          all ? null : (
               <Grid container spacing={6}>
                 <Grid item xs />
                 <Grid item>
@@ -332,10 +371,9 @@ const UserList = props => {
                   />
                 </Grid>
               </Grid>
-            );
-          }
-        })()
-      }
+            )
+        }
+      </Box>
     </React.Fragment>
   );
 };

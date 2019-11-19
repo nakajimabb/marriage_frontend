@@ -2,6 +2,7 @@ import React, {useRef, useState} from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import {
+  AppBar,
   FormControl,
   Grid,
   FormControlLabel,
@@ -16,7 +17,6 @@ import {
   Card,
   CardHeader,
   CardContent,
-  AppBar,
   Toolbar,
   Button,
   makeStyles,
@@ -892,7 +892,7 @@ const UserForm = props => {
             <Grid item xs />
             <Grid item>
               <Button onClick={() => onClose(null)} color="primary">
-                { i18next.t('views.app.cancel') }
+                { i18next.t('views.user.back') }
               </Button>
               <Button onClick={onSave} color="primary">
                 { i18next.t('views.app.save') }

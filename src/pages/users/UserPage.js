@@ -2,19 +2,16 @@ import React, {useEffect, useState} from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import {
+  Divider,
   Box,
-  Dialog,
-  DialogContent,
   Tab,
   Tabs,
   Typography,
   makeStyles,
 } from "@material-ui/core";
-import { User } from "react-feather";
 import axios from 'axios'
 
 import i18next from 'i18n'
-import DialogTitle from "pages/components/DialogTitle";
 import { str } from 'helpers';
 import UserForm from "./UserForm";
 import UserProfile from "./UserProfile";
@@ -23,8 +20,13 @@ import PartnerList from "./PartnerList";
 import env from 'environment';
 
 const useStyles = makeStyles(theme => ({
+  tabs: {
+    backgroundColor: theme.palette.common.white,
+  },
   content: {
     backgroundColor: theme.body.background,
+    margin: 0,
+    padding: 0,
   },
 }));
 
@@ -46,14 +48,12 @@ const TabPanel = props => {
 };
 
 const UserPage = props => {
-  const { open, user_id, session, onClose, maxWidth, form, profile, requirement, partners, action } = props;
+  const { user_id, session, onClose, form, profile, requirement, partners, action, setTitle } = props;
   const [user, setUser] = useState({});
   const [user_friend, setUserFriend] = useState({});
   const [matchmakers, setMatchmakers] = useState([]);
-  const [fullScreen, setFullScreen] = useState(props.fullScreen);
   const [tab, setTab] = React.useState(0);
   const classes = useStyles();
-  const title = str(user.nickname) + i18next.t('views.user.page_of');
 
   let index = 0, tab_indexes = {};
   if(form) tab_indexes.form = index++;
@@ -68,11 +68,15 @@ const UserPage = props => {
         const url = env.API_ORIGIN + 'api/users/' + user_id + '/' + str(action);
         axios.get(url, {headers})
           .then((results) => {
-            setUser(results.data.user);
-            setUserFriend(results.data.user_friend);
-            setMatchmakers(results.data.matchmakers);
+            const data = results.data;
+            const title = str(data.user.nickname) + i18next.t('views.user.page_of');
+            setUser(data.user);
+            setUserFriend(data.user_friend);
+            setMatchmakers(data.matchmakers);
+            setTitle(title);
           })
           .catch((data) => {
+            setTitle(null);
             alert('データの取得に失敗しました。');
           });
       }
@@ -81,8 +85,10 @@ const UserPage = props => {
       setMatchmakers([{id: session.user.id, full_name: full_name}]);
 
       let user2 = Object.assign({}, user);
+      const title = i18next.t('views.user.new');
       user2.matchmaker_id = session.user.id;
       setUser(user2);
+      setTitle(title);
     }
   }, [user_id, session.headers]);
 
@@ -97,65 +103,47 @@ const UserPage = props => {
     setTab(newValue);
   };
 
-  const onClose2 = () => {
-    onClose(null);
-  };
-
-  const onResize = () => {
-    setFullScreen(!fullScreen);
-  };
-
   return (
     <React.Fragment>
-      <Dialog
-        open={open}
-        onClose={onClose2}
-        disableBackdropClick={ true }
-        disableEscapeKeyDown={ true }
-        fullScreen = { fullScreen }
-        maxWidth={ maxWidth }
+      <Tabs
+        value={tab}
+        indicatorColor="primary"
+        textColor="primary"
+        onChange={tabChange}
+        className={classes.tabs}
       >
-        <DialogTitle title={title} icon={<User />} fullScreen={ fullScreen } onClose={ onClose2 } onResize={ onResize } >
-          <Tabs
-            value={tab}
-            indicatorColor="primary"
-            textColor="primary"
-            onChange={tabChange}
-            aria-label="simple tabs example"
-          >
-            { form ? (<Tab label={i18next.t('views.app.edit')} {...a11yProps(tab_indexes.form)} />) : null } }
-            { profile ? (<Tab label={i18next.t('views.user.public_profile')} {...a11yProps(tab_indexes.profile)} />) : null }
-            { requirement ? (<Tab label={i18next.model('requirement')} {...a11yProps(tab_indexes.requirement)} />) : null }
-            { partners ? (<Tab label={i18next.t('views.user.partner_matches')} {...a11yProps(tab_indexes.partners)} />) : null }
-          </Tabs>
-        </DialogTitle>
-        <DialogContent className={classes.content}>
-          {
-            form ?
-              (<TabPanel value={tab} index={tab_indexes.form} >
-                <UserForm user={user} matchmakers={matchmakers} setUser={setUser} onClose={onClose} />
-              </TabPanel>) : null
-          }
-          {
-            profile ?
-              (<TabPanel value={tab} index={tab_indexes.profile}>
-                <UserProfile user={user} user_friend={user_friend} setUserFriend={setUserFriend} />
-              </TabPanel>) : null
-          }
-          {
-            requirement ?
-              (<TabPanel value={tab} index={tab_indexes.requirement}>
-                <UserRequirement user={user} />
-              </TabPanel>) : null
-          }
-          {
-            partners ?
-              (<TabPanel value={tab} index={tab_indexes.partners}>
-                <PartnerList user={user} all />
-              </TabPanel>) : null
-          }
-        </DialogContent>
-      </Dialog>
+        { form ? (<Tab label={i18next.t('views.app.edit')} {...a11yProps(tab_indexes.form)} />) : null } }
+        { profile ? (<Tab label={i18next.t('views.user.public_profile')} {...a11yProps(tab_indexes.profile)} />) : null }
+        { requirement ? (<Tab label={i18next.model('requirement')} {...a11yProps(tab_indexes.requirement)} />) : null }
+        { partners ? (<Tab label={i18next.t('views.user.partner_matches')} {...a11yProps(tab_indexes.partners)} />) : null }
+      </Tabs>
+      <Divider />
+      <Box className={classes.content}>
+        {
+          form ?
+            (<TabPanel value={tab} index={tab_indexes.form} style={{position: 'relative'}}>
+              <UserForm user={user} matchmakers={matchmakers} setUser={setUser} onClose={onClose} />
+            </TabPanel>) : null
+        }
+        {
+          profile ?
+            (<TabPanel value={tab} index={tab_indexes.profile}>
+              <UserProfile user={user} user_friend={user_friend} setUserFriend={setUserFriend} onClose={onClose} />
+            </TabPanel>) : null
+        }
+        {
+          requirement ?
+            (<TabPanel value={tab} index={tab_indexes.requirement}>
+              <UserRequirement user={user} onClose={onClose} />
+            </TabPanel>) : null
+        }
+        {
+          partners ?
+            (<TabPanel value={tab} index={tab_indexes.partners}>
+              <PartnerList user={user} all onClose={onClose} />
+            </TabPanel>) : null
+        }
+      </Box>
     </React.Fragment>
   );
 };

@@ -36,12 +36,12 @@ const useStyles = makeStyles(theme => ({
   cell: {
     padding: '3px 15px',
   },
+  number: {
+    width: 80,
+  },
   appBar: {
     top: 'auto',
     bottom: 0,
-  },
-  number: {
-    width: 80,
   },
   toolbar: {
     minHeight: 'initial',
@@ -384,6 +384,9 @@ const UserRequirement = props => {
           <Grid container spacing={6}>
             <Grid item xs />
             <Grid item>
+              <Button onClick={() => onClose(null)} color="primary">
+                { i18next.t('views.user.back') }
+              </Button>
               <Button onClick={onSave} color="primary">
                 { i18next.t('views.app.save') }
               </Button>

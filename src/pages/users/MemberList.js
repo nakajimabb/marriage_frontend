@@ -1,20 +1,19 @@
 import React, {useEffect, useState} from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import { Box } from "@material-ui/core";
 import { UserPlus } from "react-feather";
 import axios from 'axios'
 
 import i18next from 'i18n'
 import { logout } from "redux/actions/sessionActions";
-import TitleBar from "pages/components/TitleBar";
 import UserList from "./UserList";
 import env from 'environment';
 
 
 const MemberList = props => {
   const { dispatch, session, history } = props;
-  const [data, setData] = useState([]);
+  const [data, setData] = useState([i18next.t('views.app.list')]);
+  const [subtitle, setSubtitle] = useState(null);
   const title = i18next.t('views.user.members');
   const item_labels = [
     (u => (u.last_name + ' ' + u.first_name + ' (' + u.nickname + ')')),
@@ -65,10 +64,21 @@ const MemberList = props => {
 
   return (
     <React.Fragment>
-      <TitleBar title={title} icon={<UserPlus />} />
-      <Box p={6}>
-        <UserList data={data} item_labels={item_labels} new_user all updateUser={updateUser} form profile requirement partners action="edit" />
-      </Box>
+      <UserList
+        title={title}
+        icon={<UserPlus />}
+        data={data}
+        item_labels={item_labels}
+        new_user
+        all
+        form
+        profile
+        requirement
+        partners
+        action="edit"
+        updateUser={updateUser}
+        setTitle={setSubtitle}
+      />
     </React.Fragment>
   );
 };

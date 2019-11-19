@@ -2,6 +2,8 @@ import React from "react";
 import { withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import {
+  AppBar,
+  Toolbar,
   Grid,
   Avatar,
   Card,
@@ -22,6 +24,14 @@ import env from 'environment';
 
 
 const useStyles = makeStyles(theme => ({
+  appBar: {
+    top: 'auto',
+    bottom: 0,
+  },
+  toolbar: {
+    minHeight: 'initial',
+    padding: theme.spacing(2),
+  },
   content: {
     backgroundColor: theme.body.background,
   },
@@ -81,7 +91,7 @@ const UserFriend = props => {
 
 const UserProfile = props => {
 
-  const { user, user_friend, setUserFriend, session } = props;
+  const { user, user_friend, setUserFriend, session, onClose } = props;
   const classes = useStyles();
   const user_age = age(user.birthday) || user.age;
   const me = session.user;
@@ -391,6 +401,22 @@ const UserProfile = props => {
           </Card>
         </Grid>
       </Grid>
+      <AppBar position="fixed" color="default" className={classes.appBar} >
+        <Toolbar className={classes.toolbar} >
+          <Grid container spacing={6}>
+            <Grid item xs />
+            {
+              onClose ? (
+                <Grid item>
+                  <Button onClick={() => onClose(null)} color="primary">
+                    { i18next.t('views.user.back') }
+                  </Button>
+                </Grid>
+              ) : null
+            }
+          </Grid>
+        </Toolbar>
+      </AppBar>
     </React.Fragment>
   );
 };
