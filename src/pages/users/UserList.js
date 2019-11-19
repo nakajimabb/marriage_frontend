@@ -222,7 +222,7 @@ const UserList = props => {
   return (
     <React.Fragment>
       <TitleBar title={title} icon={icon} variant="dense" />
-      <Box p={6}>
+      <Box px={5} py={2} >
         <Grid container spacing={6} >
           <Grid item>
             <FormControl className={classes.control} >

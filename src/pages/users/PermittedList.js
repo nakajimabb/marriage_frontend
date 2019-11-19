@@ -37,10 +37,14 @@ const PermittedList = props => {
 
   return (
     <React.Fragment>
-      <TitleBar title={title} icon={<Heart />} />
-      <Box p={6}>
-        <UserList data={data} all profile action="" />
-      </Box>
+      <UserList
+        title={title}
+        icon={<Heart />}
+        data={data}
+        all
+        profile
+        action=""
+      />
     </React.Fragment>
   );
 };
