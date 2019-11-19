@@ -76,6 +76,7 @@ const MatchmakerList = props => {
         data={data}
         all
         profile
+        search_items={['name', 'sex', 'prefecture', 'age', 'religion', 'member_sharing', 'friend']}
       />
     </React.Fragment>
   );

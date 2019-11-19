@@ -61,7 +61,7 @@ const MyProfile = props => {
           <Tab label={i18next.model('requirement')} {...a11yProps(2)} />
         </Tabs>
       </TitleBar>
-      <Box p={6}>
+      <Box>
         <TabPanel value={tab} index={0}>
           <UserSelf user={user} matchmakers={matchmakers} setUser={setUser} />
         </TabPanel>

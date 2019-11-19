@@ -78,6 +78,7 @@ const MemberList = props => {
         action="edit"
         updateUser={updateUser}
         setTitle={setSubtitle}
+        search_items={['name', 'sex', 'prefecture', 'age', 'religion']}
       />
     </React.Fragment>
   );

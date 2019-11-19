@@ -384,12 +384,20 @@ const UserRequirement = props => {
           <Grid container spacing={6}>
             <Grid item xs />
             <Grid item>
-              <Button onClick={() => onClose(null)} color="primary">
-                { i18next.t('views.user.back') }
-              </Button>
-              <Button onClick={onSave} color="primary">
-                { i18next.t('views.app.save') }
-              </Button>
+              {
+                onClose ? (
+                  <Button onClick={() => onClose(null)} color="primary">
+                    { i18next.t('views.user.back') }
+                  </Button>
+                ): null
+              }
+              {
+                onSave ? (
+                  <Button onClick={onSave} color="primary">
+                    {i18next.t('views.app.save')}
+                  </Button>
+                ) : null
+              }
             </Grid>
           </Grid>
         </Toolbar>

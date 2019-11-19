@@ -75,6 +75,7 @@ const UserAll = props => {
         partners
         action="edit"
         updateUser={updateUser}
+        search_items={['name', 'sex', 'prefecture', 'age', 'religion', 'role_matchmaker', 'member_sharing']}
       />
     </React.Fragment>
   );

@@ -105,19 +105,25 @@ const UserPage = props => {
 
   return (
     <React.Fragment>
-      <Tabs
-        value={tab}
-        indicatorColor="primary"
-        textColor="primary"
-        onChange={tabChange}
-        className={classes.tabs}
-      >
-        { form ? (<Tab label={i18next.t('views.app.edit')} {...a11yProps(tab_indexes.form)} />) : null } }
-        { profile ? (<Tab label={i18next.t('views.user.public_profile')} {...a11yProps(tab_indexes.profile)} />) : null }
-        { requirement ? (<Tab label={i18next.model('requirement')} {...a11yProps(tab_indexes.requirement)} />) : null }
-        { partners ? (<Tab label={i18next.t('views.user.partner_matches')} {...a11yProps(tab_indexes.partners)} />) : null }
-      </Tabs>
-      <Divider />
+      {
+        (Object.keys(tab_indexes).length >= 2) ? (
+          <React.Fragment>
+            <Tabs
+              value={tab}
+              indicatorColor="primary"
+              textColor="primary"
+              onChange={tabChange}
+              className={classes.tabs}
+            >
+              { form ? (<Tab label={i18next.t('views.app.edit')} {...a11yProps(tab_indexes.form)} />) : null } }
+              { profile ? (<Tab label={i18next.t('views.user.public_profile')} {...a11yProps(tab_indexes.profile)} />) : null }
+              { requirement ? (<Tab label={i18next.model('requirement')} {...a11yProps(tab_indexes.requirement)} />) : null }
+              { partners ? (<Tab label={i18next.t('views.user.partner_matches')} {...a11yProps(tab_indexes.partners)} />) : null }
+            </Tabs>
+            <Divider />
+          </React.Fragment>
+        ) : null
+      }
       <Box className={classes.content}>
         {
           form ?

@@ -43,6 +43,7 @@ const ViewableList = props => {
         all
         profile
         action=""
+        search_items={['name', 'sex', 'prefecture', 'age', 'religion']}
       />
     </React.Fragment>
   );
