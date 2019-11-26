@@ -15,9 +15,9 @@ import {
   MenuItem,
   TextField,
   Paper,
-  makeStyles, AppBar, Toolbar, Button,
+  makeStyles, AppBar, Toolbar, Button, Tooltip,
 } from "@material-ui/core";
-import { QuestionAnswer, Edit, Done } from '@material-ui/icons';
+import { QuestionAnswer, Edit, Done, AddCircleOutline } from '@material-ui/icons';
 import axios from 'axios'
 
 import i18next from 'i18n'
@@ -145,7 +145,7 @@ const Question = props => {
         </TableCell>
         <TableCell className={classes.small}>
           <IconButton size="small" onClick={onEdit} >
-            <Done size="small" fontSize="small" />
+            <Done fontSize="small" />
           </IconButton>
         </TableCell>
       </TableRow>
@@ -168,7 +168,7 @@ const Question = props => {
       </TableCell>
       <TableCell className={classes.small}>
         <IconButton size="small" onClick={onEdit} >
-          <Edit size="small" fontSize="small" />
+          <Edit fontSize="small" />
         </IconButton>
       </TableCell>
     </TableRow>
@@ -210,10 +210,11 @@ const QuestionAll = props => {
     if(headers && headers['access-token'] && headers['client'] && headers['uid']) {
       let url = env.API_ORIGIN + 'api/questions/save_collection';
       let question_params = createFormCollectionData(questions, 'question');
+      question_params.append('question_type', question_type);
       axios.post(url, question_params, { headers })
       .then((results) => {
-        clearEdit();
         setErrors([]);
+        setQuestions(results.data.questions);
         setMessage(i18next.t('views.app.save_done'));
       })
       .catch(({response}) => {
@@ -227,10 +228,15 @@ const QuestionAll = props => {
     setQuestionType(event.target.value);
   };
 
-  const onEdit = i => () => {
+  const onQuestionEdit = i => () => {
     let questions2 = Array.from(questions);
     let q = questions2[i];
     q.edit = !q.edit;
+    setQuestions(questions2);
+  };
+
+  const onQuestionNew = () => {
+    let questions2 = questions.concat({edit: true});
     setQuestions(questions2);
   };
 
@@ -272,25 +278,38 @@ const QuestionAll = props => {
 
       <TitleBar title={title} icon={ <QuestionAnswer /> } variant="dense" />
       <Box px={5} py={2} >
-        <FormControl className={classes.control} style={{width: 150}} >
-          <InputLabel htmlFor="question_type">{ i18next.attr('question', 'question_type') }</InputLabel>
-          <Select
-            value={ str(question_type) }
-            name="question_type"
-            onChange={handleSearchChange}
-            inputProps={{
-              name: "question_type",
-            }}
-            fullWidth
-          >
-            <MenuItem value="">
-              <em></em>
-            </MenuItem>
-            {
-              Object.keys(question_types).map(question_type => <MenuItem value={question_type}>{ question_types[question_type] }</MenuItem>)
-            }
-          </Select>
-        </FormControl>
+        <Grid container spacing={6} >
+          <Grid item>
+            <FormControl className={classes.control} style={{width: 150}} >
+              <InputLabel htmlFor="question_type">{ i18next.attr('question', 'question_type') }</InputLabel>
+              <Select
+                value={ str(question_type) }
+                name="question_type"
+                onChange={handleSearchChange}
+                inputProps={{
+                  name: "question_type",
+                }}
+                fullWidth
+              >
+                <MenuItem value="">
+                  <em></em>
+                </MenuItem>
+                {
+                  Object.keys(question_types).map(question_type => <MenuItem value={question_type}>{ question_types[question_type] }</MenuItem>)
+                }
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs />
+          <Grid item>
+            <Tooltip title={i18next.t('views.question.add_question')}>
+              <IconButton size="small" onClick={onQuestionNew} >
+                <AddCircleOutline fontSize="large" />
+              </IconButton>
+            </Tooltip>
+          </Grid>
+        </Grid>
+
         <Paper className={classes.paper} >
           <Table className={classes.table} size="small" aria-label="a dense table">
             <TableBody>
@@ -299,7 +318,7 @@ const QuestionAll = props => {
                   <Question
                     question={q}
                     errors={(+error_index == i) ? errors : {}}
-                    onEdit={onEdit(i)}
+                    onEdit={onQuestionEdit(i)}
                     handleChange={handleChange(i)}
                   />
                   )
