@@ -7,5 +7,7 @@ import app from './en/app.yml';
 import user from './en/user.yml';
 import user_friend from './en/user_friend.yml';
 import requirement from './en/requirement.yml';
+import question from './en/question.yml';
 
-export const en = merge.all([country, lang, message, prefecture, app, user, user_friend, requirement]).en;
+export const en = merge.all([country, lang, message, prefecture, app, user, user_friend, requirement,
+  question]).en;

@@ -1,6 +1,6 @@
 import i18next from 'i18n'
 
-export function createFormData(data, model_name) {
+export const createFormData = (data, model_name) => {
   let form_data = new FormData();
   for(let key in data) {
     if(data[key] != null) {
@@ -8,9 +8,9 @@ export function createFormData(data, model_name) {
     }
   }
   return form_data;
-}
+};
 
-export function collectErrors(response, model_name) {
+export const collectErrors = (response, model_name) => {
   let errors = {};
   if (response.status === 500) {
     const data_errors = response.data.errors;
@@ -24,4 +24,17 @@ export function collectErrors(response, model_name) {
     errors.base = response.status + ' ' + response.statusText;
   }
   return errors
-}
+};
+
+export const createFormCollectionData = (array, model_name) => {
+  let form_data = new FormData();
+  const name1 = 'form_' + model_name + '_collection';
+  const name2 = model_name + '_attributes';
+  for(let i in array) {
+    for (let key in array[i]) {
+      form_data.append(`${name1}[${name2}][${i}][${key}`, array[i][key]);
+    }
+  }
+  return form_data;
+};
+

@@ -1,5 +1,5 @@
 import React from "react";
-import { SupervisedUserCircle, PeopleOutline, AllInclusive } from "@material-ui/icons";
+import { SupervisedUserCircle, AllInclusive } from "@material-ui/icons";
 import { Heart, UserPlus, Users, Settings } from "react-feather";
 
 import async from "../components/Async";
@@ -19,6 +19,7 @@ const MatchmakerList = async(() => import("../pages/users/MatchmakerList"));
 const UserAll = async(() => import("../pages/users/UserAll"));
 const MyProfile = async(() => import("../pages/users/MyProfile"));
 const PermittedList = async(() => import("../pages/users/PermittedList"));
+const QuestionAll = async(() => import("../pages/questions/QuestionAll"));
 
 const courtshipRoutes = [
   {
@@ -72,10 +73,14 @@ const headRoutes = [
     icon: <SupervisedUserCircle />,
     children: [
       {
-        path: "/head/all",
+        path: "/head/user_all",
         name: 'views.user.list',
-        icon: <PeopleOutline />,
         component: UserAll
+      },
+      {
+        path: "/head/question_all",
+        name: 'views.question.list',
+        component: QuestionAll
       },
     ]
   },

@@ -78,7 +78,7 @@ const UserSelf = props => {
           setMessage(i18next.t('views.app.save_done'));
         })
         .catch((data) => {
-          setErrors(collectErrors(data.response));
+          setErrors(collectErrors(data.response, 'user'));
         });
     }
   };
