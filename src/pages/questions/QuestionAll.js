@@ -15,13 +15,15 @@ import {
   MenuItem,
   TextField,
   Paper,
-  makeStyles, AppBar, Toolbar, Button, Tooltip,
+  Typography,
+  Tooltip,
+  makeStyles,
 } from "@material-ui/core";
 import { QuestionAnswer, Edit, Done, AddCircleOutline } from '@material-ui/icons';
 import axios from 'axios'
 
 import i18next from 'i18n'
-import { str, collectErrors, createFormCollectionData } from 'helpers';
+import { str, collectErrors, createFormData } from 'helpers';
 import { logout } from "redux/actions/sessionActions";
 import TitleBar from "pages/components/TitleBar";
 import CustomizedSnackbar from "pages/components/CustomizedSnackbar";
@@ -29,17 +31,6 @@ import env from 'environment';
 
 
 const useStyles = makeStyles(theme => ({
-  grid: {
-    margin: 0,
-    padding: 0,
-  },
-  icon: {
-    color: 'rgba(255, 255, 255, 0.54)',
-  },
-  media: {
-    width: '100%',
-    height: 200
-  },
   paper: {
     marginTop: 15,
   },
@@ -53,125 +44,229 @@ const useStyles = makeStyles(theme => ({
     margin: 0,
     padding: 5,
   },
-  small: {
+  cell_small: {
     width: 60,
     margin: 0,
     padding: 5,
   },
-  appBar: {
-    top: 'auto',
-    bottom: 0,
+  cell_tools: {
+    width: 65,
+    margin: 0,
+    padding: '5px !important',
   },
-  toolbar: {
-    minHeight: 'initial',
-    padding: theme.spacing(2),
+  cell_choices: {
+    margin: 0,
+    padding: '5px !important',
+  },
+  choice_label: {
+    width: 160,
+    margin: 0,
+    padding: 5,
+  },
+  choice_value: {
+    width: 50,
+    margin: 0,
+    padding: 5,
   },
 }));
 
+const QuestionChoices = props => {
+  const { question, question_choices, handleChoiceChange, index } = props;
+  const classes = useStyles();
+
+  if(question.edit) {
+    return question_choices.length > 0 ? (
+      <TableRow>
+        <TableCell colspan="5" className={classes.cell_choices}>
+          {
+            question_choices.map((choice, i) => (
+              <React.Fragment>
+                <FormControl>
+                  <TextField
+                    name="label"
+                    label={i18next.attr('question_choice', 'label')}
+                    autoComplete="off"
+                    defaultValue=""
+                    value={str(choice.label)}
+                    onChange={handleChoiceChange(index, i)}
+                    // error={errors.content}
+                    className={classes.choice_label}
+                  />
+                </FormControl>
+                <FormControl>
+                  <TextField
+                    name="value"
+                    type="number"
+                    label={i18next.attr('question_choice', 'value')}
+                    autoComplete="off"
+                    defaultValue=""
+                    value={str(choice.value)}
+                    onChange={handleChoiceChange(index, i)}
+                    // error={errors.content}
+                    className={classes.choice_value}
+                  />
+                </FormControl>
+              </React.Fragment>
+            ))
+          }
+        </TableCell>
+      </TableRow>
+    ) : null;
+  }
+
+  return question_choices.length > 0 ? (
+    <TableRow>
+      <TableCell colspan="5" className={classes.cell_choices}>
+        <Grid container spacing={6} >
+          <Grid item>
+            <Typography>
+              { i18next.model('question_choice') }:
+            </Typography>
+          </Grid>
+          {
+            question_choices.map((choice, i) => (
+              <Grid item>
+                <Typography>
+                  { choice.label }({ choice.value }) &nbsp;
+                </Typography>
+              </Grid>
+            ))
+          }
+        </Grid>
+      </TableCell>
+    </TableRow>
+  ) : null;
+};
+
+
 const Question = props => {
-  const { question, errors, onEdit, handleChange } = props;
+  const { question, errors, onEdit, onSave, handleChange, handleChoiceChange, onChoiceNew, index } = props;
   const classes = useStyles();
   const answer_types = i18next.data_list('enum', 'question', 'answer_type');
+  const question_choices = question.question_choices_attributes || [];
 
   if(question.edit) {
     return (
-      <TableRow key={question.id}>
-        <TableCell className={classes.content}>
-          <FormControl fullWidth>
-            <TextField
-              name="content"
-              label={ i18next.attr('question', 'content') }
-              autoComplete="off"
-              defaultValue=""
-              value={ str(question.content) }
-              onChange={handleChange}
-              error={errors.content}
-              fullWidth
-            />
-          </FormControl>
-        </TableCell>
-        <TableCell className={classes.answer_type} >
-          <FormControl className={classes.control} >
-            <InputLabel htmlFor="answer_type">{ i18next.attr('question', 'answer_type') }</InputLabel>
-            <Select
-              value={ question.answer_type }
-              name="answer_type"
-              onChange={handleChange}
-              inputProps={{
-                name: "answer_type",
-              }}
-              style={{width: 90}}
-              error={errors.answer_type}
-              fullWidth
-            >
-              <MenuItem value="">
-                <em></em>
-              </MenuItem>
-              {
-                Object.keys(answer_types).map(answer_type => <MenuItem value={answer_type}>{ answer_types[answer_type] }</MenuItem>)
-              }
-            </Select>
-          </FormControl>
-        </TableCell>
-        <TableCell className={classes.small}>
-          <FormControl fullWidth>
-            <TextField
-              name="min_answer_size"
-              type="number"
-              label={ i18next.attr('question', 'min_answer_size') }
-              autoComplete="off"
-              defaultValue=""
-              value={ question.min_answer_size }
-              onChange={handleChange}
-              error={errors.min_answer_size}
-              fullWidth
-            />
-          </FormControl>
-        </TableCell>
-        <TableCell className={classes.small}>
-          <FormControl fullWidth>
-            <TextField
-              name="max_answer_size"
-              type="number"
-              label={ i18next.attr('question', 'max_answer_size') }
-              autoComplete="off"
-              defaultValue=""
-              value={ question.max_answer_size }
-              onChange={handleChange}
-              error={errors.max_answer_size}
-              fullWidth
-            />
-          </FormControl>
-        </TableCell>
-        <TableCell className={classes.small}>
-          <IconButton size="small" onClick={onEdit} >
-            <Done fontSize="small" />
-          </IconButton>
-        </TableCell>
-      </TableRow>
+      <React.Fragment>
+        <TableRow key={question.id}>
+          <TableCell className={classes.content}>
+            <FormControl fullWidth>
+              <TextField
+                name="content"
+                label={ i18next.attr('question', 'content') }
+                autoComplete="off"
+                defaultValue=""
+                value={ str(question.content) }
+                onChange={handleChange(index)}
+                error={errors.content}
+                fullWidth
+              />
+            </FormControl>
+          </TableCell>
+          <TableCell className={classes.answer_type} >
+            <FormControl className={classes.control} >
+              <InputLabel htmlFor="answer_type">{ i18next.attr('question', 'answer_type') }</InputLabel>
+              <Select
+                value={ question.answer_type }
+                name="answer_type"
+                onChange={handleChange(index)}
+                inputProps={{
+                  name: "answer_type",
+                }}
+                style={{width: 90}}
+                error={errors.answer_type}
+                fullWidth
+              >
+                <MenuItem value="">
+                  <em></em>
+                </MenuItem>
+                {
+                  Object.keys(answer_types).map(answer_type => <MenuItem value={answer_type}>{ answer_types[answer_type] }</MenuItem>)
+                }
+              </Select>
+            </FormControl>
+          </TableCell>
+          <TableCell className={classes.cell_small}>
+            <FormControl fullWidth>
+              <TextField
+                name="min_answer_size"
+                type="number"
+                label={ i18next.attr('question', 'min_answer_size') }
+                autoComplete="off"
+                defaultValue=""
+                value={ question.min_answer_size }
+                onChange={handleChange(index)}
+                error={errors.min_answer_size}
+                fullWidth
+              />
+            </FormControl>
+          </TableCell>
+          <TableCell className={classes.cell_small}>
+            <FormControl fullWidth>
+              <TextField
+                name="max_answer_size"
+                type="number"
+                label={ i18next.attr('question', 'max_answer_size') }
+                autoComplete="off"
+                defaultValue=""
+                value={ question.max_answer_size }
+                onChange={handleChange(index)}
+                error={errors.max_answer_size}
+                fullWidth
+              />
+            </FormControl>
+          </TableCell>
+          <TableCell className={classes.cell_tools}>
+            {
+              question.answer_type == 'number' ? (
+                <IconButton size="small" onClick={onChoiceNew(index)} >
+                  <AddCircleOutline fontSize="small" />
+                </IconButton>
+              ) : null
+            }
+            <IconButton size="small" onClick={onSave(index)} >
+              <Done fontSize="small" />
+            </IconButton>
+          </TableCell>
+        </TableRow>
+        <QuestionChoices
+          question={question}
+          question_choices={question_choices}
+          index={index}
+          handleChoiceChange={handleChoiceChange}
+        />
+      </React.Fragment>
     );
   }
 
   return (
-    <TableRow key={question.id}>
-      <TableCell className={classes.content}>
-        {question.content}
-      </TableCell>
-      <TableCell className={classes.answer_type}>
-        {question.answer_type ? i18next.enum('question', 'answer_type', question.answer_type) : ''}
-      </TableCell>
-      <TableCell className={classes.small}>
-        {question.min_answer_size}
-      </TableCell>
-      <TableCell className={classes.small}>
-        {question.max_answer_size}
-      </TableCell>
-      <TableCell className={classes.small}>
-        <IconButton size="small" onClick={onEdit} >
-          <Edit fontSize="small" />
-        </IconButton>
-      </TableCell>
-    </TableRow>
+    <React.Fragment>
+      <TableRow key={question.id}>
+        <TableCell className={classes.content}>
+          {question.content}
+        </TableCell>
+        <TableCell className={classes.answer_type}>
+          {question.answer_type ? i18next.enum('question', 'answer_type', question.answer_type) : ''}
+        </TableCell>
+        <TableCell className={classes.cell_small}>
+          {question.min_answer_size}
+        </TableCell>
+        <TableCell className={classes.cell_small}>
+          {question.max_answer_size}
+        </TableCell>
+        <TableCell className={classes.cell_tools}>
+          <IconButton size="small" onClick={onEdit(index)} >
+            <Edit fontSize="small" />
+          </IconButton>
+        </TableCell>
+      </TableRow>
+      <QuestionChoices
+        question={question}
+        question_choices={question_choices}
+        index={index}
+        handleChoiceChange={handleChoiceChange}
+        />
+    </React.Fragment>
     );
 };
 
@@ -179,7 +274,6 @@ const QuestionAll = props => {
   const { dispatch, session, history } = props;
   const [question_type, setQuestionType] = useState('compatibility');
   const [questions, setQuestions] = useState([]);
-  const [message, setMessage] = useState(null);
   const [errors, setErrors] = useState({});
   const [error_index, setErrorIndex] = useState(null);
   const title = i18next.t('views.question.list');
@@ -205,21 +299,30 @@ const QuestionAll = props => {
 
   }, [session.headers, question_type]);
 
-  const onSave = () => {
+  const onQuestionSave = i => () => {
     const headers  = session.headers;
     if(headers && headers['access-token'] && headers['client'] && headers['uid']) {
-      let url = env.API_ORIGIN + 'api/questions/save_collection';
-      let question_params = createFormCollectionData(questions, 'question');
-      question_params.append('question_type', question_type);
-      axios.post(url, question_params, { headers })
+      let question = questions[i];
+
+      let url = env.API_ORIGIN + 'api/questions/';
+      if (question.id) url += question.id;
+
+      let promise;
+      if (question.id) {
+        promise = axios.patch(url, {question}, {headers});
+      } else {
+        promise = axios.post(url, {question}, {headers});
+      }
+      promise
       .then((results) => {
-        setErrors([]);
-        setQuestions(results.data.questions);
-        setMessage(i18next.t('views.app.save_done'));
+        let questions2 = Array.from(questions);
+        questions2[i] = results.data.question;
+        setQuestions(questions2);
+        setErrors({});
       })
-      .catch(({response}) => {
-        setErrors(collectErrors(response, 'question'));
-        setErrorIndex(+response.data.index);
+      .catch((data) => {
+        setErrors(collectErrors(data.response, 'question'));
+        setErrorIndex(i);
       });
     }
   };
@@ -236,15 +339,28 @@ const QuestionAll = props => {
   };
 
   const onQuestionNew = () => {
-    let questions2 = questions.concat({edit: true});
+    const q = { question_type: question_type,
+                answer_type: 'number',
+                min_answer_size: 1,
+                max_answer_size: 1,
+                question_choices_attributes: [],
+                edit: true　};
+    let questions2 = questions.concat(q);
     setQuestions(questions2);
   };
 
-  const clearEdit = () => {
+  const onQuestionChoiceNew = i => () => {
     let questions2 = Array.from(questions);
-    for(const i in questions2) {
-      questions2[i].edit = false;
-    }
+    let choices = questions2[i].question_choices_attributes || [];
+    choices.push({value: choices.length + 1});
+    questions2[i].question_choices_attributes = choices;
+    setQuestions(questions2);
+  };
+
+  const handleChoiceChange = (i, j) => event => {
+    let questions2 = Array.from(questions);
+    let choice = questions2[i].question_choices_attributes[j];
+    choice[event.target.name] = event.target.value;
     setQuestions(questions2);
   };
 
@@ -268,12 +384,6 @@ const QuestionAll = props => {
           })
         }
         onClose={() => setErrors({})}
-      />
-      <CustomizedSnackbar
-        open={ message }
-        variant="info"
-        message={ message }
-        onClose={() => setMessage(null)}
       />
 
       <TitleBar title={title} icon={ <QuestionAnswer /> } variant="dense" />
@@ -317,9 +427,13 @@ const QuestionAll = props => {
                 questions.map((q, i) => (
                   <Question
                     question={q}
+                    index={i}
                     errors={(+error_index == i) ? errors : {}}
-                    onEdit={onQuestionEdit(i)}
-                    handleChange={handleChange(i)}
+                    onEdit={onQuestionEdit}
+                    onSave={onQuestionSave}
+                    onChoiceNew={onQuestionChoiceNew}
+                    handleChoiceChange={handleChoiceChange}
+                    handleChange={handleChange}
                   />
                   )
                 )
@@ -328,19 +442,6 @@ const QuestionAll = props => {
           </Table>
         </Paper>
       </Box>
-
-      <AppBar position="fixed" color="default" className={classes.appBar} >
-        <Toolbar className={classes.toolbar} >
-          <Grid container spacing={6}>
-            <Grid item xs />
-            <Grid item>
-              <Button onClick={onSave} color="primary">
-                { i18next.t('views.app.save') }
-              </Button>
-            </Grid>
-          </Grid>
-        </Toolbar>
-      </AppBar>
     </React.Fragment>
   );
 };

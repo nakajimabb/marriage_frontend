@@ -8,6 +8,7 @@ import user from './ja/user.yml';
 import user_friend from './ja/user_friend.yml';
 import requirement from './ja/requirement.yml';
 import question from './ja/question.yml';
+import question_choice from './ja/question_choice.yml';
 
 export const ja = merge.all([country, lang, message, prefecture, app, user, user_friend, requirement,
-  question]).ja;
+  question, question_choice]).ja;
