@@ -21,6 +21,7 @@ import {
 } from "@material-ui/core";
 import { QuestionAnswer, Edit, Done, AddCircleOutline } from '@material-ui/icons';
 import axios from 'axios'
+import clsx from 'clsx';
 
 import i18next from 'i18n'
 import { str, collectErrors, createFormData } from 'helpers';
@@ -50,34 +51,35 @@ const useStyles = makeStyles(theme => ({
     padding: 5,
   },
   cell_tools: {
-    width: 65,
+    width: 40,
     margin: 0,
     padding: '5px !important',
+  },
+  border_dashed: {
+    borderBottomStyle: 'dashed',
   },
   cell_choices: {
     margin: 0,
     padding: '5px !important',
   },
   choice_label: {
-    width: 160,
-    margin: 0,
-    padding: 5,
+    width: 150,
+    marginLeft: 5,
   },
   choice_value: {
-    width: 50,
-    margin: 0,
-    padding: 5,
+    width: 40,
+    marginLeft: 5,
   },
 }));
 
 const QuestionChoices = props => {
-  const { question, question_choices, handleChoiceChange, index } = props;
+  const { question, question_choices, handleChoiceChange, onChoiceNew, index } = props;
   const classes = useStyles();
 
   if(question.edit) {
-    return question_choices.length > 0 ? (
-      <TableRow>
-        <TableCell colspan="5" className={classes.cell_choices}>
+    return (
+      <TableRow className={classes.row_choice} >
+        <TableCell colspan="4" className={classes.cell_choices}>
           {
             question_choices.map((choice, i) => (
               <React.Fragment>
@@ -110,12 +112,17 @@ const QuestionChoices = props => {
             ))
           }
         </TableCell>
+        <TableCell className={classes.cell_tools}>
+          <IconButton size="small" onClick={onChoiceNew(index)} >
+            <AddCircleOutline fontSize="small" />
+          </IconButton>
+        </TableCell>
       </TableRow>
-    ) : null;
+    );
   }
 
-  return question_choices.length > 0 ? (
-    <TableRow>
+  return (
+    <TableRow className={classes.row_choice} >
       <TableCell colspan="5" className={classes.cell_choices}>
         <Grid container spacing={6} >
           <Grid item>
@@ -135,7 +142,7 @@ const QuestionChoices = props => {
         </Grid>
       </TableCell>
     </TableRow>
-  ) : null;
+  );
 };
 
 
@@ -144,12 +151,14 @@ const Question = props => {
   const classes = useStyles();
   const answer_types = i18next.data_list('enum', 'question', 'answer_type');
   const question_choices = question.question_choices_attributes || [];
+  const is_num = question.answer_type == 'number';
+  const class_cell = is_num ? classes.border_dashed : {};
 
   if(question.edit) {
     return (
       <React.Fragment>
-        <TableRow key={question.id}>
-          <TableCell className={classes.content}>
+        <TableRow key={question.id} >
+          <TableCell className={clsx(classes.content, class_cell)}>
             <FormControl fullWidth>
               <TextField
                 name="content"
@@ -163,7 +172,7 @@ const Question = props => {
               />
             </FormControl>
           </TableCell>
-          <TableCell className={classes.answer_type} >
+          <TableCell className={clsx(classes.answer_type, class_cell)} >
             <FormControl className={classes.control} >
               <InputLabel htmlFor="answer_type">{ i18next.attr('question', 'answer_type') }</InputLabel>
               <Select
@@ -186,7 +195,7 @@ const Question = props => {
               </Select>
             </FormControl>
           </TableCell>
-          <TableCell className={classes.cell_small}>
+          <TableCell className={clsx(classes.cell_small, class_cell)}>
             <FormControl fullWidth>
               <TextField
                 name="min_answer_size"
@@ -201,7 +210,7 @@ const Question = props => {
               />
             </FormControl>
           </TableCell>
-          <TableCell className={classes.cell_small}>
+          <TableCell className={clsx(classes.cell_small, class_cell)}>
             <FormControl fullWidth>
               <TextField
                 name="max_answer_size"
@@ -216,56 +225,59 @@ const Question = props => {
               />
             </FormControl>
           </TableCell>
-          <TableCell className={classes.cell_tools}>
-            {
-              question.answer_type == 'number' ? (
-                <IconButton size="small" onClick={onChoiceNew(index)} >
-                  <AddCircleOutline fontSize="small" />
-                </IconButton>
-              ) : null
-            }
+          <TableCell className={clsx(classes.cell_tools, class_cell)}>
             <IconButton size="small" onClick={onSave(index)} >
               <Done fontSize="small" />
             </IconButton>
           </TableCell>
         </TableRow>
-        <QuestionChoices
-          question={question}
-          question_choices={question_choices}
-          index={index}
-          handleChoiceChange={handleChoiceChange}
-        />
+        {
+          is_num ? (
+            <QuestionChoices
+              question={question}
+              question_choices={question_choices}
+              index={index}
+              handleChoiceChange={handleChoiceChange}
+              onChoiceNew={onChoiceNew}
+            />
+          ) : null
+        }
       </React.Fragment>
     );
   }
 
   return (
     <React.Fragment>
-      <TableRow key={question.id}>
-        <TableCell className={classes.content}>
+      <TableRow key={question.id} >
+        <TableCell  className={clsx(classes.content, class_cell)} >
           {question.content}
         </TableCell>
-        <TableCell className={classes.answer_type}>
+        <TableCell className={clsx(classes.answer_type, class_cell)}>
           {question.answer_type ? i18next.enum('question', 'answer_type', question.answer_type) : ''}
         </TableCell>
-        <TableCell className={classes.cell_small}>
+        <TableCell className={clsx(classes.cell_small, class_cell)}>
           {question.min_answer_size}
         </TableCell>
-        <TableCell className={classes.cell_small}>
+        <TableCell className={clsx(classes.cell_small, class_cell)}>
           {question.max_answer_size}
         </TableCell>
-        <TableCell className={classes.cell_tools}>
+        <TableCell className={clsx(classes.cell_tools, class_cell)}>
           <IconButton size="small" onClick={onEdit(index)} >
             <Edit fontSize="small" />
           </IconButton>
         </TableCell>
       </TableRow>
-      <QuestionChoices
-        question={question}
-        question_choices={question_choices}
-        index={index}
-        handleChoiceChange={handleChoiceChange}
-        />
+      {
+        is_num ? (
+          <QuestionChoices
+            question={question}
+            question_choices={question_choices}
+            index={index}
+            handleChoiceChange={handleChoiceChange}
+            onChoiceNew={onChoiceNew}
+          />
+        ) : null
+      }
     </React.Fragment>
     );
 };
