@@ -13,7 +13,6 @@ import env from 'environment';
 const MemberList = props => {
   const { dispatch, session, history } = props;
   const [data, setData] = useState([i18next.t('views.app.list')]);
-  const [subtitle, setSubtitle] = useState(null);
   const title = i18next.t('views.user.members');
   const item_labels = [
     (u => (u.last_name + ' ' + u.first_name + ' (' + u.nickname + ')')),
@@ -28,8 +27,8 @@ const MemberList = props => {
         .then((results) => {
           setData(results.data.users);
         })
-        .catch((data) => {
-          alert('データの取得に失敗しました。');
+        .catch(({response}) => {
+          alert(response.status + ' ' + response.statusText);
         });
     }
     else {
@@ -55,8 +54,8 @@ const MemberList = props => {
             }
             setData(data2);
           })
-          .catch((data) => {
-            alert('データの取得に失敗しました。');
+          .catch(({response}) => {
+            alert(response.status + ' ' + response.statusText);
           });
       }
     }
@@ -75,9 +74,9 @@ const MemberList = props => {
         profile
         requirement
         partners
+        question
         action="edit"
         updateUser={updateUser}
-        setTitle={setSubtitle}
         search_items={['name', 'sex', 'prefecture', 'age', 'religion']}
       />
     </React.Fragment>

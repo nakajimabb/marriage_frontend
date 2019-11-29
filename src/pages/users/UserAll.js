@@ -24,12 +24,12 @@ const UserAll = props => {
     if(headers && headers['access-token'] && headers['client'] && headers['uid']) {
       const url = env.API_ORIGIN + 'api/users';
       axios.get(url, {headers})
-          .then((results) => {
-            setData(results.data.users);
-          })
-          .catch((data) => {
-            alert('データの取得に失敗しました。');
-          });
+        .then((results) => {
+          setData(results.data.users);
+        })
+        .catch(({response}) => {
+          alert(response.status + ' ' + response.statusText);
+        });
     }
     else {
       dispatch(logout());
@@ -54,8 +54,8 @@ const UserAll = props => {
             }
             setData(data2);
           })
-          .catch((data) => {
-            alert('データの取得に失敗しました。');
+          .catch(({response}) => {
+            alert(response.status + ' ' + response.statusText);
           });
       }
     }
@@ -73,6 +73,7 @@ const UserAll = props => {
         profile
         requirement
         partners
+        question
         action="edit"
         updateUser={updateUser}
         search_items={['name', 'sex', 'prefecture', 'age', 'religion', 'role_matchmaker', 'member_sharing']}

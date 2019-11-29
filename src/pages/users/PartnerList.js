@@ -112,8 +112,8 @@ const PartnerList = props => {
           .then((results) => {
             setData(results.data.users || []);
           })
-          .catch((data) => {
-            alert('データの取得に失敗しました。');
+          .catch(({response}) => {
+            alert(response.status + ' ' + response.statusText);
           });
       }
     }
@@ -139,8 +139,8 @@ const PartnerList = props => {
               setData(data2);
             }
           })
-          .catch((data) => {
-            alert('データの更新に失敗しました。');
+          .catch(({response}) => {
+            alert(response.status + ' ' + response.statusText);
           });
       }
     }

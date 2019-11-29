@@ -9,6 +9,7 @@ import TitleBar from "pages/components/TitleBar";
 import UserProfile from "./UserProfile";
 import UserSelf from "./UserSelf";
 import UserRequirement from "./UserRequirement";
+import QuestionForm from "../questions/QuestionForm";
 
 
 const TabPanel = props => {
@@ -58,7 +59,8 @@ const MyProfile = props => {
         >
           <Tab label={i18next.t('views.user.edit_self')} {...a11yProps(0)} />
           <Tab label={i18next.t('views.user.public_profile')} {...a11yProps(1)} />
-          <Tab label={i18next.model('requirement')} {...a11yProps(2)} />
+          <Tab label={i18next.model('question')} {...a11yProps(2)} />
+          <Tab label={i18next.model('requirement')} {...a11yProps(3)} />
         </Tabs>
       </TitleBar>
       <Box>
@@ -69,6 +71,9 @@ const MyProfile = props => {
           <UserProfile user={user} open />
         </TabPanel>
         <TabPanel value={tab} index={2}>
+          <QuestionForm user={user} />
+        </TabPanel>
+        <TabPanel value={tab} index={3}>
           <UserRequirement user={user} />
         </TabPanel>
       </Box>

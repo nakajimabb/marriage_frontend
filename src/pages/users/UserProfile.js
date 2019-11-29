@@ -112,8 +112,8 @@ const UserProfile = props => {
           const user_friend = results.data.user_friend;
           setUserFriend(user_friend);
         })
-        .catch((data) => {
-          alert('共有リクエストに失敗しました。');
+        .catch(({response}) => {
+          alert(response.status + ' ' + response.statusText);
         });
     }
   };

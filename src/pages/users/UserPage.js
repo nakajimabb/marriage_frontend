@@ -17,6 +17,7 @@ import UserForm from "./UserForm";
 import UserProfile from "./UserProfile";
 import UserRequirement from "./UserRequirement";
 import PartnerList from "./PartnerList";
+import QuestionForm from "../questions/QuestionForm";
 import env from 'environment';
 
 const useStyles = makeStyles(theme => ({
@@ -48,7 +49,7 @@ const TabPanel = props => {
 };
 
 const UserPage = props => {
-  const { user_id, session, onClose, form, profile, requirement, partners, action, setTitle } = props;
+  const { user_id, session, onClose, form, profile, requirement, partners, question, action, setTitle } = props;
   const [user, setUser] = useState({});
   const [user_friend, setUserFriend] = useState({});
   const [matchmakers, setMatchmakers] = useState([]);
@@ -59,6 +60,7 @@ const UserPage = props => {
   if(form) tab_indexes.form = index++;
   if(profile) tab_indexes.profile = index++;
   if(requirement) tab_indexes.requirement = index++;
+  if(question) tab_indexes.question = index++;
   if(partners) tab_indexes.partners = index++;
 
   useEffect(() => {
@@ -75,9 +77,9 @@ const UserPage = props => {
             setMatchmakers(data.matchmakers);
             setTitle(title);
           })
-          .catch((data) => {
+          .catch(({response}) => {
             setTitle(null);
-            alert('データの取得に失敗しました。');
+            alert(response.status + ' ' + response.statusText);
           });
       }
     } else {
@@ -118,6 +120,7 @@ const UserPage = props => {
               { form ? (<Tab label={i18next.t('views.app.edit')} {...a11yProps(tab_indexes.form)} />) : null } }
               { profile ? (<Tab label={i18next.t('views.user.public_profile')} {...a11yProps(tab_indexes.profile)} />) : null }
               { requirement ? (<Tab label={i18next.model('requirement')} {...a11yProps(tab_indexes.requirement)} />) : null }
+              { question ? (<Tab label={i18next.model('question')} {...a11yProps(tab_indexes.question)} />) : null }
               { partners ? (<Tab label={i18next.t('views.user.partner_matches')} {...a11yProps(tab_indexes.partners)} />) : null }
             </Tabs>
             <Divider />
@@ -141,6 +144,12 @@ const UserPage = props => {
           requirement ?
             (<TabPanel value={tab} index={tab_indexes.requirement}>
               <UserRequirement user={user} onClose={onClose} />
+            </TabPanel>) : null
+        }
+        {
+          question ?
+            (<TabPanel value={tab} index={tab_indexes.question}>
+              <QuestionForm user={user} onClose={onClose} />
             </TabPanel>) : null
         }
         {

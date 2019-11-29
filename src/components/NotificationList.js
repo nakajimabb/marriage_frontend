@@ -55,8 +55,8 @@ const NotificationList = props => {
         .then((results) => {
           setUserFriends(results.data.user_friends);
         })
-        .catch((data) => {
-          alert('データの取得に失敗しました。');
+        .catch(({response}) => {
+          alert(response.status + ' ' + response.statusText);
         });
     }
   }, [session.headers]);
@@ -73,8 +73,8 @@ const NotificationList = props => {
           setUserFriends(user_friends);
           dispatch(setNotification({count: user_friends.size}));
         })
-        .catch((data) => {
-          alert('データの更新に失敗しました。');
+        .catch(({response}) => {
+          alert(response.status + ' ' + response.statusText);
         });
     }
   };

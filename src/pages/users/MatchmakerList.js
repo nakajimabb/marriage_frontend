@@ -50,8 +50,8 @@ const MatchmakerList = props => {
         .then((results) => {
           setData(results.data.users);
         })
-        .catch((data) => {
-          alert('データの取得に失敗しました。');
+        .catch(({response}) => {
+          alert(response.status + ' ' + response.statusText);
         });
     }
     else {

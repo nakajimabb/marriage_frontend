@@ -70,8 +70,8 @@ const UserRequirement = props => {
           .then((results) => {
             setRequirement(results.data.requirement);
           })
-          .catch((data) => {
-            alert('データの取得に失敗しました。');
+          .catch(({response}) => {
+            alert(response.status + ' ' + response.statusText);
           });
       }
     }

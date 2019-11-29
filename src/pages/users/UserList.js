@@ -98,7 +98,7 @@ const UserBreadcrumbs = props => {
 
 const UserList = props => {
   const { title, icon, data, new_user, item_labels, updateUser,
-    all, form, profile, requirement, partners, action, search_items } = props;
+    all, form, profile, requirement, partners, question, action, search_items } = props;
   const [open, setOpen] = useState(false);
   const [user_id, setUserId] = useState(null);
   const [search, setSearch] = useState({});
@@ -219,6 +219,7 @@ const UserList = props => {
           profile={profile}
           requirement={requirement}
           partners={partners}
+          question={question}
           action={action}
           maxWidth="md"
           onClose={closeUserPage}

@@ -24,7 +24,7 @@ import axios from 'axios'
 import clsx from 'clsx';
 
 import i18next from 'i18n'
-import { str, collectErrors, createFormData } from 'helpers';
+import { str, collectErrors } from 'helpers';
 import { logout } from "redux/actions/sessionActions";
 import TitleBar from "pages/components/TitleBar";
 import CustomizedSnackbar from "pages/components/CustomizedSnackbar";
@@ -78,7 +78,7 @@ const QuestionChoices = props => {
 
   if(question.edit) {
     return (
-      <TableRow className={classes.row_choice} >
+      <TableRow>
         <TableCell colspan="4" className={classes.cell_choices}>
           {
             question_choices.map((choice, i) => (
@@ -122,7 +122,7 @@ const QuestionChoices = props => {
   }
 
   return (
-    <TableRow className={classes.row_choice} >
+    <TableRow>
       <TableCell colspan="5" className={classes.cell_choices}>
         <Grid container spacing={6} >
           <Grid item>
@@ -300,8 +300,8 @@ const QuestionAll = props => {
         .then((results) => {
           setQuestions(results.data.questions);
         })
-        .catch((data) => {
-          alert('データの取得に失敗しました。');
+        .catch(({response}) => {
+          alert(response.status + ' ' + response.statusText);
         });
     }
     else {
@@ -332,8 +332,8 @@ const QuestionAll = props => {
         setQuestions(questions2);
         setErrors({});
       })
-      .catch((data) => {
-        setErrors(collectErrors(data.response, 'question'));
+      .catch(({response}) => {
+        setErrors(collectErrors(response, 'question'));
         setErrorIndex(i);
       });
     }

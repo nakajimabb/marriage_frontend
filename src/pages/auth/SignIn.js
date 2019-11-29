@@ -69,7 +69,7 @@ class SignIn extends Component {
       dispatch(setTheme(theme));
       history.push('/');
     } else {
-      alert("ログインに失敗しました。(" + response.status + ' ' + response.statusText + ')');
+      alert(response.status + ' ' + response.statusText);
     }
   };
 

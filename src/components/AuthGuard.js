@@ -41,7 +41,8 @@ const AuthGuard = props => {
           }
           setCount(+user2.notification_count || 0);
         })
-        .catch((data) => {
+        .catch(({response}) => {
+          alert(response.status + ' ' + response.statusText);
           redirectSignIn();
         });
     } else {

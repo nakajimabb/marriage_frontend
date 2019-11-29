@@ -86,8 +86,8 @@ const UserForm = props => {
           setErrors({});
           onClose(results.data.user.id);
         })
-        .catch((data) => {
-          setErrors(collectErrors(data.response, 'user'));
+        .catch(({response}) => {
+          setErrors(collectErrors(response, 'user'));
         });
     }
   };
