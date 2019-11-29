@@ -17,6 +17,7 @@ import {
   Checkbox,
   RadioGroup,
   FormGroup,
+  TextField,
   Toolbar,
   makeStyles,
 } from "@material-ui/core";
@@ -72,7 +73,7 @@ const AnswerValues = props => {
     const value = (answer_values.length > 0) ? answer_values[0].value : null;
     return (
       <Grid key={question.id} className={classes.answer}>
-        <FormControl component="fieldset" className={classes.formControl}>
+        <FormControl component="fieldset">
           <RadioGroup name="values" value={+value} onChange={handleValueChange(index)} row>
             {
               question_choices.map((choice) => (
@@ -89,7 +90,7 @@ const AnswerValues = props => {
   const values = checked_values.map(answer_value => answer_value.value);
   return (
     <Grid key={question.id} className={classes.answer}>
-      <FormControl component="fieldset" className={classes.formControl}>
+      <FormControl component="fieldset">
         <FormGroup name="values" onChange={handleValueChange(index)} row>
           {
             question_choices.map((choice) => (
@@ -112,13 +113,40 @@ const AnswerValues = props => {
   );
 };
 
+const AnswerNotes = props => {
+  const {question, answer_notes, handleNoteChange, index} = props;
+  const classes = useStyles();
+  const answer_notes2 = (answer_notes.length > 0) ? answer_notes : [{question_id: question.id}];
+
+  return (
+    <Grid key={question.id} className={classes.answer}>
+      <FormControl fullWidth>
+        {
+          answer_notes2.map((answer_note) => (
+            <TextField
+              name="note"
+              autoComplete="off"
+              defaultValue=""
+              value={ str(answer_note.note) }
+              onChange={handleNoteChange(index)}
+              fullWidth
+            />
+            )
+          )
+        }
+      </FormControl>
+    </Grid>
+  );
+};
 
 const Question = props => {
-  const { question, handleValueChange, index, error } = props;
+  const { question, handleValueChange, handleNoteChange, index, error } = props;
   const classes = useStyles();
   const question_choices = question.question_choices_attributes || [];
   const answer_values = question.answer_values_attributes || [];
+  const answer_notes = question.answer_notes_attributes || [];
   const is_num = question.answer_type == 'number';
+  const is_note = question.answer_type == 'note';
 
   return (
     <React.Fragment>
@@ -144,6 +172,16 @@ const Question = props => {
             answer_values={answer_values}
             index={index}
             handleValueChange={handleValueChange}
+          />
+        ) : null
+      }
+      {
+        is_note ? (
+          <AnswerNotes
+            question={question}
+            answer_notes={answer_notes}
+            index={index}
+            handleNoteChange={handleNoteChange}
           />
         ) : null
       }
@@ -188,6 +226,7 @@ const QuestionForm = props => {
       form_answers.user = {id :user.id};
       form_answers.questions = questions.map(question => ({id: question.id}));
       form_answers.answer_values_attributes = questions.map(question => question.answer_values_attributes || []).flat();
+      form_answers.answer_notes_attributes = questions.map(question => question.answer_notes_attributes || []).flat();
       axios.post(url, {form_answers}, {headers})
       .then((results) => {
         setErrors({});
@@ -235,6 +274,20 @@ const QuestionForm = props => {
       }
     }
     questions2[i].answer_values_attributes = answer_values;
+    setQuestions(questions2);
+  };
+
+  const handleNoteChange = i => event => {
+    let questions2 = Array.from(questions);
+    let question = questions2[i];
+    let answer_notes = question.answer_notes_attributes || [];
+
+    if(answer_notes.length > 0) {
+      answer_notes[0].note = event.target.value;
+    } else {
+      answer_notes.push({question_id: question.id, note: event.target.value});
+    }
+    questions2[i].answer_notes_attributes = answer_notes;
     setQuestions(questions2);
   };
 
@@ -286,6 +339,7 @@ const QuestionForm = props => {
                   index={i}
                   error={errors[q.id]}
                   handleValueChange={handleValueChange}
+                  handleNoteChange={handleNoteChange}
                 />
               )
             )
