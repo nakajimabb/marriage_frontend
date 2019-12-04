@@ -25,6 +25,7 @@ import axios from "axios";
 
 import i18next from 'i18n'
 import { str } from 'helpers';
+import Compatibility from "./Compatibility";
 import env from 'environment';
 
 
@@ -72,12 +73,14 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+
 const PartnerList = props => {
   const { session, item_labels, user, all, onClose } = props;
   const [data, setData] = React.useState([]);
   const [search, setSearch] = useState({});
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(all ? -1 : 12);
+  const [partner_id, setPartnerId] = React.useState(null);
   const classes = useStyles();
   const prefectures = i18next.data_list('prefecture');
   const religions = i18next.data_list('enum', 'user', 'religion');
@@ -146,6 +149,10 @@ const PartnerList = props => {
     }
   };
 
+  const onCloseCompatibility = () => {
+    setPartnerId(null);
+  };
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -198,6 +205,16 @@ const PartnerList = props => {
     else {
       return user.sex == 'male' ? '/static/img/avatars/male.png' : '/static/img/avatars/female.png'
     }
+  }
+
+  if(partner_id) {
+    return (
+      <Compatibility
+        user={user}
+        partner_id={partner_id}
+        onClose={onCloseCompatibility}
+      />
+    );
   }
 
   return (
@@ -299,7 +316,7 @@ const PartnerList = props => {
             return (
               <Grid item xs={6} md={4} lg={3} xl={2} className={classes.grid} >
                 <Card className={classes.card}>
-                  <CardActionArea>
+                  <CardActionArea onClick={() => setPartnerId(user.id)} >
                     <CardMedia
                       className={classes.media}
                       image={ avatar_url(user) }

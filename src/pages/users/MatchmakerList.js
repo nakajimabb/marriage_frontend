@@ -7,7 +7,6 @@ import axios from 'axios'
 
 import i18next from 'i18n'
 import { logout } from "redux/actions/sessionActions";
-import TitleBar from "pages/components/TitleBar";
 import UserList from "./UserList";
 import env from 'environment';
 
