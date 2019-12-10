@@ -53,7 +53,7 @@ class SignIn extends Component {
 
     const url = env.API_ORIGIN + 'auth/sign_in';
     const headers = { 'Content-Type': 'application/json;charset=utf-8' };
-    const body = {email: this.state.email, password: this.state.password};
+    const body = {nickname: this.state.nickname, password: this.state.password};
 
     let response = await fetch(url, {method: 'POST', headers, body: JSON.stringify(body)});
     if(response.ok) {
@@ -84,8 +84,8 @@ class SignIn extends Component {
         </Typography>
         <form onSubmit={this.handleSubmit}>
           <FormControl margin="normal" required fullWidth>
-            <InputLabel htmlFor="email">Email Address</InputLabel>
-            <Input id="email" name="email" autoComplete="email" autoFocus value={this.state.email} onChange={this.handleChange('email')} />
+            <InputLabel htmlFor="nickname">nickname</InputLabel>
+            <Input id="nickname" name="nickname" autoComplete="nickname" autoFocus value={this.state.nickname} onChange={this.handleChange('nickname')} />
           </FormControl>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="password">Password</InputLabel>

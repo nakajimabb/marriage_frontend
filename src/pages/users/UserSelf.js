@@ -61,7 +61,7 @@ const UserSelf = props => {
   const classes = useStyles();
   const user_age = age(user.birthday) || user.age;
   const prefecture = user.prefecture ? i18next.t('prefecture.' + user.prefecture): '';
-  const address = prefecture + str(user.city) + str(user.house_number);
+  const address = prefecture + str(user.city) + str(user.street) + str(user.building);
 
   const onSave = async () => {
     const headers  = session.headers;

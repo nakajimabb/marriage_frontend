@@ -729,13 +729,26 @@ const UserForm = props => {
 
               <FormControl fullWidth>
                 <TextField
-                    name="house_number"
-                    label={ i18next.attr('user', 'house_number') }
+                  name="street"
+                  label={ i18next.attr('user', 'street') }
+                  autoComplete="off"
+                  defaultValue=""
+                  value={ str(user.street) }
+                  onChange={handleChange}
+                  error={errors.street}
+                  fullWidth
+                />
+              </FormControl>
+
+              <FormControl fullWidth>
+                <TextField
+                    name="building"
+                    label={ i18next.attr('user', 'building') }
                     autoComplete="off"
                     defaultValue=""
-                    value={ str(user.house_number) }
+                    value={ str(user.building) }
                     onChange={handleChange}
-                    error={errors.house_number}
+                    error={errors.building}
                     fullWidth
                 />
               </FormControl>
