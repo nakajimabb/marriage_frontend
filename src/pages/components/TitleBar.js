@@ -37,9 +37,7 @@ const TitleBar = props => {
         </Grid>
         <Grid item xs />
         <Grid item>
-          <Box pt={4} px={4} >
-            { sub_menu }
-          </Box>
+          { sub_menu }
         </Grid>
       </Grid>
       <Divider />

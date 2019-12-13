@@ -1,5 +1,5 @@
 import React from "react";
-import { SupervisedUserCircle, AllInclusive } from "@material-ui/icons";
+import { SupervisedUserCircle, AllInclusive, EventNote } from "@material-ui/icons";
 import { Heart, UserPlus, Users, Settings } from "react-feather";
 
 import async from "../components/Async";
@@ -20,6 +20,7 @@ const UserAll = async(() => import("../pages/users/UserAll"));
 const MyProfile = async(() => import("../pages/users/MyProfile"));
 const PermittedList = async(() => import("../pages/users/PermittedList"));
 const QuestionAll = async(() => import("../pages/questions/QuestionAll"));
+const RoomList = async(() => import("../pages/rooms/RoomList"));
 
 const courtshipRoutes = [
   {
@@ -33,6 +34,13 @@ const courtshipRoutes = [
 
 
 const commonRoutes = [
+  {
+    id: 'views.room.list',
+    path: "/rooms/list",
+    icon: <EventNote />,
+    component: RoomList,
+    children: null
+  },
   {
     id: 'views.user.account',
     path: "/",

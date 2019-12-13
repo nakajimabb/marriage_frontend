@@ -51,7 +51,7 @@ const useStyles = makeStyles(theme => ({
 
 const UserRequirement = props => {
 
-  const { user, session, matchmakers, setUser, onClose } = props;
+  const { user, session, onClose } = props;
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState(null);
   const [requirement, setRequirement] = useState({});
