@@ -94,6 +94,7 @@ const RoomPage = props => {
           })
           .catch(({response}) => {
             alert(response.status + ' ' + response.statusText);
+            onClose();
           });
       }
     }

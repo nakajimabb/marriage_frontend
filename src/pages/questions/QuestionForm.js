@@ -63,21 +63,21 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const AnswerValues = props => {
-  const {question, question_choices, answer_values, handleValueChange, index} = props;
+const AnswerChoices = props => {
+  const {question, question_choices, answer_choices, handleValueChange, index} = props;
   const classes = useStyles();
   const radio = ((question.min_answer_size == 1) && (question.max_answer_size == 1));
-  const checked_values = answer_values.filter(v => !v._destroy);
+  const checked_values = answer_choices.filter(choice => !choice._destroy);
 
   if (radio) {
-    const value = (answer_values.length > 0) ? answer_values[0].value : null;
+    const value = (answer_choices.length > 0) ? answer_choices[0].question_choice_id : null;
     return (
       <Grid key={question.id} className={classes.answer}>
         <FormControl component="fieldset">
           <RadioGroup name="values" value={+value} onChange={handleValueChange(index)} row>
             {
               question_choices.map((choice) => (
-                  <FormControlLabel value={choice.value} control={<Radio/>} label={choice.label} classes={classes.radio}/>
+                  <FormControlLabel value={+choice.id} control={<Radio/>} label={choice.label} classes={classes.radio}/>
                 )
               )
             }
@@ -87,7 +87,7 @@ const AnswerValues = props => {
     );
   }
 
-  const values = checked_values.map(answer_value => answer_value.value);
+  const values = checked_values.map(answer_choice => answer_choice.question_choice_id);
   return (
     <Grid key={question.id} className={classes.answer}>
       <FormControl component="fieldset">
@@ -97,8 +97,8 @@ const AnswerValues = props => {
                 <FormControlLabel
                   control={
                     <Checkbox
-                      value={choice.value}
-                      checked={~values.indexOf(+choice.value)}
+                      value={choice.id}
+                      checked={~values.indexOf(choice.id)}
                       onChange={handleValueChange(index)}
                     />
                   }
@@ -143,7 +143,7 @@ const Question = props => {
   const { question, handleValueChange, handleNoteChange, index, error } = props;
   const classes = useStyles();
   const question_choices = question.question_choices_attributes || [];
-  const answer_values = question.answer_values_attributes || [];
+  const answer_choices = question.answer_choices_attributes || [];
   const answer_notes = question.answer_notes_attributes || [];
   const is_num = question.answer_type == 'number';
   const is_note = question.answer_type == 'note';
@@ -166,10 +166,10 @@ const Question = props => {
       </Grid>
       {
         is_num ? (
-          <AnswerValues
+          <AnswerChoices
             question={question}
             question_choices={question_choices}
-            answer_values={answer_values}
+            answer_choices={answer_choices}
             index={index}
             handleValueChange={handleValueChange}
           />
@@ -225,7 +225,7 @@ const QuestionForm = props => {
       let form_answers = {};
       form_answers.user = {id :user.id};
       form_answers.questions = questions.map(question => ({id: question.id}));
-      form_answers.answer_values_attributes = questions.map(question => question.answer_values_attributes || []).flat();
+      form_answers.answer_choices_attributes = questions.map(question => question.answer_choices_attributes || []).flat();
       form_answers.answer_notes_attributes = questions.map(question => question.answer_notes_attributes || []).flat();
       axios.post(url, {form_answers}, {headers})
       .then((results) => {
@@ -247,33 +247,33 @@ const QuestionForm = props => {
   const handleValueChange = i => event => {
     let questions2 = Array.from(questions);
     let question = questions2[i];
-    let answer_values = questions2[i].answer_values_attributes || [];
+    let answer_choices = questions2[i].answer_choices_attributes || [];
 
-    const value = +(event.target.value);
+    const value = +event.target.value;
     if(question.min_answer_size == 1 && question.max_answer_size == 1) {
-      if(answer_values.length > 0) {
-        answer_values[0].value = value;
+      if(answer_choices.length > 0) {
+        answer_choices[0].question_choice_id = value;
       } else {
-        answer_values.push({question_id: question.id, value: value});
+        answer_choices.push({question_id: question.id, question_choice_id: value});
       }
     } else {
       if(event.target.type == 'checkbox') {
         if(event.target.checked) {
-          const index = answer_values.findIndex(v => v.value == value);
+          const index = answer_choices.findIndex(v => v.question_choice_id == value);
           if(~index) {
-            answer_values[index]._destroy = null;
+            answer_choices[index]._destroy = null;
           } else {
-            answer_values.push({question_id: question.id, value: value});
+            answer_choices.push({question_id: question.id, question_choice_id: value});
           }
         } else {
-          const index = answer_values.findIndex(v => v.value == value);
+          const index = answer_choices.findIndex(v => v.question_choice_id == value);
           if(~index) {
-            answer_values[index]._destroy = true;
+            answer_choices[index]._destroy = true;
           }
         }
       }
     }
-    questions2[i].answer_values_attributes = answer_values;
+    questions2[i].answer_choices_attributes = answer_choices;
     setQuestions(questions2);
   };
 
