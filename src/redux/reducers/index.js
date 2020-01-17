@@ -1,11 +1,17 @@
 import { combineReducers } from 'redux';
 
-import themeReducer from './themeReducers';
-import sessionReducer from './sessionReducers';
-import notificationReducer from './notificationReducers';
+import themeReducer, { initialTheme } from './themeReducers';
+import sessionReducer, { initialSession } from './sessionReducers';
+import notificationReducer, { initialNotification } from './notificationReducers';
+
+export const initialState = {
+	theme: initialTheme,
+	session: initialSession,
+	notification: initialNotification,
+};
 
 export default combineReducers({
-	themeReducer,
-	sessionReducer,
-	notificationReducer,
+	theme: themeReducer,
+	session: sessionReducer,
+	notification: notificationReducer,
 });

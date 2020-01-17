@@ -1,17 +1,18 @@
-import React, {Component, Fragment, useEffect, useState} from 'react';
-import Cookies from "js-cookie";
-import {connect} from "react-redux";
-import { withRouter } from "react-router-dom";
+import React, {Component, Fragment, useContext, useEffect, useState } from 'react';
+import Cookies from 'js-cookie';
+import { withRouter } from 'react-router-dom';
 import axios from "axios";
 
-import { login, logout } from "../redux/actions/sessionActions";
-import { setTheme } from "../redux/actions/themeActions";
-import { setNotification } from "../redux/actions/notificationActions";
-import env from '../environment';
+import env from 'src/environment';
+import { login, logout } from 'src/redux/actions/sessionActions';
+import { setTheme } from 'src/redux/actions/themeActions';
+import { setNotification } from 'src/redux/actions/notificationActions';
+import AppContext from 'src/contexts/AppContext';
 
 
 const AuthGuard = props => {
-  const { location, history, session, notification, dispatch } = props;
+  const {state: {session, notification}, dispatch} = useContext(AppContext);
+  const { location, history } = props;
   const [user, setUser] = useState(session.user);
   const [count, setCount] = useState(notification.count);
   const str_headers = Cookies.get('headers');
@@ -71,10 +72,4 @@ const AuthGuard = props => {
   return (!session.loggedIn || !session.user) ? null : <Fragment>{ props.children }</Fragment>;
 };
 
-export default connect(store => (
-    { session: store.sessionReducer,
-      notification: store.notificationReducer
-    }
-  )
-)(withRouter(AuthGuard));
-
+export default withRouter(AuthGuard);

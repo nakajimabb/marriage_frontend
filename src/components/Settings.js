@@ -1,19 +1,17 @@
-import React, { Component } from "react";
-import styled from "styled-components";
-import { connect } from "react-redux";
-import { setTheme } from "../redux/actions/themeActions";
-
+import React, { useState, useContext } from 'react';
 import {
   Typography,
   Drawer,
   ListItem,
   IconButton,
-  Paper as MuiPaper
-} from "@material-ui/core";
+  Paper as MuiPaper,
+} from '@material-ui/core';
+import { Palette as PaletteIcon } from '@material-ui/icons';
+import styled from 'styled-components';
+import { spacing } from '@material-ui/system';
 
-import { spacing } from "@material-ui/system";
-
-import { Palette as PaletteIcon } from "@material-ui/icons";
+import { setTheme } from 'src/redux/actions/themeActions';
+import AppContext from 'src/contexts/AppContext';
 
 const Paper = styled(MuiPaper)(spacing);
 
@@ -48,21 +46,8 @@ const Heading = styled(ListItem)`
   }
 `;
 
-class Demos extends Component {
-  state = {
-    anchorMenu: null
-  };
-
-  toggleMenu = event => {
-    this.setState({ anchorMenu: event.currentTarget });
-  };
-
-  closeMenu = () => {
-    this.setState({ anchorMenu: null });
-  };
-
-  render() {
-    const { dispatch } = this.props;
+const Demos = () => {
+  const { dispatch } = useContext(AppContext);
 
     return (
       <Wrapper>
@@ -99,13 +84,11 @@ class Demos extends Component {
         </Demo>
       </Wrapper>
     );
-  }
-}
+};
 
-Demos = connect()(Demos);
 
-export default function Settings() {
-  const [state, setState] = React.useState({
+const Settings = () => {
+  const [state, setState] = useState({
     isOpen: false
   });
 
@@ -123,4 +106,7 @@ export default function Settings() {
       </Drawer>
     </React.Fragment>
   );
-}
+};
+
+export default Settings;
+

@@ -1,11 +1,13 @@
-import React from "react";
-import { HashRouter as Router, Route, Switch } from "react-router-dom";
-import { getRoutes, authRoutes } from "./index";
-import DashboardLayout from "../layouts/Dashboard";
-import AuthLayout from "../layouts/Auth";
-import Page404 from "../pages/auth/Page404";
-import AuthGuard from "../components/AuthGuard";
-import {connect} from "react-redux";
+import React, { useContext } from 'react';
+import { HashRouter as Router, Route, Switch } from 'react-router-dom';
+
+import DashboardLayout from 'src/layouts/Dashboard';
+import AuthLayout from 'src/layouts/Auth';
+import Page404 from 'src/pages/auth/Page404';
+import AuthGuard from 'src/components/AuthGuard';
+import AppContext from 'src/contexts/AppContext';
+import { getRoutes, authRoutes } from './index';
+
 
 const childRoutes = (Layout, routes) =>
   routes.map(({ children, path, component: Component }, index) =>
@@ -39,7 +41,8 @@ const childRoutes = (Layout, routes) =>
   );
 
 const Routes = (props) => {
-  const { session } = props;
+  const {state: {session}} = useContext(AppContext);
+
   const routes = getRoutes(session.roles);
   return (
     <Router>
@@ -62,4 +65,4 @@ const Routes = (props) => {
   );
 };
 
-export default connect(store => ({ session: store.sessionReducer  }))(Routes);
+export default Routes;

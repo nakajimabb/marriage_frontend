@@ -1,4 +1,4 @@
-import i18next from 'i18n'
+import i18next from 'src/i18n'
 
 export const createFormData = (data, model_name) => {
   let form_data = new FormData();

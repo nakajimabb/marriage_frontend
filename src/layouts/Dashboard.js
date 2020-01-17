@@ -1,17 +1,16 @@
-import React from "react";
-import styled, { createGlobalStyle } from "styled-components";
-
-import Sidebar from "../components/Sidebar";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-
-import { spacing } from "@material-ui/system";
+import React from 'react';
+import { spacing } from '@material-ui/system';
 import {
   Hidden,
   CssBaseline,
   Paper as MuiPaper,
   withWidth
-} from "@material-ui/core";
+} from '@material-ui/core';
+import styled, { createGlobalStyle } from 'styled-components';
+
+import Sidebar from 'src/components/Sidebar';
+import Header from 'src/components/Header';
+import Footer from 'src/components/Footer';
 
 const drawerWidth = 260;
 

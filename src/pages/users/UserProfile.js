@@ -1,6 +1,5 @@
-import React from "react";
-import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
+import React, {useContext} from 'react';
+import { withRouter } from 'react-router-dom';
 import {
   AppBar,
   Toolbar,
@@ -15,12 +14,13 @@ import {
   ListItemText,
   Button,
   makeStyles,
-} from "@material-ui/core";
-import axios from "axios";
+} from '@material-ui/core';
+import axios from 'axios';
 
-import i18next from 'i18n'
-import { str, age } from 'helpers';
-import env from 'environment';
+import env from 'src/environment';
+import i18next from 'src/i18n'
+import { str, age } from 'src/helpers';
+import AppContext from 'src/contexts/AppContext';
 
 
 const useStyles = makeStyles(theme => ({
@@ -56,7 +56,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const UserFriend = props => {
-  const { user, user_friend, session, onRequest } = props;
+  const {state: {session}} = useContext(AppContext);
+  const { user, user_friend, onRequest } = props;
   const me = session.user;
   const request_ok = me.role_matchmaker && user.role_matchmaker && me.id != user.id;
 
@@ -90,8 +91,8 @@ const UserFriend = props => {
 };
 
 const UserProfile = props => {
-
-  const { user, user_friend, setUserFriend, session, onClose } = props;
+  const {state: {session}} = useContext(AppContext);
+  const { user, user_friend, setUserFriend, onClose } = props;
   const classes = useStyles();
   const user_age = age(user.birthday) || user.age;
   const me = session.user;
@@ -136,7 +137,7 @@ const UserProfile = props => {
                 />
               </Grid>
             </CardContent>
-            <UserFriend user={user} user_friend={user_friend} session={session} onRequest={onRequest} />
+            <UserFriend user={user} user_friend={user_friend} onRequest={onRequest} />
             <List component="nav">
               <ListItem button>
                 <ListItemIcon>
@@ -421,4 +422,4 @@ const UserProfile = props => {
   );
 };
 
-export default connect(store => ({ session: store.sessionReducer }))(withRouter(UserProfile));
+export default withRouter(UserProfile);

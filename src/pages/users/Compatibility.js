@@ -1,6 +1,5 @@
-import React, {useEffect, useState} from "react";
-import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
+import React, { useEffect, useState, useContext } from 'react';
+import { withRouter } from 'react-router-dom';
 import {
   AppBar,
   Avatar,
@@ -17,14 +16,15 @@ import {
   TableRow,
   Typography,
   makeStyles,
-} from "@material-ui/core";
-import axios from "axios";
+} from '@material-ui/core';
+import axios from 'axios';
+import clsx from 'clsx';
 
-import i18next from 'i18n'
-import { str } from 'helpers';
-import { logout } from "redux/actions/sessionActions";
-import env from 'environment';
-import clsx from "clsx";
+import env from 'src/environment';
+import i18next from 'src/i18n'
+import { str } from 'src/helpers';
+import { logout } from 'src/redux/actions/sessionActions';
+import AppContext from 'src/contexts/AppContext';
 
 
 const useStyles = makeStyles(theme => ({
@@ -206,7 +206,8 @@ const ProfileCompatibility = props => {
 };
 
 const Compatibility = props => {
-  const { dispatch, session, history, user, onClose, partner_id } = props;
+  const {state: {session}, dispatch} = useContext(AppContext);
+  const { history, user, onClose, partner_id } = props;
   const [partner, setPartner] = React.useState({});
   const [question_type, setQuestionType] = useState('profile');
   const [questions, setQuestions] = useState([[], []]);
@@ -312,4 +313,4 @@ const Compatibility = props => {
   );
 };
 
-export default connect(store => ({ session: store.sessionReducer }))(withRouter(Compatibility));
+export default withRouter(Compatibility);

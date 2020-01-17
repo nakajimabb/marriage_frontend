@@ -1,6 +1,5 @@
-import React, {useState} from "react";
-import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
+import React, {useState} from 'react';
+import { withRouter } from 'react-router-dom';
 import {
   Grid,
   Box,
@@ -23,13 +22,13 @@ import {
   Link,
   FormControlLabel,
   makeStyles,
-} from "@material-ui/core";
+} from '@material-ui/core';
 import { PersonAdd as AddIcon } from '@material-ui/icons';
 
-import i18next from 'i18n'
-import { str } from 'helpers';
-import TitleBar from "pages/components/TitleBar";
-import UserPage from "./UserPage";
+import i18next from 'src/i18n'
+import { str } from 'src/helpers';
+import TitleBar from 'src/pages/components/TitleBar';
+import UserPage from './UserPage';
 
 
 const useStyles = makeStyles(theme => ({
@@ -456,4 +455,4 @@ const UserList = props => {
   );
 };
 
-export default connect(store => ({ session: store.sessionReducer }))(withRouter(UserList));
+export default withRouter(UserList);

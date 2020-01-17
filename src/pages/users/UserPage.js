@@ -1,6 +1,5 @@
-import React, {useEffect, useState} from "react";
-import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
+import React, {useContext, useEffect, useState} from 'react';
+import { withRouter } from 'react-router-dom';
 import {
   Divider,
   Box,
@@ -8,17 +7,18 @@ import {
   Tabs,
   Typography,
   makeStyles,
-} from "@material-ui/core";
+} from '@material-ui/core';
 import axios from 'axios'
 
-import i18next from 'i18n'
-import { str } from 'helpers';
-import UserForm from "./UserForm";
-import UserProfile from "./UserProfile";
-import UserRequirement from "./UserRequirement";
-import PartnerList from "./PartnerList";
-import QuestionForm from "../questions/QuestionForm";
-import env from 'environment';
+import env from 'src/environment';
+import i18next from 'src/i18n'
+import { str } from 'src/helpers';
+import QuestionForm from 'src/pages/questions/QuestionForm';
+import AppContext from 'src/contexts/AppContext';
+import UserForm from './UserForm';
+import UserProfile from './UserProfile';
+import UserRequirement from './UserRequirement';
+import PartnerList from './PartnerList';
 
 const useStyles = makeStyles(theme => ({
   tabs: {
@@ -49,7 +49,8 @@ const TabPanel = props => {
 };
 
 const UserPage = props => {
-  const { user_id, session, onClose, form, profile, requirement, partners, question, action, setTitle } = props;
+  const {state: {session}} = useContext(AppContext);
+  const { user_id, onClose, form, profile, requirement, partners, question, action, setTitle } = props;
   const [user, setUser] = useState({});
   const [user_friend, setUserFriend] = useState({});
   const [matchmakers, setMatchmakers] = useState([]);
@@ -163,4 +164,4 @@ const UserPage = props => {
   );
 };
 
-export default connect(store => ({ session: store.sessionReducer }))(withRouter(UserPage));
+export default withRouter(UserPage);

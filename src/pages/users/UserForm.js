@@ -1,6 +1,5 @@
-import React, {useRef, useState} from "react";
-import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
+import React, {useContext, useRef, useState} from 'react';
+import { withRouter } from 'react-router-dom';
 import {
   AppBar,
   FormControl,
@@ -20,13 +19,14 @@ import {
   Toolbar,
   Button,
   makeStyles,
-} from "@material-ui/core";
-import axios from "axios";
+} from '@material-ui/core';
+import axios from 'axios';
 
-import i18next from 'i18n'
-import { str, collectErrors, createFormData } from 'helpers';
-import CustomizedSnackbar from "pages/components/CustomizedSnackbar";
-import env from 'environment';
+import env from 'src/environment';
+import i18next from 'src/i18n'
+import { str, collectErrors, createFormData } from 'src/helpers';
+import CustomizedSnackbar from 'src/pages/components/CustomizedSnackbar';
+import AppContext from 'src/contexts/AppContext';
 
 
 const useStyles = makeStyles(theme => ({
@@ -45,8 +45,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const UserForm = props => {
-
-  const { user, session, matchmakers, setUser, onClose } = props;
+  const {state: {session}} = useContext(AppContext);
+  const { user, matchmakers, setUser, onClose } = props;
   const [errors, setErrors] = useState({});
   const avatar = useRef();
   const prefectures = i18next.data_list('prefecture');
@@ -510,6 +510,9 @@ const UserForm = props => {
                       error={errors.matchmaker_id}
                       fullWidth
                     >
+                      <MenuItem value="">
+                        <em></em>
+                      </MenuItem>
                       {
                         matchmakers.map(matchmaker => <MenuItem
                           value={matchmaker.id}>{matchmaker.full_name}</MenuItem>)
@@ -926,4 +929,4 @@ const UserForm = props => {
   );
 };
 
-export default connect(store => ({ session: store.sessionReducer }))(withRouter(UserForm));
+export default withRouter(UserForm);

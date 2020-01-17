@@ -1,14 +1,14 @@
 import * as types from '../constants';
 
 
-const initialState = {
+export const initialSession = {
   loggedIn: false,
   headers: null,
   user: {},
   roles: []
 };
 
-export default function reducer(state=initialState, actions) {
+export default function reducer(state=initialSession, actions) {
   switch (actions.type) {
 
     case types.SESSION_LOGIN: {

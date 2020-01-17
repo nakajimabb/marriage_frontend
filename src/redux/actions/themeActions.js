@@ -1,5 +1,5 @@
-import * as types from '../constants';
 import Cookies from "js-cookie";
+import * as types from '../constants';
 
 export function setTheme(value) {
   Cookies.set('theme', value, { expires: 365 });

@@ -1,6 +1,5 @@
-import React, {useEffect, useState} from "react";
-import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
+import React, {useContext, useEffect, useState} from 'react';
+import { withRouter } from 'react-router-dom';
 import {
   AppBar,
   Grid,
@@ -20,14 +19,15 @@ import {
   TextField,
   Toolbar,
   makeStyles,
-} from "@material-ui/core";
+} from '@material-ui/core';
 import axios from 'axios'
 
-import i18next from 'i18n'
-import { str, collectErrors } from 'helpers';
-import { logout } from "redux/actions/sessionActions";
-import CustomizedSnackbar from "pages/components/CustomizedSnackbar";
-import env from 'environment';
+import env from 'src/environment';
+import i18next from 'src/i18n'
+import { str } from 'src/helpers';
+import { logout } from 'src/redux/actions/sessionActions';
+import CustomizedSnackbar from 'src/pages/components/CustomizedSnackbar';
+import AppContext from 'src/contexts/AppContext';
 
 
 const useStyles = makeStyles(theme => ({
@@ -190,7 +190,8 @@ const Question = props => {
 };
 
 const QuestionForm = props => {
-  const { dispatch, session, history, onClose, user } = props;
+  const {state: {session}, dispatch} = useContext(AppContext);
+  const { history, onClose, user } = props;
   const [question_type, setQuestionType] = useState('compatibility');
   const [questions, setQuestions] = useState([]);
   const [message, setMessage] = useState(null);
@@ -373,4 +374,4 @@ const QuestionForm = props => {
   );
 };
 
-export default connect(store => ({ session: store.sessionReducer }))(withRouter(QuestionForm));
+export default withRouter(QuestionForm);

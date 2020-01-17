@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
-import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
+import React, { useEffect, useContext } from 'react';
+import { withRouter } from 'react-router-dom';
 import {
   Box,
   Card,
@@ -15,17 +14,18 @@ import {
   Tooltip,
   IconButton,
   makeStyles,
-} from "@material-ui/core";
-import {EventNote, AddCircleOutline} from "@material-ui/icons";
-import { Edit } from "react-feather";
-import axios from "axios";
+} from '@material-ui/core';
+import { EventNote, AddCircleOutline } from '@material-ui/icons';
+import { Edit } from 'react-feather';
+import axios from 'axios';
 
-import i18next from 'i18n'
-import TitleBar from "pages/components/TitleBar";
-import { str } from 'helpers';
-import RoomForm from "./RoomForm";
-import RoomPage from "./RoomPage";
-import env from 'environment';
+import env from 'src/environment';
+import i18next from 'src/i18n'
+import TitleBar from 'src/pages/components/TitleBar';
+import { str } from 'src/helpers';
+import AppContext from 'src/contexts/AppContext';
+import RoomForm from './RoomForm';
+import RoomPage from './RoomPage';
 
 
 const useStyles = makeStyles(theme => ({
@@ -199,8 +199,8 @@ const Room = props => {
   );
 };
 
-const RoomList = props => {
-  const { session } = props;
+const RoomList = () => {
+  const {state: {session}} = useContext(AppContext);
   const title = i18next.t('views.room.list');
   const [tab, setTab] = React.useState(0);
   const [room_id, setRoomId] = React.useState(null);
@@ -408,4 +408,4 @@ const RoomList = props => {
   );
 };
 
-export default connect(store => ({ session: store.sessionReducer }))(withRouter(RoomList));
+export default withRouter(RoomList);

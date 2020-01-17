@@ -1,11 +1,11 @@
 import * as types from '../constants';
 
 
-const initialState = {
+export const initialNotification = {
   count: 0,
 };
 
-export default function reducer(state=initialState, actions) {
+export default function reducer(state=initialNotification, actions) {
   switch (actions.type) {
 
     case types.SET_COUNT: {

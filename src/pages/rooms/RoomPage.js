@@ -1,7 +1,5 @@
-import clsx from 'clsx';
-import React, {useEffect, useState} from "react";
-import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
+import React, {useContext, useEffect, useState} from 'react';
+import { withRouter } from 'react-router-dom';
 import {
   AppBar,
   Grid,
@@ -15,13 +13,15 @@ import {
   Paper,
   Typography,
   makeStyles,
-} from "@material-ui/core";
-import axios from "axios";
+} from '@material-ui/core';
+import axios from 'axios';
+import clsx from 'clsx';
 
-import i18next from 'i18n'
-import { str } from 'helpers';
-import TitleBar from "pages/components/TitleBar";
-import env from 'environment';
+import env from 'src/environment';
+import i18next from 'src/i18n'
+import { str } from 'src/helpers';
+import TitleBar from 'src/pages/components/TitleBar';
+import AppContext from 'src/contexts/AppContext';
 
 
 const useStyles = makeStyles(theme => ({
@@ -70,8 +70,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const RoomPage = props => {
-
-  const { room_id, session, onClose } = props;
+  const {state: {session}} = useContext(AppContext);
+  const { room_id, onClose } = props;
   const [room, setRoom] = useState({});
   const [room_user, setRoomUser] = useState({});
   const [users, setUsers] = useState([]);
@@ -240,4 +240,4 @@ const RoomPage = props => {
   );
 };
 
-export default connect(store => ({ session: store.sessionReducer }))(withRouter(RoomPage));
+export default withRouter(RoomPage);

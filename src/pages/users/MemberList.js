@@ -1,17 +1,18 @@
-import React, {useEffect, useState} from "react";
-import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
-import { UserPlus } from "react-feather";
+import React, { useEffect, useState, useContext } from 'react';
+import { withRouter } from 'react-router-dom';
+import { UserPlus } from 'react-feather';
 import axios from 'axios'
 
-import i18next from 'i18n'
-import { logout } from "redux/actions/sessionActions";
-import UserList from "./UserList";
-import env from 'environment';
+import env from 'src/environment';
+import i18next from 'src/i18n'
+import { logout } from 'src/redux/actions/sessionActions';
+import AppContext from 'src/contexts/AppContext';
+import UserList from './UserList';
 
 
 const MemberList = props => {
-  const { dispatch, session, history } = props;
+  const {state: {session}, dispatch} = useContext(AppContext);
+  const { history } = props;
   const [data, setData] = useState([i18next.t('views.app.list')]);
   const title = i18next.t('views.user.members');
   const item_labels = [
@@ -83,4 +84,4 @@ const MemberList = props => {
   );
 };
 
-export default connect(store => ({ session: store.sessionReducer }))(withRouter(MemberList));
+export default withRouter(MemberList);

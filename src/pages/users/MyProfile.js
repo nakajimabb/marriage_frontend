@@ -1,15 +1,15 @@
-import React, { useState } from "react";
-import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
-import { Box, Tab, Tabs, Typography } from "@material-ui/core";
-import { Settings } from "react-feather";
+import React, { useContext, useState } from 'react';
+import { withRouter } from 'react-router-dom';
+import { Box, Tab, Tabs, Typography } from '@material-ui/core';
+import { Settings } from 'react-feather';
 
-import i18next from 'i18n'
-import TitleBar from "pages/components/TitleBar";
-import UserProfile from "./UserProfile";
-import UserSelf from "./UserSelf";
-import UserRequirement from "./UserRequirement";
-import QuestionForm from "../questions/QuestionForm";
+import i18next from 'src/i18n'
+import TitleBar from 'src/pages/components/TitleBar';
+import QuestionForm from 'src/pages/questions/QuestionForm';
+import AppContext from 'src/contexts/AppContext';
+import UserRequirement from './UserRequirement';
+import UserProfile from './UserProfile';
+import UserSelf from './UserSelf';
 
 
 const TabPanel = props => {
@@ -36,8 +36,8 @@ function a11yProps(index) {
   };
 }
 
-const MyProfile = props => {
-  const { session } = props;
+const MyProfile = () => {
+  const {state: {session}} = useContext(AppContext);
   const [user, setUser] = useState(session.user);
   const [matchmakers, setMatchmakers] = useState([]);
   const title = i18next.t('views.user.account');
@@ -81,4 +81,4 @@ const MyProfile = props => {
   );
 };
 
-export default connect(store => ({ session: store.sessionReducer }))(withRouter(MyProfile));
+export default withRouter(MyProfile);

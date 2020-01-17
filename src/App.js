@@ -1,28 +1,15 @@
-import React from "react";
-import { connect } from "react-redux";
+import React from 'react';
 
-import DateFnsUtils from "@date-io/date-fns";
-import MuiThemeProvider from "@material-ui/core/styles/MuiThemeProvider";
-import { MuiPickersUtilsProvider } from "@material-ui/pickers";
-import { StylesProvider } from "@material-ui/styles";
-import { ThemeProvider } from "styled-components";
+import Routes from 'src/routes/Routes';
+import { AppContextProvider } from 'src/contexts/AppContext';
+import 'src/i18n';
 
-import maTheme from "theme";
-import Routes from "routes/Routes";
-import 'i18n'
-
-function App({ theme }) {
+const App = () => {
   return (
-    <StylesProvider injectFirst>
-      <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <MuiThemeProvider theme={maTheme[theme.currentTheme]}>
-          <ThemeProvider theme={maTheme[theme.currentTheme]}>
-            <Routes />
-          </ThemeProvider>
-        </MuiThemeProvider>
-      </MuiPickersUtilsProvider>
-    </StylesProvider>
+    <AppContextProvider>
+      <Routes />
+    </AppContextProvider>
   );
-}
+};
 
-export default connect(store => ({ theme: store.themeReducer }))(App);
+export default App;

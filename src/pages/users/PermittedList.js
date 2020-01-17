@@ -1,19 +1,18 @@
-import React, {useEffect, useState} from "react";
-import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
-import { Box } from "@material-ui/core";
-import { Heart } from "react-feather";
+import React, { useEffect, useState, useContext } from 'react';
+import { withRouter } from 'react-router-dom';
+import { Heart } from 'react-feather';
 import axios from 'axios'
 
-import i18next from 'i18n'
-import { logout } from "redux/actions/sessionActions";
-import TitleBar from "pages/components/TitleBar";
-import UserList from "./UserList";
-import env from 'environment';
+import env from 'src/environment';
+import i18next from 'src/i18n'
+import { logout } from 'src/redux/actions/sessionActions';
+import AppContext from 'src/contexts/AppContext';
+import UserList from './UserList';
 
 
 const PermittedList = props => {
-  const { dispatch, session, history } = props;
+  const {state: {session}, dispatch} = useContext(AppContext);
+  const { history } = props;
   const [data, setData] = useState([]);
   const title = i18next.t('views.user.permitted_users');
 
@@ -49,4 +48,4 @@ const PermittedList = props => {
   );
 };
 
-export default connect(store => ({ session: store.sessionReducer }))(withRouter(PermittedList));
+export default withRouter(PermittedList);

@@ -1,6 +1,6 @@
-import React from "react";
-import styled from "styled-components";
-import { Link } from "react-router-dom";
+import React from 'react';
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 import {
   FormControl,
@@ -9,8 +9,8 @@ import {
   Button as MuiButton,
   Paper,
   Typography
-} from "@material-ui/core";
-import { spacing } from "@material-ui/system";
+} from '@material-ui/core';
+import { spacing } from '@material-ui/system';
 
 const Button = styled(MuiButton)(spacing);
 
@@ -22,7 +22,7 @@ const Wrapper = styled(Paper)`
   }
 `;
 
-function SignUp() {
+const SignUp = () => {
   return (
     <Wrapper>
       <Typography component="h1" variant="h4" align="center" gutterBottom>
@@ -66,6 +66,6 @@ function SignUp() {
       </form>
     </Wrapper>
   );
-}
+};
 
 export default SignUp;

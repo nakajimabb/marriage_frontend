@@ -1,7 +1,6 @@
-import React from "react";
-import styled, { createGlobalStyle } from "styled-components";
-
-import { CssBaseline } from "@material-ui/core";
+import React from 'react';
+import { CssBaseline } from '@material-ui/core';
+import styled, { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
   html,
@@ -24,7 +23,7 @@ const Root = styled.div`
   min-height: 100%;
 `;
 
-function Page({ children }) {
+const Page = ({ children }) => {
   return (
     <Root>
       <CssBaseline />
@@ -32,6 +31,6 @@ function Page({ children }) {
       {children}
     </Root>
   );
-}
+};
 
 export default Page;

@@ -1,6 +1,5 @@
-import React, {useEffect, useState} from "react";
-import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
+import React, { useContext, useEffect, useState } from 'react';
+import { withRouter } from 'react-router-dom';
 import {
   AppBar,
   Toolbar,
@@ -19,14 +18,15 @@ import {
   TextField,
   TablePagination,
   makeStyles,
-} from "@material-ui/core";
-import { Favorite, FavoriteBorder } from "@material-ui/icons";
-import axios from "axios";
+} from '@material-ui/core';
+import { Favorite, FavoriteBorder } from '@material-ui/icons';
+import axios from 'axios';
 
-import i18next from 'i18n'
-import { str } from 'helpers';
-import Compatibility from "./Compatibility";
-import env from 'environment';
+import env from 'src/environment';
+import i18next from 'src/i18n'
+import { str } from 'src/helpers';
+import AppContext from 'src/contexts/AppContext';
+import Compatibility from './Compatibility';
 
 
 const useStyles = makeStyles(theme => ({
@@ -75,7 +75,8 @@ const useStyles = makeStyles(theme => ({
 
 
 const PartnerList = props => {
-  const { session, item_labels, user, all, onClose } = props;
+  const {state: {session}} = useContext(AppContext);
+  const { item_labels, user, all, onClose } = props;
   const [data, setData] = React.useState([]);
   const [search, setSearch] = useState({});
   const [page, setPage] = React.useState(0);
@@ -389,4 +390,4 @@ const PartnerList = props => {
   );
 };
 
-export default connect(store => ({ session: store.sessionReducer }))(withRouter(PartnerList));
+export default withRouter(PartnerList);

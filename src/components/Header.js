@@ -1,9 +1,11 @@
-import React, {Component, useState} from "react";
-import styled, { withTheme } from "styled-components";
-import { connect } from "react-redux";
-import { darken } from "polished";
-import { withRouter } from "react-router-dom";
-
+import React, { useContext, useState } from 'react';
+import { withRouter } from 'react-router-dom';
+import {
+  Bell,
+  MessageSquare,
+  Search as SearchIcon,
+  Power
+} from 'react-feather';
 import {
   Badge,
   Grid,
@@ -14,20 +16,15 @@ import {
   AppBar as MuiAppBar,
   IconButton as MuiIconButton,
   Toolbar
-} from "@material-ui/core";
+} from '@material-ui/core';
+import { Menu as MenuIcon } from '@material-ui/icons';
+import styled from 'styled-components';
+import { darken } from 'polished';
 
-import { Menu as MenuIcon } from "@material-ui/icons";
-
-import {
-  Bell,
-  MessageSquare,
-  Search as SearchIcon,
-  Power
-} from "react-feather";
-
-import { logout } from "../redux/actions/sessionActions";
-import Settings from "./Settings";
-import NotificationList from "./NotificationList";
+import { logout } from 'src/redux/actions/sessionActions';
+import AppContext from 'src/contexts/AppContext';
+import NotificationList from './NotificationList';
+import Settings from './Settings';
 
 
 const AppBar = styled(MuiAppBar)`
@@ -101,56 +98,51 @@ const Flag = styled.img`
   height: 22px;
 `;
 
-class UserMenu extends Component {
-  state = {
-    anchorMenu: null
+const MuiUserMenu = props => {
+  const { dispatch } = useContext(AppContext);
+  const { history } = props;
+  const [state, setState] = useState(null);
+  const open = Boolean(state);
+
+  const toggleMenu = event => {
+    setState(event.currentTarget);
   };
 
-  toggleMenu = event => {
-    this.setState({ anchorMenu: event.currentTarget });
+  const closeMenu = () => {
+    setState(null);
   };
 
-  closeMenu = () => {
-    this.setState({ anchorMenu: null });
-  };
-
-  signOut = () => {
-    const { dispatch, history } = this.props;
-
+  const signOut = () => {
     dispatch(logout());
     history.push('/auth/sign-in');
   };
-
-  render() {
-    const { anchorMenu } = this.state;
-    const open = Boolean(anchorMenu);
 
     return (
       <React.Fragment>
         <IconButton
           aria-owns={open ? "menu-appbar" : undefined}
           aria-haspopup="true"
-          onClick={this.toggleMenu}
+          onClick={toggleMenu}
           color="inherit"
         >
           <Power />
         </IconButton>
         <Menu
           id="menu-appbar"
-          anchorEl={anchorMenu}
+          anchorEl={state}
           open={open}
-          onClose={this.closeMenu}
+          onClose={closeMenu}
         >
           <MenuItem
             onClick={() => {
-              this.closeMenu();
+              closeMenu();
             }}
           >
             Profile
           </MenuItem>
           <MenuItem
             onClick={() => {
-              this.signOut();
+              signOut();
             }}
           >
             Sign out
@@ -158,12 +150,12 @@ class UserMenu extends Component {
         </Menu>
       </React.Fragment>
     );
-  }
-}
+};
 
-UserMenu = connect(store => ({ session: store.sessionReducer }))(withRouter(UserMenu));
+const UserMenu = withRouter(MuiUserMenu);
 
-const Header = ({ onDrawerToggle, onMobileToggle, notification }) => {
+const Header = ({ onDrawerToggle, onMobileToggle }) => {
+  const {state: {notification}} = useContext(AppContext);
   const [open_notification, setOpenNotification] = useState(false);
 
   return (
@@ -214,7 +206,7 @@ const Header = ({ onDrawerToggle, onMobileToggle, notification }) => {
                 </Indicator>
               </IconButton>
               <Settings/>
-              <UserMenu/>
+              <UserMenu />
             </Grid>
           </Grid>
         </Toolbar>
@@ -223,10 +215,4 @@ const Header = ({ onDrawerToggle, onMobileToggle, notification }) => {
   );
 };
 
-// export default connect()(withTheme(Header));
-export default connect(store => (
-    { session: store.sessionReducer,
-      notification: store.notificationReducer
-    }
-  )
-)(withRouter(Header));
+export default withRouter(Header);

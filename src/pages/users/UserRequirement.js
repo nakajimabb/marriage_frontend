@@ -1,7 +1,7 @@
-import React, {useEffect, useState} from "react";
-import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
+import React, {useContext, useEffect, useState} from 'react';
+import { withRouter } from 'react-router-dom';
 import {
+  AppBar,
   FormGroup,
   FormControl,
   Grid,
@@ -11,22 +11,23 @@ import {
   Checkbox,
   Container,
   Box,
-  AppBar,
   Toolbar,
   Button,
   Table,
   TableBody,
   TableCell,
   TableRow,
-  Paper, FormControlLabel,
-} from "@material-ui/core";
-import { makeStyles } from '@material-ui/core/styles';
-import axios from "axios";
+  Paper,
+  FormControlLabel,
+  makeStyles,
+} from '@material-ui/core';
+import axios from 'axios';
 
-import i18next from 'i18n'
-import { str, collectErrors, createFormData } from 'helpers';
-import CustomizedSnackbar from "pages/components/CustomizedSnackbar";
-import env from 'environment';
+import env from 'src/environment';
+import i18next from 'src/i18n'
+import { str, collectErrors, createFormData } from 'src/helpers';
+import CustomizedSnackbar from 'src/pages/components/CustomizedSnackbar';
+import AppContext from 'src/contexts/AppContext';
 
 
 const useStyles = makeStyles(theme => ({
@@ -50,8 +51,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const UserRequirement = props => {
-
-  const { user, session, onClose } = props;
+  const {state: {session}} = useContext(AppContext);
+  const { user, onClose } = props;
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState(null);
   const [requirement, setRequirement] = useState({});
@@ -406,4 +407,4 @@ const UserRequirement = props => {
   );
 };
 
-export default connect(store => ({ session: store.sessionReducer }))(withRouter(UserRequirement));
+export default withRouter(UserRequirement);

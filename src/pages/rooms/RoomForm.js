@@ -1,6 +1,5 @@
-import React, {useEffect, useState} from "react";
-import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
+import React, {useContext, useEffect, useState} from 'react';
+import { withRouter } from 'react-router-dom';
 import {
   AppBar,
   FormGroup,
@@ -20,13 +19,14 @@ import {
   Paper,
   InputLabel,
   makeStyles,
-} from "@material-ui/core";
-import axios from "axios";
+} from '@material-ui/core';
+import axios from 'axios';
 
-import i18next from 'i18n'
-import { str, collectErrors, createFormData } from 'helpers';
-import CustomizedSnackbar from "pages/components/CustomizedSnackbar";
-import env from 'environment';
+import env from 'src/environment';
+import i18next from 'src/i18n'
+import { str, collectErrors, createFormData } from 'src/helpers';
+import CustomizedSnackbar from 'src/pages/components/CustomizedSnackbar';
+import AppContext from 'src/contexts/AppContext';
 
 
 const useStyles = makeStyles(theme => ({
@@ -58,15 +58,14 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const RoomForm = props => {
-
-  const { room_id, session, onClose, onUpdate } = props;
+  const {state: {session}} = useContext(AppContext);
+  const { room_id, onClose, onUpdate } = props;
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState(null);
   const [room, setRoom] = useState({});
   const classes = useStyles();
   const room_types = i18next.data_list('enum', 'room', 'room_type');
   const prefectures = i18next.data_list('prefecture');
-  const user = session.user;
 
   useEffect(() => {
     if(room_id) {
@@ -387,4 +386,4 @@ const RoomForm = props => {
   );
 };
 
-export default connect(store => ({ session: store.sessionReducer }))(withRouter(RoomForm));
+export default withRouter(RoomForm);

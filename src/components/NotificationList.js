@@ -1,6 +1,5 @@
-import React, {useEffect, useState} from "react";
-import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
+import React, { useEffect, useState, useContext } from 'react';
+import { withRouter } from 'react-router-dom';
 import {
   Button,
   Dialog,
@@ -13,15 +12,17 @@ import {
   Avatar,
   Typography,
   makeStyles,
-} from "@material-ui/core";
-import { User } from "react-feather";
+} from '@material-ui/core';
+import { User } from 'react-feather';
 import axios from 'axios'
 
-import i18next from 'i18n'
-import DialogTitle from "pages/components/DialogTitle";
-import { str, createFormData } from 'helpers';
-import env from 'environment';
-import {setNotification} from "../redux/actions/notificationActions";
+import env from 'src/environment';
+import i18next from 'src/i18n'
+import { str, createFormData } from 'src/helpers';
+import DialogTitle from 'src/pages/components/DialogTitle';
+import {setNotification} from 'src/redux/actions/notificationActions';
+import AppContext from 'src/contexts/AppContext';
+
 
 const useStyles = makeStyles(theme => ({
   content: {
@@ -43,7 +44,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const NotificationList = props => {
-  const { open, session, dispatch, onClose } = props;
+  const {state: {session}, dispatch} = useContext(AppContext);
+  const { open, onClose } = props;
   const [user_friends, setUserFriends] = useState([]);
   const classes = useStyles();
 
@@ -128,10 +130,4 @@ const NotificationList = props => {
   );
 };
 
-export default connect(store => (
-    { session: store.sessionReducer,
-      notification: store.notificationReducer
-    }
-  )
-)(withRouter(NotificationList));
-
+export default withRouter(NotificationList);

@@ -1,6 +1,10 @@
 import * as types from '../constants';
 
-export default function reducer(state={ currentTheme: 0 }, actions) {
+export const initialTheme = {
+  currentTheme: 0
+};
+
+export default function reducer(state=initialTheme, actions) {
   switch (actions.type) {
 
     case types.SET_THEME:

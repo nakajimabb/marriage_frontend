@@ -1,10 +1,11 @@
-import React, { Component } from "react";
-import styled from "styled-components";
-import { Link } from "react-router-dom";
-import { connect } from "react-redux";
+import React, { useContext, useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
-import { login } from "../../redux/actions/sessionActions";
-import { setTheme } from "../../redux/actions/themeActions";
+import { login } from 'src/redux/actions/sessionActions';
+import { setTheme } from 'src/redux/actions/themeActions';
+import AppContext from 'src/contexts/AppContext';
 
 import {
   Checkbox,
@@ -15,11 +16,10 @@ import {
   Button as MuiButton,
   Paper,
   Typography
-} from "@material-ui/core";
-import { spacing } from "@material-ui/system";
+} from '@material-ui/core';
+import { spacing } from '@material-ui/system';
 
-import env from '../../environment';
-import Cookies from "js-cookie";
+import env from 'src/environment';
 
 
 const Button = styled(MuiButton)(spacing);
@@ -33,27 +33,28 @@ const Wrapper = styled(Paper)`
 `;
 
 
-class SignIn extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
+const SignIn = props => {
+  const { dispatch } = useContext(AppContext);
+  const { history } = props;
+  const [user, setUser] = useState({});
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
+  useEffect(() => {
+    const theme = Cookies.get('theme') || 0;
+    dispatch(setTheme(theme));
+  }, [user]);
 
-  handleChange = name => event => {
-    this.setState({ [name]: event.target.value });
+  const handleChange = name => event => {
+    let user2 = Object.assign({}, user);
+    user2[name] = event.target.value;
+    setUser(user2);
   };
 
-  handleSubmit = async event => {
+  const handleSubmit = async event => {
     event.preventDefault();
-
-    const { dispatch, history } = this.props;
 
     const url = env.API_ORIGIN + 'auth/sign_in';
     const headers = { 'Content-Type': 'application/json;charset=utf-8' };
-    const body = {nickname: this.state.nickname, password: this.state.password};
+    const body = {nickname: user.nickname, password: user.password};
 
     let response = await fetch(url, {method: 'POST', headers, body: JSON.stringify(body)});
     if(response.ok) {
@@ -63,17 +64,14 @@ class SignIn extends Component {
         'uid': response.headers.get('uid'),
       };
       let json = await response.json();
-      const user = json.data;
-      dispatch(login({headers, user}));
-      const theme = Cookies.get('theme') || 0;
-      dispatch(setTheme(theme));
+      const user2 = json.data;
+      dispatch(login({headers, user: user2}));
       history.push('/');
     } else {
       alert(response.status + ' ' + response.statusText);
     }
   };
 
-  render() {
     return (
       <Wrapper>
         <Typography component="h1" variant="h1" align="center" gutterBottom>
@@ -82,10 +80,10 @@ class SignIn extends Component {
         <Typography component="h2" variant="body1" align="center">
           Sign in to your account to continue
         </Typography>
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={handleSubmit}>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="nickname">nickname</InputLabel>
-            <Input id="nickname" name="nickname" autoComplete="nickname" autoFocus value={this.state.nickname} onChange={this.handleChange('nickname')} />
+            <Input id="nickname" name="nickname" autoComplete="nickname" autoFocus value={user.nickname} onChange={handleChange('nickname')} />
           </FormControl>
           <FormControl margin="normal" required fullWidth>
             <InputLabel htmlFor="password">Password</InputLabel>
@@ -94,8 +92,8 @@ class SignIn extends Component {
               type="password"
               id="password"
               autoComplete="current-password"
-              value={this.state.password}
-              onChange={this.handleChange('password')}
+              value={user.password}
+              onChange={handleChange('password')}
             />
           </FormControl>
           <FormControlLabel
@@ -122,7 +120,6 @@ class SignIn extends Component {
         </form>
       </Wrapper>
     );
-  }
-}
+};
 
-export default connect(store => ({ session: store.sessionReducer }))(SignIn);
+export default SignIn;

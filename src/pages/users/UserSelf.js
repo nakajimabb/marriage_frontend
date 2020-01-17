@@ -1,6 +1,5 @@
-import React, {useState} from "react";
-import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
+import React, {useContext, useState} from 'react';
+import { withRouter } from 'react-router-dom';
 import {
   AppBar,
   Toolbar,
@@ -22,14 +21,15 @@ import {
   ListItemIcon,
   ListItemText,
   makeStyles,
-} from "@material-ui/core";
-import axios from "axios";
+} from '@material-ui/core';
+import axios from 'axios';
 
-import i18next from 'i18n'
-import { str, full_name, age, collectErrors, createFormData } from 'helpers';
-import { login } from "redux/actions/sessionActions";
-import CustomizedSnackbar from "pages/components/CustomizedSnackbar";
-import env from 'environment';
+import env from 'src/environment';
+import i18next from 'src/i18n'
+import { str, full_name, age, collectErrors, createFormData } from 'src/helpers';
+import { login } from 'src/redux/actions/sessionActions';
+import CustomizedSnackbar from 'src/pages/components/CustomizedSnackbar';
+import AppContext from 'src/contexts/AppContext';
 
 
 const useStyles = makeStyles(theme => ({
@@ -55,7 +55,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const UserSelf = props => {
-  const { user, session, setUser, dispatch } = props;
+  const {state: {session}, dispatch} = useContext(AppContext);
+  const { user, setUser } = props;
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState(null);
   const classes = useStyles();
@@ -377,4 +378,4 @@ const UserSelf = props => {
   );
 };
 
-export default connect(store => ({ session: store.sessionReducer }))(withRouter(UserSelf));
+export default withRouter(UserSelf);

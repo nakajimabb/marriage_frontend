@@ -1,8 +1,8 @@
-import React from "react";
-import { SupervisedUserCircle, AllInclusive, EventNote } from "@material-ui/icons";
-import { Heart, UserPlus, Users, Settings } from "react-feather";
+import React from 'react';
+import { SupervisedUserCircle, AllInclusive, EventNote } from '@material-ui/icons';
+import { Heart, UserPlus, Users, Settings } from 'react-feather';
 
-import async from "../components/Async";
+import async from 'src/components/Async';
 
 
 // Auth components
@@ -128,19 +128,6 @@ export const authRoutes = {
 };
 
 export const getRoutes = (roles) => {
-  let routes = [];
-  if(roles && ~roles.indexOf('courtship'))
-    routes = routes.concat(courtshipRoutes);
-  if(roles && ~roles.indexOf('matchmaker'))
-    routes = routes.concat(matchmakerRoutes);
-  routes = routes.concat(commonRoutes);
-  if(roles && ~roles.indexOf('head'))
-    routes = routes.concat(headRoutes);
-
-  return routes;
-};
-
-export default (roles, lang) => {
   let routes = [];
   if(roles && ~roles.indexOf('courtship'))
     routes = routes.concat(courtshipRoutes);

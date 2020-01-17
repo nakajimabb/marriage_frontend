@@ -1,15 +1,4 @@
-import React from "react";
-import styled from "styled-components";
-import { rgba } from "polished";
-
-import { NavLink as RouterNavLink, withRouter } from "react-router-dom";
-import { darken } from "polished";
-
-import PerfectScrollbar from "react-perfect-scrollbar";
-import "../vendor/perfect-scrollbar.css";
-
-import { spacing } from "@material-ui/system";
-
+import React, { useState, useEffect, useContext } from 'react';
 import {
   Avatar,
   Box as MuiBox,
@@ -21,13 +10,19 @@ import {
   Drawer as MuiDrawer,
   List as MuiList,
   Typography
-} from "@material-ui/core";
-import { ExpandLess, ExpandMore } from "@material-ui/icons";
-import { Layers } from "react-feather";
-import {connect} from "react-redux";
+} from '@material-ui/core';
+import { ExpandLess, ExpandMore } from '@material-ui/icons';
+import { spacing } from '@material-ui/system';
+import styled from 'styled-components';
+import { NavLink as RouterNavLink, withRouter } from 'react-router-dom';
+import PerfectScrollbar from 'react-perfect-scrollbar';
+import { rgba, darken } from 'polished';
 
-import routes from "../routes/index";
-import i18next from "../i18n";
+import { getRoutes } from 'src/routes';
+import i18next from 'src/i18n';
+import 'src/vendor/perfect-scrollbar.css';
+import AppContext from 'src/contexts/AppContext';
+
 
 const NavLink = React.forwardRef((props, ref) => (
   <RouterNavLink innerRef={ref} {...props} />
@@ -206,7 +201,7 @@ const Dot = styled.span`
   margin-bottom: -0.5px;
 `;
 
-function SidebarCategory({
+const SidebarCategory = ({
   name,
   icon,
   classes,
@@ -214,7 +209,7 @@ function SidebarCategory({
   isCollapsable,
   badge,
   ...rest
-}) {
+}) => {
   return (
     <Category {...rest}>
       {icon}
@@ -229,9 +224,9 @@ function SidebarCategory({
       {badge ? <CategoryBadge label={badge} /> : ""}
     </Category>
   );
-}
+};
 
-function SidebarLink({ name, to, badge }) {
+const SidebarLink = ({ name, to, badge }) => {
   return (
     <Link
       button
@@ -245,49 +240,33 @@ function SidebarLink({ name, to, badge }) {
       {badge ? <LinkBadge label={badge} /> : ""}
     </Link>
   );
-}
+};
 
-class Sidebar extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
+const Sidebar = props => {
+  const {state: {session}} = useContext(AppContext);
+  const { classes, staticContext, location, ...other } = props;
+  const user = session.user;
 
-  toggle = index => {
-    // Collapse all elements
-    Object.keys(this.state).forEach(
-      item =>
-        this.state[index] ||
-        this.setState(() => ({
-          [item]: false
-        }))
+  const getState = pathname => {
+    const index = getRoutes(session.roles).findIndex(route => {
+        if (pathname === '/') {
+          return (route.path === pathname);
+        } else {
+          return (route.path != '/' && pathname.indexOf(route.path) === 0);
+        }
+      }
     );
-
-    // Toggle selected element
-    this.setState(state => ({
-      [index]: !state[index]
-    }));
+    return ~index ? {[index]: true} : {};
   };
+  const [state, setState] = useState(getState(location.pathname));
 
-  componentWillMount() {
-    /* Open collapse element that matches current url */
-    const pathName = this.props.location.pathname;
-    const { session } = this.props;
+  useEffect(() => {
+    setState(getState(location.pathname));
+  }, [location.pathname]);
 
-    routes(session.roles).forEach((route, index) => {
-      const isActive = pathName.indexOf(route.path) === 0;
-      const isOpen = route.open;
-      const isHome = route.containsHome && pathName === "/" ? true : false;
-
-      this.setState(() => ({
-        [index]: isActive || isOpen || isHome
-      }));
-    });
-  }
-
-  render() {
-    const { classes, staticContext, session, ...other } = this.props;
-    const user = session.user;
+  const toggle = index => {
+    setState({[index]: !state[index]});
+  };
 
     return (
       <Drawer variant="permanent" {...other}>
@@ -298,7 +277,7 @@ class Sidebar extends React.Component {
         <Scrollbar>
           <List disablePadding>
             <Items>
-              {routes(session.roles).map((category, index) => (
+              {getRoutes(session.roles).map((category, index) => (
                 <React.Fragment key={index}>
                   {category.header ? (
                     <SidebarSection variant="caption">
@@ -309,16 +288,16 @@ class Sidebar extends React.Component {
                   {category.children ? (
                     <React.Fragment key={index}>
                       <SidebarCategory
-                        isOpen={!this.state[index]}
+                        isOpen={!state[index]}
                         isCollapsable={true}
                         name={i18next.t(category.id)}
                         icon={category.icon}
                         button={true}
-                        onClick={() => this.toggle(index)}
+                        onClick={() => toggle(index)}
                       />
 
                       <Collapse
-                        in={this.state[index]}
+                        in={state[index]}
                         timeout="auto"
                         unmountOnExit
                       >
@@ -371,7 +350,6 @@ class Sidebar extends React.Component {
         </SidebarFooter>
       </Drawer>
     );
-  }
-}
+};
 
-export default connect(store => ({ session: store.sessionReducer }))(withRouter(Sidebar));
+export default withRouter(Sidebar);
