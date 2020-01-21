@@ -16,8 +16,8 @@ const AuthGuard = props => {
   const [user, setUser] = useState(session.user);
   const [count, setCount] = useState(notification.count);
   const str_headers = Cookies.get('headers');
-  const headers  = (str_headers ? JSON.parse(str_headers) : null);
-  const theme = Cookies.get('theme') || 0;
+  const headers  = session.headers || (str_headers ? JSON.parse(str_headers) : null);
+  const theme = session.theme || Cookies.get('theme') || 0;
 
   const redirectSignIn = () => {
     if(location.pathname !== '/auth/sign-in') {
@@ -67,7 +67,7 @@ const AuthGuard = props => {
     if(Object.keys(user).length > 0) {
       dispatch(login({headers, user}));
     }
-  }, [user, dispatch]);
+  }, [user, headers, dispatch]);
 
   return (!session.loggedIn || !session.user) ? null : <Fragment>{ props.children }</Fragment>;
 };
