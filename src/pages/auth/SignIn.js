@@ -11,18 +11,15 @@ import {
   Checkbox,
   FormControl,
   FormControlLabel,
-  Input,
-  InputLabel,
-  Button as MuiButton,
+  TextField,
+  Button,
   Paper,
   Typography
 } from '@material-ui/core';
-import { spacing } from '@material-ui/system';
 
 import env from 'src/environment';
+import i18next from 'src/i18n'
 
-
-const Button = styled(MuiButton)(spacing);
 
 const Wrapper = styled(Paper)`
   padding: ${props => props.theme.spacing(6)}px;
@@ -36,7 +33,7 @@ const Wrapper = styled(Paper)`
 const SignIn = props => {
   const { dispatch } = useContext(AppContext);
   const { history } = props;
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState({nickname: '', password: ''});
 
   useEffect(() => {
     const theme = Cookies.get('theme') || 0;
@@ -82,18 +79,31 @@ const SignIn = props => {
         </Typography>
         <form onSubmit={handleSubmit}>
           <FormControl margin="normal" required fullWidth>
-            <InputLabel htmlFor="nickname">nickname</InputLabel>
-            <Input id="nickname" name="nickname" autoComplete="nickname" autoFocus value={user.nickname} onChange={handleChange('nickname')} />
+            <TextField
+              id="nickname"
+              name="nickname"
+              label={ i18next.attr('user', 'nickname') }
+              autoComplete="nickname"
+              autoFocus
+              value={user.nickname}
+              onChange={handleChange('nickname')}
+              InputLabelProps={{
+                shrink: true
+              }}
+            />
           </FormControl>
           <FormControl margin="normal" required fullWidth>
-            <InputLabel htmlFor="password">Password</InputLabel>
-            <Input
+            <TextField
+              id="password"
               name="password"
               type="password"
-              id="password"
+              label={ i18next.attr('user', 'password') }
               autoComplete="current-password"
               value={user.password}
               onChange={handleChange('password')}
+              InputLabelProps={{
+                shrink: true
+              }}
             />
           </FormControl>
           <FormControlLabel
