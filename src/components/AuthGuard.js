@@ -57,17 +57,17 @@ const AuthGuard = props => {
 
   useEffect(() => {
     dispatch(setNotification({count}));
-  }, [count]);
+  }, [count, dispatch]);
+
+  useEffect(() => {
+    dispatch(setTheme(theme));
+  }, [theme, dispatch]);
 
   useEffect(() => {
     if(Object.keys(user).length > 0) {
       dispatch(login({headers, user}));
     }
-  }, [user]);
-
-  useEffect(() => {
-    dispatch(setTheme(theme));
-  }, []);
+  }, [user, dispatch]);
 
   return (!session.loggedIn || !session.user) ? null : <Fragment>{ props.children }</Fragment>;
 };
