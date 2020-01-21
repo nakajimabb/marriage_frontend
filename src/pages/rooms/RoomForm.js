@@ -124,9 +124,9 @@ const RoomForm = props => {
         open={ Object.keys(errors).length > 0 }
         variant="error"
         message={
-          Object.keys(errors).map(key => {
+          Object.keys(errors).map((key, i) => {
             return (
-              <div>{errors[key]}</div>
+              <div key={i}>{errors[key]}</div>
             );
           })
         }
@@ -145,24 +145,31 @@ const RoomForm = props => {
             <List component="nav">
               <ListItem className={classes.item} >
                 <ListItemIcon className={classes.name} >
-                  { i18next.attr('room', 'name') }
+                  <ListItemText
+                    inset
+                    primary={ i18next.attr('room', 'name') }
+                    className={classes.list_text}
+                  />
                 </ListItemIcon>
                 <ListItemText >
                   <FormControl fullWidth>
                     <TextField
                       name="name"
                       autoComplete="off"
-                      defaultValue=""
                       value={ str(room.name) }
                       onChange={handleChange}
-                      error={errors.name}
+                      error={!!errors.name}
                     />
                   </FormControl>
                 </ListItemText>
               </ListItem>
               <ListItem className={classes.item} >
                 <ListItemIcon className={classes.name} >
-                  { i18next.attr('room', 'room_type') }
+                  <ListItemText
+                    inset
+                    primary={ i18next.attr('room', 'room_type') }
+                    className={classes.list_text}
+                  />
                 </ListItemIcon>
                 <ListItemText >
                   <FormControl fullWidth>
@@ -173,14 +180,16 @@ const RoomForm = props => {
                         name: "room_type",
                         id: "room_room_type"
                       }}
-                      error={errors.room_type}
+                      error={!!errors.room_type}
                       fullWidth
                     >
                       <MenuItem value="">
                         <em></em>
                       </MenuItem>
                       {
-                        Object.keys(room_types).map(room_type => <MenuItem value={room_type}>{ room_types[room_type] }</MenuItem>)
+                        Object.keys(room_types).map((room_type, i) => (
+                          <MenuItem key={i} value={room_type}>{ room_types[room_type] }</MenuItem>
+                        ))
                       }
                     </Select>
                   </FormControl>
@@ -188,7 +197,11 @@ const RoomForm = props => {
               </ListItem>
               <ListItem className={classes.item} >
                 <ListItemIcon className={classes.name} >
-                  { i18next.attr('room', 'dated_on') }
+                  <ListItemText
+                    inset
+                    primary={ i18next.attr('room', 'dated_on') }
+                    className={classes.list_text}
+                  />
                 </ListItemIcon>
                 <ListItemText >
                   <FormControl fullWidth>
@@ -196,17 +209,20 @@ const RoomForm = props => {
                       name="dated_on"
                       type="date"
                       autoComplete="off"
-                      defaultValue=""
                       value={ str(room.dated_on) }
                       onChange={handleChange}
-                      error={errors.dated_on}
+                      error={!!errors.dated_on}
                     />
                   </FormControl>
                 </ListItemText>
               </ListItem>
               <ListItem className={classes.item} >
                 <ListItemIcon className={classes.name} >
-                  { i18next.attr('room', 'fixed_on') }
+                  <ListItemText
+                    inset
+                    primary={ i18next.attr('room', 'fixed_on') }
+                    className={classes.list_text}
+                  />
                 </ListItemIcon>
                 <ListItemText >
                   <FormControl fullWidth>
@@ -214,17 +230,20 @@ const RoomForm = props => {
                       name="fixed_on"
                       type="date"
                       autoComplete="off"
-                      defaultValue=""
                       value={ str(room.fixed_on) }
                       onChange={handleChange}
-                      error={errors.fixed_on}
+                      error={!!errors.fixed_on}
                     />
                   </FormControl>
                 </ListItemText>
               </ListItem>
               <ListItem className={classes.item} >
                 <ListItemIcon className={classes.name} >
-                  { i18next.t('views.room.user_count') }
+                  <ListItemText
+                    inset
+                    primary={ i18next.t('views.room.user_count') }
+                    className={classes.list_text}
+                  />
                 </ListItemIcon>
                 <ListItemText >
                   <FormGroup row>
@@ -234,11 +253,10 @@ const RoomForm = props => {
                         type="number"
                         label={ i18next.enum('user', 'sex', 'male') }
                         autoComplete="off"
-                        defaultValue=""
                         value={ str(room.male_count) }
                         onChange={handleChange}
                         className={classes.number}
-                        error={errors.male_count}
+                        error={!!errors.male_count}
                       />
                     </FormControl>
                     <Box m={5}>
@@ -249,11 +267,10 @@ const RoomForm = props => {
                         type="number"
                         label={ i18next.enum('user', 'sex', 'female') }
                         autoComplete="off"
-                        defaultValue=""
                         value={ str(room.female_count) }
                         onChange={handleChange}
                         className={classes.number}
-                        error={errors.female_count}
+                        error={!!errors.female_count}
                       />
                     </FormControl>
                   </FormGroup>
@@ -261,7 +278,11 @@ const RoomForm = props => {
               </ListItem>
               <ListItem className={classes.item} >
                 <ListItemIcon className={classes.name} >
-                  { i18next.attr('user', 'age') }
+                  <ListItemText
+                    inset
+                    primary={ i18next.attr('user', 'age') }
+                    className={classes.list_text}
+                  />
                 </ListItemIcon>
                 <ListItemText >
                   <FormGroup row>
@@ -270,11 +291,10 @@ const RoomForm = props => {
                         name="min_age"
                         type="number"
                         autoComplete="off"
-                        defaultValue=""
                         value={ str(room.min_age) }
                         onChange={handleChange}
                         className={classes.number}
-                        error={errors.min_age}
+                        error={!!errors.min_age}
                       />
                     </FormControl>
                     <Box m={2}>
@@ -285,11 +305,10 @@ const RoomForm = props => {
                         name="max_age"
                         type="number"
                         autoComplete="off"
-                        defaultValue=""
                         value={ str(room.max_age) }
                         onChange={handleChange}
                         className={classes.number}
-                        error={errors.max_age}
+                        error={!!errors.max_age}
                       />
                     </FormControl>
                   </FormGroup>
@@ -297,7 +316,11 @@ const RoomForm = props => {
               </ListItem>
               <ListItem className={classes.item} >
                 <ListItemIcon className={classes.name} >
-                  { i18next.t('views.room.place') }
+                  <ListItemText
+                    inset
+                    primary={ i18next.t('views.room.place') }
+                    className={classes.list_text}
+                  />
                 </ListItemIcon>
                 <ListItemText >
                   <FormGroup row>
@@ -310,13 +333,15 @@ const RoomForm = props => {
                           name: "prefecture",
                           id: "room_prefecture"
                         }}
-                        error={errors.prefecture}
+                        error={!!errors.prefecture}
                       >
                         <MenuItem value="">
                           <em></em>
                         </MenuItem>
                         {
-                          Object.keys(prefectures).map(prefecture => <MenuItem value={prefecture}>{ prefectures[prefecture] }</MenuItem>)
+                          Object.keys(prefectures).map((prefecture, i) => (
+                            <MenuItem key={i} value={prefecture}>{ prefectures[prefecture] }</MenuItem>
+                          ))
                         }
                       </Select>
                     </FormControl>
@@ -325,10 +350,9 @@ const RoomForm = props => {
                         name="address"
                         autoComplete="off"
                         label={ i18next.attr('room', 'address') }
-                        defaultValue=""
                         value={ str(room.address) }
                         onChange={handleChange}
-                        error={errors.address}
+                        error={!!errors.address}
                       />
                     </FormControl>
                   </FormGroup>
@@ -336,7 +360,11 @@ const RoomForm = props => {
               </ListItem>
               <ListItem className={classes.item} >
                 <ListItemIcon className={classes.name} >
-                  { i18next.attr('room', 'remark') }
+                  <ListItemText
+                    inset
+                    primary={ i18next.attr('room', 'remark') }
+                    className={classes.list_text}
+                  />
                 </ListItemIcon>
                 <ListItemText >
                   <FormControl fullWidth>
@@ -350,7 +378,7 @@ const RoomForm = props => {
                       onChange={handleChange}
                       variant="outlined"
                       margin="normal"
-                      error={errors.remark}
+                      error={!!errors.remark}
                     />
                   </FormControl>
                 </ListItemText>

@@ -115,10 +115,10 @@ function a11yProps(index) {
 
 
 const RoomAction = props => {
-  const { room, user, onJoin, onLeft, onEdit } = props;
+  const { room, onJoin, onLeft, onEdit } = props;
   const availability = room.availability;
 
-  if(availability == 'created') {
+  if(availability === 'created') {
     return (
       <IconButton size="small" onClick={onEdit} >
         <Edit fontSize="small" />
@@ -126,7 +126,7 @@ const RoomAction = props => {
     );
   }
 
-  if(availability == 'registrable') {
+  if(availability === 'registrable') {
     return (
       <Button variant="outlined" size="small" color="primary" onClick={onJoin}>
         { i18next.t('views.room.join') }
@@ -134,7 +134,7 @@ const RoomAction = props => {
     );
   }
 
-  if(availability == 'joined') {
+  if(availability === 'joined') {
     return (
       <Button variant="outlined" size="small" color="secondary" onClick={onLeft}>
         { i18next.t('views.room.left') }
@@ -233,7 +233,7 @@ const RoomList = () => {
   };
 
   const join_or_leftRoom = (room, action) => () => {
-    const message = (action == 'join') ? i18next.t('views.room.confirm_join') : i18next.t('views.room.confirm_left');
+    const message = (action === 'join') ? i18next.t('views.room.confirm_join') : i18next.t('views.room.confirm_left');
     if(window.confirm(message)) {
       const headers = session.headers;
       if (headers && headers['access-token'] && headers['client'] && headers['uid']) {
@@ -281,7 +281,7 @@ const RoomList = () => {
 
   const updateRoom = (room, add=false) => {
     let rooms2 = Array.from(rooms);
-    const index = rooms2.findIndex(r => r.id == room.id);
+    const index = rooms2.findIndex(r => r.id === room.id);
     if(~index) {
       rooms2[index] = room;
     } else if(add) {
@@ -290,7 +290,7 @@ const RoomList = () => {
     setRooms(rooms2);
   };
 
-  if(open == 'page') {
+  if(open === 'page') {
     return (
       <React.Fragment>
         <RoomPage
@@ -301,7 +301,7 @@ const RoomList = () => {
     );
   }
 
-  if(open == 'form') {
+  if(open === 'form') {
     return (
       <React.Fragment>
         <TitleBar title={page_title} variant="dense" />
@@ -343,9 +343,9 @@ const RoomList = () => {
         { ~Object.keys(tab_indexes).indexOf('all') ?
           (<TabPanel value={tab} index={tab_indexes.all}>
             <Grid container spacing={6}>
-              { rooms.map(room => {
+              { rooms.map((room, i) => {
                 return (
-                  <Grid item xs={6} lg={4} xl={3}>
+                  <Grid key={i} item xs={6} lg={4} xl={3}>
                     <Room
                       room={room}
                       user={user}
@@ -364,9 +364,9 @@ const RoomList = () => {
         { ~Object.keys(tab_indexes).indexOf('available') ?
           (<TabPanel value={tab} index={tab_indexes.available}>
             <Grid container spacing={6}>
-              { roomFilter(rooms).map(room => {
+              { roomFilter(rooms).map((room, i) => {
                 return (
-                  <Grid item xs={6} lg={4} xl={3}>
+                  <Grid key={i} item xs={6} lg={4} xl={3}>
                     <Room
                       room={room}
                       user={user}
@@ -385,9 +385,9 @@ const RoomList = () => {
         { ~Object.keys(tab_indexes).indexOf('mylist') ?
           (<TabPanel value={tab} index={tab_indexes.mylist}>
             <Grid container spacing={6}>
-              { joinedFilter(rooms).map(room => {
+              { joinedFilter(rooms).map((room, i) => {
                 return (
-                  <Grid item xs={6} lg={4} xl={3}>
+                  <Grid key={i} item xs={6} lg={4} xl={3}>
                     <Room
                       room={room}
                       user={user}

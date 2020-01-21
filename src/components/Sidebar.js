@@ -242,27 +242,27 @@ const SidebarLink = ({ name, to, badge }) => {
   );
 };
 
+const getState = (pathname, roles) => {
+  const index = getRoutes(roles).findIndex(route => {
+      if (pathname === '/') {
+        return (route.path === pathname);
+      } else {
+        return (route.path !== '/' && pathname.indexOf(route.path) === 0);
+      }
+    }
+  );
+  return ~index ? {[index]: true} : {};
+};
+
 const Sidebar = props => {
   const {state: {session}} = useContext(AppContext);
   const { classes, staticContext, location, ...other } = props;
   const user = session.user;
-
-  const getState = pathname => {
-    const index = getRoutes(session.roles).findIndex(route => {
-        if (pathname === '/') {
-          return (route.path === pathname);
-        } else {
-          return (route.path != '/' && pathname.indexOf(route.path) === 0);
-        }
-      }
-    );
-    return ~index ? {[index]: true} : {};
-  };
-  const [state, setState] = useState(getState(location.pathname));
+  const [state, setState] = useState({});
 
   useEffect(() => {
-    setState(getState(location.pathname));
-  }, [location.pathname]);
+    setState(getState(location.pathname, session.roles));
+  }, [location.pathname, session.roles]);
 
   const toggle = index => {
     setState({[index]: !state[index]});

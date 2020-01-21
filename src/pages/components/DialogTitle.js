@@ -1,5 +1,5 @@
 import React from "react";
-import {Grid, Divider, Box, makeStyles, Toolbar} from "@material-ui/core";
+import { Grid, Divider, Box, makeStyles } from "@material-ui/core";
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import IconButton from '@material-ui/core/IconButton';
 import MaximizeIcon from '@material-ui/icons/Maximize';

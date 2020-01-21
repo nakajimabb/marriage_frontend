@@ -136,7 +136,7 @@ const PartnerList = props => {
           .then((results) => {
             const eval_partner = results.data.eval_partner
             let data2 = Array.from(data);
-            const index = data.findIndex(u => u.id == eval_partner.partner_id)
+            const index = data.findIndex(u => u.id === eval_partner.partner_id)
             if(~index) {
               data2[index].permitted = eval_partner.permitted;
               data2[index].requirement_score = eval_partner.requirement_score;
@@ -193,7 +193,7 @@ const PartnerList = props => {
   function equalDate(array, search, keys) {
     const options = keys.map(key => [key, search[key]]).filter(a => a[1]);
     if(Object.keys(options).length) {
-      return array.filter(n => options.every(option => n[option[0]] == option[1]));
+      return array.filter(n => options.every(option => n[option[0]] === option[1]));
     } else {
       return array;
     }
@@ -204,7 +204,7 @@ const PartnerList = props => {
       return user.avatar_url;
     }
     else {
-      return user.sex == 'male' ? '/static/img/avatars/male.png' : '/static/img/avatars/female.png'
+      return user.sex === 'male' ? '/static/img/avatars/male.png' : '/static/img/avatars/female.png'
     }
   }
 
@@ -226,7 +226,6 @@ const PartnerList = props => {
             <InputLabel htmlFor="search">{ i18next.t('views.app.search') }</InputLabel>
             <Input id="search_name"
                    name="name"
-                   defaultValue=""
                    value={search.name}
                    placeholder={ i18next.attr('user', 'name') + '(' + i18next.attr('user', 'kana') + ') or ' + i18next.attr('user', 'nickname') }
                    onChange={handleSearchChange} />
@@ -234,7 +233,7 @@ const PartnerList = props => {
           <FormControl className={classes.control} style={{width: 60}} >
             <InputLabel htmlFor="sex">{ i18next.attr('user', 'sex') }</InputLabel>
             <Select
-              value={search.sex}
+              value={str(search.sex)}
               name="sex"
               onChange={handleSearchChange}
               inputProps={{
@@ -264,7 +263,11 @@ const PartnerList = props => {
                 <em></em>
               </MenuItem>
               {
-                Object.keys(prefectures).map(prefecture => <MenuItem value={prefecture}>{ prefectures[prefecture] }</MenuItem>)
+                Object.keys(prefectures).map((prefecture, i) => (
+                  <MenuItem key={i} value={prefecture}>
+                    { prefectures[prefecture] }
+                  </MenuItem>
+                ))
               }
             </Select>
           </FormControl>
@@ -274,7 +277,6 @@ const PartnerList = props => {
               type="number"
               label={ i18next.attr('user', 'age') + '~' }
               autoComplete="off"
-              defaultValue=""
               value={ str(search.min_age) }
               onChange={handleSearchChange}
             />
@@ -285,7 +287,6 @@ const PartnerList = props => {
               type="number"
               label={ '~' + i18next.attr('user', 'age') }
               autoComplete="off"
-              defaultValue=""
               value={ str(search.max_age) }
               onChange={handleSearchChange}
             />
@@ -304,7 +305,11 @@ const PartnerList = props => {
                 <em></em>
               </MenuItem>
               {
-                Object.keys(religions).map(religion => <MenuItem value={religion}>{ religions[religion] }</MenuItem>)
+                Object.keys(religions).map((religion, i) => (
+                  <MenuItem key={i} value={religion}>
+                    { religions[religion] }
+                  </MenuItem>
+                ))
               }
             </Select>
           </FormControl>
@@ -313,9 +318,9 @@ const PartnerList = props => {
 
       <Grid container spacing={6}>
         {
-          target_array.map(user => {
+          target_array.map((user, i) => {
             return (
-              <Grid item xs={6} md={4} lg={3} xl={2} className={classes.grid} >
+              <Grid key={i} item xs={6} md={4} lg={3} xl={2} className={classes.grid} >
                 <Card className={classes.card}>
                   <CardActionArea onClick={() => setPartnerId(user.id)} >
                     <CardMedia
@@ -328,7 +333,7 @@ const PartnerList = props => {
                     <Grid container spacing={6}>
                       <Grid item>
                         {
-                          (item_labels || default_labels).map(f => (<Box>{ f(user) }</Box>))
+                          (item_labels || default_labels).map((f, i) => (<Box key={i}>{ f(user) }</Box>))
                         }
                       </Grid>
                       <Grid item xs />

@@ -1,4 +1,4 @@
-import React, {Component, Fragment, useContext, useEffect, useState } from 'react';
+import React, { Fragment, useContext, useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import { withRouter } from 'react-router-dom';
 import axios from "axios";
@@ -28,7 +28,7 @@ const AuthGuard = props => {
 
   function diff_user(user1, user2) {
     const keys = Object.keys(user1);
-    return keys.filter(key => user1[key] != user2[key])
+    return keys.filter(key => user1[key] !== user2[key])
   }
 
   const initSession = () => {

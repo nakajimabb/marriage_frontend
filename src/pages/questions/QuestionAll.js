@@ -25,7 +25,6 @@ import clsx from 'clsx';
 import env from 'src/environment';
 import i18next from 'src/i18n'
 import { str, collectErrors } from 'src/helpers';
-import { logout } from 'src/redux/actions/sessionActions';
 import TitleBar from 'src/pages/components/TitleBar';
 import CustomizedSnackbar from 'src/pages/components/CustomizedSnackbar';
 import AppContext from 'src/contexts/AppContext';
@@ -79,16 +78,15 @@ const QuestionChoices = props => {
   if(question.edit) {
     return (
       <TableRow>
-        <TableCell colspan="4" className={classes.cell_choices}>
+        <TableCell colSpan="4" className={classes.cell_choices}>
           {
             question_choices.map((choice, i) => (
-              <React.Fragment>
+              <React.Fragment key={i}>
                 <FormControl>
                   <TextField
                     name="label"
                     label={i18next.attr('question_choice', 'label')}
                     autoComplete="off"
-                    defaultValue=""
                     value={str(choice.label)}
                     onChange={handleChoiceChange(index, i)}
                     // error={errors.content}
@@ -101,7 +99,6 @@ const QuestionChoices = props => {
                     type="number"
                     label={i18next.attr('question_choice', 'value')}
                     autoComplete="off"
-                    defaultValue=""
                     value={str(choice.value)}
                     onChange={handleChoiceChange(index, i)}
                     // error={errors.content}
@@ -123,7 +120,7 @@ const QuestionChoices = props => {
 
   return (
     <TableRow>
-      <TableCell colspan="5" className={classes.cell_choices}>
+      <TableCell colSpan="5" className={classes.cell_choices}>
         <Grid container spacing={6} >
           <Grid item>
             <Typography>
@@ -132,7 +129,7 @@ const QuestionChoices = props => {
           </Grid>
           {
             question_choices.map((choice, i) => (
-              <Grid item>
+              <Grid key={i} item>
                 <Typography>
                   { choice.label }({ choice.value }) &nbsp;
                 </Typography>
@@ -151,7 +148,7 @@ const Question = props => {
   const classes = useStyles();
   const answer_types = i18next.data_list('enum', 'question', 'answer_type');
   const question_choices = question.question_choices_attributes || [];
-  const is_num = question.answer_type == 'number';
+  const is_num = question.answer_type === 'number';
   const class_cell = is_num ? classes.border_dashed : {};
 
   if(question.edit) {
@@ -164,7 +161,6 @@ const Question = props => {
                 name="content"
                 label={ i18next.attr('question', 'content') }
                 autoComplete="off"
-                defaultValue=""
                 value={ str(question.content) }
                 onChange={handleChange(index)}
                 error={errors.content}
@@ -190,7 +186,9 @@ const Question = props => {
                   <em></em>
                 </MenuItem>
                 {
-                  Object.keys(answer_types).map(answer_type => <MenuItem value={answer_type}>{ answer_types[answer_type] }</MenuItem>)
+                  Object.keys(answer_types).map((answer_type, i) => (
+                    <MenuItem key={i} value={answer_type}>{ answer_types[answer_type] }</MenuItem>
+                  ))
                 }
               </Select>
             </FormControl>
@@ -202,7 +200,6 @@ const Question = props => {
                 type="number"
                 label={ i18next.attr('question', 'min_answer_size') }
                 autoComplete="off"
-                defaultValue=""
                 value={ question.min_answer_size }
                 onChange={handleChange(index)}
                 error={errors.min_answer_size}
@@ -217,7 +214,6 @@ const Question = props => {
                 type="number"
                 label={ i18next.attr('question', 'max_answer_size') }
                 autoComplete="off"
-                defaultValue=""
                 value={ question.max_answer_size }
                 onChange={handleChange(index)}
                 error={errors.max_answer_size}
@@ -282,9 +278,8 @@ const Question = props => {
     );
 };
 
-const QuestionAll = props => {
-  const {state: {session}, dispatch} = useContext(AppContext);
-  const { history } = props;
+const QuestionAll = () => {
+  const {state: {session}} = useContext(AppContext);
   const [question_type, setQuestionType] = useState('compatibility');
   const [questions, setQuestions] = useState([]);
   const [errors, setErrors] = useState({});
@@ -306,8 +301,7 @@ const QuestionAll = props => {
         });
     }
     else {
-      dispatch(logout());
-      history.push('/auth/sign-in');
+      alert(i18next.t('errors.app.occurred'));
     }
 
   }, [session.headers, question_type]);
@@ -390,11 +384,7 @@ const QuestionAll = props => {
         open={ Object.keys(errors).length > 0 }
         variant="error"
         message={
-          Object.keys(errors).map(key => {
-            return (
-              <div>{errors[key]}</div>
-            );
-          })
+          Object.keys(errors).map((key, i) => <div key={i}>{errors[key]}</div>)
         }
         onClose={() => setErrors({})}
       />
@@ -418,7 +408,9 @@ const QuestionAll = props => {
                   <em></em>
                 </MenuItem>
                 {
-                  Object.keys(question_types).map(question_type => <MenuItem value={question_type}>{ question_types[question_type] }</MenuItem>)
+                  Object.keys(question_types).map((question_type, i) => (
+                    <MenuItem key={i} value={question_type}>{ question_types[question_type] }</MenuItem>
+                  ))
                 }
               </Select>
             </FormControl>
@@ -437,11 +429,12 @@ const QuestionAll = props => {
           <Table className={classes.table} size="small" aria-label="a dense table">
             <TableBody>
               {
-                questions.map((q, i) => (
+                questions.map((q, j) => (
                   <Question
+                    key={j}
                     question={q}
-                    index={i}
-                    errors={(+error_index == i) ? errors : {}}
+                    index={j}
+                    errors={(+error_index === j) ? errors : {}}
                     onEdit={onQuestionEdit}
                     onSave={onQuestionSave}
                     onChoiceNew={onQuestionChoiceNew}

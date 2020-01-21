@@ -25,7 +25,6 @@ import axios from 'axios'
 import env from 'src/environment';
 import i18next from 'src/i18n'
 import { str } from 'src/helpers';
-import { logout } from 'src/redux/actions/sessionActions';
 import CustomizedSnackbar from 'src/pages/components/CustomizedSnackbar';
 import AppContext from 'src/contexts/AppContext';
 
@@ -66,7 +65,7 @@ const useStyles = makeStyles(theme => ({
 const AnswerChoices = props => {
   const {question, question_choices, answer_choices, handleValueChange, index} = props;
   const classes = useStyles();
-  const radio = ((question.min_answer_size == 1) && (question.max_answer_size == 1));
+  const radio = ((question.min_answer_size === 1) && (question.max_answer_size === 1));
   const checked_values = answer_choices.filter(choice => !choice._destroy);
 
   if (radio) {
@@ -76,8 +75,8 @@ const AnswerChoices = props => {
         <FormControl component="fieldset">
           <RadioGroup name="values" value={+value} onChange={handleValueChange(index)} row>
             {
-              question_choices.map((choice) => (
-                  <FormControlLabel value={+choice.id} control={<Radio/>} label={choice.label} classes={classes.radio}/>
+              question_choices.map((choice, i) => (
+                  <FormControlLabel key={i} value={+choice.id} control={<Radio/>} label={choice.label}/>
                 )
               )
             }
@@ -93,8 +92,9 @@ const AnswerChoices = props => {
       <FormControl component="fieldset">
         <FormGroup name="values" onChange={handleValueChange(index)} row>
           {
-            question_choices.map((choice) => (
+            question_choices.map((choice, i) => (
                 <FormControlLabel
+                  key={i}
                   control={
                     <Checkbox
                       value={choice.id}
@@ -122,11 +122,11 @@ const AnswerNotes = props => {
     <Grid key={question.id} className={classes.answer}>
       <FormControl fullWidth>
         {
-          answer_notes2.map((answer_note) => (
+          answer_notes2.map((answer_note, i) => (
             <TextField
+              key={i}
               name="note"
               autoComplete="off"
-              defaultValue=""
               value={ str(answer_note.note) }
               onChange={handleNoteChange(index)}
               fullWidth
@@ -145,8 +145,8 @@ const Question = props => {
   const question_choices = question.question_choices_attributes || [];
   const answer_choices = question.answer_choices_attributes || [];
   const answer_notes = question.answer_notes_attributes || [];
-  const is_num = question.answer_type == 'number';
-  const is_note = question.answer_type == 'note';
+  const is_num = question.answer_type === 'number';
+  const is_note = question.answer_type === 'note';
 
   return (
     <React.Fragment>
@@ -160,7 +160,7 @@ const Question = props => {
         <Grid item xs />
         <Grid item>
           { i18next.t('views.question.answer_size') }
-          { (question.min_answer_size == question.max_answer_size) ?
+          { (question.min_answer_size === question.max_answer_size) ?
               question.min_answer_size : `${question.min_answer_size}~${question.max_answer_size}` }
         </Grid>
       </Grid>
@@ -190,8 +190,8 @@ const Question = props => {
 };
 
 const QuestionForm = props => {
-  const {state: {session}, dispatch} = useContext(AppContext);
-  const { history, onClose, user } = props;
+  const {state: {session}} = useContext(AppContext);
+  const { onClose, user } = props;
   const [question_type, setQuestionType] = useState('compatibility');
   const [questions, setQuestions] = useState([]);
   const [message, setMessage] = useState(null);
@@ -213,8 +213,7 @@ const QuestionForm = props => {
         });
     }
     else {
-      dispatch(logout());
-      history.push('/auth/sign-in');
+      alert(i18next.t('errors.app.occurred'));
     }
 
   }, [session.headers, question_type, user.id]);
@@ -251,23 +250,23 @@ const QuestionForm = props => {
     let answer_choices = questions2[i].answer_choices_attributes || [];
 
     const value = +event.target.value;
-    if(question.min_answer_size == 1 && question.max_answer_size == 1) {
+    if(question.min_answer_size === 1 && question.max_answer_size === 1) {
       if(answer_choices.length > 0) {
         answer_choices[0].question_choice_id = value;
       } else {
         answer_choices.push({question_id: question.id, question_choice_id: value});
       }
     } else {
-      if(event.target.type == 'checkbox') {
+      if(event.target.type === 'checkbox') {
         if(event.target.checked) {
-          const index = answer_choices.findIndex(v => v.question_choice_id == value);
+          const index = answer_choices.findIndex(v => v.question_choice_id === value);
           if(~index) {
             answer_choices[index]._destroy = null;
           } else {
             answer_choices.push({question_id: question.id, question_choice_id: value});
           }
         } else {
-          const index = answer_choices.findIndex(v => v.question_choice_id == value);
+          const index = answer_choices.findIndex(v => v.question_choice_id === value);
           if(~index) {
             answer_choices[index]._destroy = true;
           }
@@ -325,7 +324,9 @@ const QuestionForm = props => {
                   <em></em>
                 </MenuItem>
                 {
-                  Object.keys(question_types).map(question_type => <MenuItem value={question_type}>{ question_types[question_type] }</MenuItem>)
+                  Object.keys(question_types).map((question_type, i) => (
+                    <MenuItem key={i} value={question_type}>{ question_types[question_type] }</MenuItem>
+                  ))
                 }
               </Select>
             </FormControl>
@@ -337,8 +338,9 @@ const QuestionForm = props => {
             questions.map((q, i) => (
                 <Question
                   question={q}
+                  key={i}
                   index={i}
-                  error={errors[q.id]}
+                  error={!!errors[q.id]}
                   handleValueChange={handleValueChange}
                   handleNoteChange={handleNoteChange}
                 />

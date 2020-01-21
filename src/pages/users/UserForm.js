@@ -110,9 +110,9 @@ const UserForm = props => {
         open={ Object.keys(errors).length > 0 }
         variant="error"
         message={
-          Object.keys(errors).map(key => {
+          Object.keys(errors).map((key, i) => {
             return (
-              <div>{errors[key]}</div>
+              <div key={i}>{errors[key]}</div>
             );
           })
         }
@@ -144,14 +144,13 @@ const UserForm = props => {
                 </Box>
               </Grid>
 
-              <Grid fullWidth container spacing={4} >
+              <Grid container spacing={4} >
                 <Grid item xs={6}>
                   <FormControl fullWidth>
                     <TextField
                       name="last_name"
                       label={ i18next.attr('user', 'last_name') }
                       autoComplete="off"
-                      defaultValue=""
                       value={ str(user.last_name) }
                       onChange={handleChange}
                       error={errors.last_name}
@@ -165,7 +164,6 @@ const UserForm = props => {
                       name="first_name"
                       label={ i18next.attr('user', 'first_name') }
                       autoComplete="off"
-                      defaultValue=""
                       value={ str(user.first_name) }
                       onChange={handleChange}
                       error={errors.first_name}
@@ -175,14 +173,13 @@ const UserForm = props => {
                 </Grid>
               </Grid>
 
-              <Grid fullWidth container spacing={4} >
+              <Grid container spacing={4} >
                 <Grid item xs={6}>
                   <FormControl fullWidth>
                     <TextField
                       name="last_name_kana"
                       label={ i18next.attr('user', 'last_name_kana') }
                       autoComplete="off"
-                      defaultValue=""
                       value={ str(user.last_name_kana) }
                       onChange={handleChange}
                       error={errors.last_name_kana}
@@ -196,10 +193,9 @@ const UserForm = props => {
                       name="first_name_kana"
                       label={ i18next.attr('user', 'first_name_kana') }
                       autoComplete="off"
-                      defaultValue=""
                       value={ str(user.first_name_kana) }
                       onChange={handleChange}
-                      error={errors.first_name_kana}
+                      error={!!errors.first_name_kana}
                       fullWidth
                     />
                   </FormControl>
@@ -212,10 +208,9 @@ const UserForm = props => {
                   label={ i18next.attr('user', 'email') }
                   type="email"
                   autoComplete="off"
-                  defaultValue=""
                   value={ str(user.email) }
                   onChange={handleChange}
-                  error={errors.email}
+                  error={!!errors.email}
                   fullWidth
                 />
               </FormControl>
@@ -229,7 +224,7 @@ const UserForm = props => {
                     name: "sex",
                     id: "user_sex"
                   }}
-                  error={errors.sex}
+                  error={!!errors.sex}
                   fullWidth
                 >
                   <MenuItem value="">
@@ -246,13 +241,12 @@ const UserForm = props => {
                   label={ i18next.attr('user', 'birthday') }
                   type="date"
                   autoComplete="off"
-                  defaultValue=""
                   value={ str(user.birthday) }
                   onChange={handleChange}
                   InputLabelProps={{
                     shrink: true
                   }}
-                  error={errors.birthday}
+                  error={!!errors.birthday}
                   fullWidth
                 />
               </FormControl>
@@ -262,10 +256,9 @@ const UserForm = props => {
                   name="nickname"
                   label={ i18next.attr('user', 'nickname') }
                   autoComplete="off"
-                  defaultValue=""
                   value={ str(user.nickname) }
                   onChange={handleChange}
-                  error={errors.nickname}
+                  error={!!errors.nickname}
                   fullWidth
                 />
               </FormControl>
@@ -279,7 +272,7 @@ const UserForm = props => {
                     name: "lang",
                     id: "user_lang"
                   }}
-                  error={errors.lang}
+                  error={!!errors.lang}
                   fullWidth
                 >
                   <MenuItem value="">
@@ -298,7 +291,7 @@ const UserForm = props => {
                   autoComplete="new-password"
                   value={ str(user.password) }
                   onChange={handleChange}
-                  error={errors.password}
+                  error={!!errors.password}
                 />
               </FormControl>
 
@@ -310,7 +303,7 @@ const UserForm = props => {
                   autoComplete="new-password"
                   value={ str(user.password_confirmation) }
                   onChange={handleChange}
-                  error={errors.password_confirmation}
+                  error={!!errors.password_confirmation}
                 />
               </FormControl>
             </CardContent>
@@ -330,19 +323,21 @@ const UserForm = props => {
                       name: "blood",
                       id: "user_blood"
                     }}
-                    error={errors.blood}
+                    error={!!errors.blood}
                     fullWidth
                 >
                   <MenuItem value="">
                     <em></em>
                   </MenuItem>
                   {
-                    Object.keys(bloods).map(blood => <MenuItem value={blood}>{ bloods[blood] }</MenuItem>)
+                    Object.keys(bloods).map((blood, i) => (
+                      <MenuItem key={i} value={blood}>{ bloods[blood] }</MenuItem>
+                    ))
                   }
                 </Select>
               </FormControl>
 
-              <Grid fullWidth container spacing={4} >
+              <Grid container spacing={4} >
                 <Grid item xs={6}>
                   <FormControl fullWidth>
                     <TextField
@@ -350,10 +345,9 @@ const UserForm = props => {
                         type="number"
                         label={ i18next.attr('user', 'height') }
                         autoComplete="off"
-                        defaultValue=""
                         value={ str(user.height) }
                         onChange={handleChange}
-                        error={errors.height}
+                        error={!!errors.height}
                         fullWidth
                     />
                   </FormControl>
@@ -365,17 +359,16 @@ const UserForm = props => {
                         type="number"
                         label={ i18next.attr('user', 'weight') }
                         autoComplete="off"
-                        defaultValue=""
                         value={ str(user.weight) }
                         onChange={handleChange}
-                        error={errors.weight}
+                        error={!!errors.weight}
                         fullWidth
                     />
                   </FormControl>
                 </Grid>
               </Grid>
 
-              <Grid fullWidth container spacing={4} >
+              <Grid container spacing={4} >
                 <Grid item xs={6}>
                   <FormControl fullWidth>
                     <InputLabel htmlFor="drinking">{ i18next.attr('user', 'drinking') }</InputLabel>
@@ -386,14 +379,16 @@ const UserForm = props => {
                           name: "drinking",
                           id: "user_drinking"
                         }}
-                        error={errors.drinking}
+                        error={!!errors.drinking}
                         fullWidth
                     >
                     <MenuItem value="">
                       <em></em>
                     </MenuItem>
                     {
-                      Object.keys(drinkings).map(drinking => <MenuItem value={drinking}>{ drinkings[drinking] }</MenuItem>)
+                      Object.keys(drinkings).map((drinking, i) => (
+                        <MenuItem key={i} value={drinking}>{ drinkings[drinking] }</MenuItem>
+                      ))
                     }
                     </Select>
                   </FormControl>
@@ -408,21 +403,23 @@ const UserForm = props => {
                           name: "smoking",
                           id: "user_smoking"
                         }}
-                        error={errors.smoking}
+                        error={!!errors.smoking}
                         fullWidth
                     >
                       <MenuItem value="">
                         <em></em>
                       </MenuItem>
                       {
-                        Object.keys(smokings).map(smoking => <MenuItem value={smoking}>{ smokings[smoking] }</MenuItem>)
+                        Object.keys(smokings).map((smoking, i) => (
+                          <MenuItem key={i} value={smoking}>{ smokings[smoking] }</MenuItem>
+                        ))
                       }
                     </Select>
                   </FormControl>
                 </Grid>
               </Grid>
 
-              <Grid fullWidth container spacing={4} >
+              <Grid container spacing={4} >
                 <Grid item xs={4}>
                   <FormControl fullWidth>
                     <FormControlLabel
@@ -437,14 +434,13 @@ const UserForm = props => {
                         name="disease_name"
                         label={ i18next.attr('user', 'disease_name') }
                         autoComplete="off"
-                        defaultValue=""
                         value={ str(user.disease_name) }
                         onChange={handleChange}
                         InputLabelProps={{
                           shrink: true
                         }}
                         disabled={!user.diseased}
-                        error={errors.disease_name}
+                        error={!!errors.disease_name}
                         fullWidth
                     />
                   </FormControl>
@@ -460,7 +456,7 @@ const UserForm = props => {
                 title={ i18next.t('views.user.roles') }
             />
             <CardContent>
-              <Grid fullWidth container spacing={2} >
+              <Grid container spacing={2} >
                 <Grid item xs={4}>
                   <FormControl fullWidth>
                     <InputLabel htmlFor="marital_status">{ i18next.attr('user', 'marital_status') }</InputLabel>
@@ -471,14 +467,16 @@ const UserForm = props => {
                         name: "marital_status",
                         id: "user_marital_status"
                       }}
-                      error={errors.marital_status}
+                      error={!!errors.marital_status}
                       fullWidth
                     >
                       <MenuItem value="">
                         <em></em>
                       </MenuItem>
                       {
-                        Object.keys(marital_statuses).map(marital_status => <MenuItem value={marital_status}>{ marital_statuses[marital_status] }</MenuItem>)
+                        Object.keys(marital_statuses).map((marital_status, i) => (
+                          <MenuItem key={i} value={marital_status}>{ marital_statuses[marital_status] }</MenuItem>
+                        ))
                       }
                     </Select>
                   </FormControl>
@@ -487,7 +485,7 @@ const UserForm = props => {
                 </Grid>
               </Grid>
 
-              <Grid fullWidth container spacing={4} >
+              <Grid container spacing={4} >
                 <Grid item xs={6}>
                   <FormControl fullWidth>
                     <FormControlLabel
@@ -497,32 +495,36 @@ const UserForm = props => {
                   </FormControl>
                 </Grid>
                 <Grid item xs={6}>
-                  <FormControl fullWidth>
-                    <InputLabel htmlFor="matchmaker_id">{i18next.attr('user', 'matchmaker_id')}</InputLabel>
-                    <Select
-                      value={str(user.matchmaker_id)}
-                      onChange={handleChange}
-                      inputProps={{
-                        name: "matchmaker_id",
-                        id: "user_matchmaker_id"
-                      }}
-                      disabled={!is_head}
-                      error={errors.matchmaker_id}
-                      fullWidth
-                    >
-                      <MenuItem value="">
-                        <em></em>
-                      </MenuItem>
-                      {
-                        matchmakers.map(matchmaker => <MenuItem
-                          value={matchmaker.id}>{matchmaker.full_name}</MenuItem>)
-                      }
-                    </Select>
-                  </FormControl>
+                  {
+                    matchmakers.length > 0 ?
+                    <FormControl fullWidth>
+                      <InputLabel htmlFor="matchmaker_id">{i18next.attr('user', 'matchmaker_id')}</InputLabel>
+                      <Select
+                        value={str(user.matchmaker_id)}
+                        onChange={handleChange}
+                        inputProps={{
+                          name: "matchmaker_id",
+                          id: "user_matchmaker_id"
+                        }}
+                        disabled={!is_head}
+                        error={!!errors.matchmaker_id}
+                        fullWidth
+                      >
+                        <MenuItem value="">
+                          <em></em>
+                        </MenuItem>
+                        {
+                          matchmakers.map((matchmaker, i) => (
+                            <MenuItem key={i} value={matchmaker.id}>{matchmaker.full_name}</MenuItem>
+                          ))
+                        }
+                      </Select>
+                    </FormControl> : null
+                  }
                 </Grid>
               </Grid>
 
-              <Grid fullWidth container spacing={4} >
+              <Grid container spacing={4} >
                 <Grid item xs={6}>
                   <FormControl fullWidth>
                     <FormControlLabel
@@ -541,7 +543,7 @@ const UserForm = props => {
                         name: "member_sharing",
                         id: "user_member_sharing"
                       }}
-                      error={errors.member_sharing}
+                      error={!!errors.member_sharing}
                       disabled={!user.role_matchmaker}
                       fullWidth
                     >
@@ -549,7 +551,9 @@ const UserForm = props => {
                         <em></em>
                       </MenuItem>
                       {
-                        Object.keys(member_sharings).map(member_sharing => <MenuItem value={member_sharing}>{ member_sharings[member_sharing] }</MenuItem>)
+                        Object.keys(member_sharings).map((member_sharing, i) => (
+                          <MenuItem key={i} value={member_sharing}>{ member_sharings[member_sharing] }</MenuItem>
+                        ))
                       }
                     </Select>
                   </FormControl>
@@ -562,7 +566,7 @@ const UserForm = props => {
                 title={ i18next.t('views.user.religion') }
             />
             <CardContent>
-              <Grid fullWidth container spacing={4} >
+              <Grid container spacing={4} >
                 <Grid item xs={6}>
                   <FormControl fullWidth>
                     <InputLabel htmlFor="religion">{ i18next.attr('user', 'religion') }</InputLabel>
@@ -573,14 +577,16 @@ const UserForm = props => {
                           name: "religion",
                           id: "user_religion"
                         }}
-                        error={errors.religion}
+                        error={!!errors.religion}
                         fullWidth
                     >
                       <MenuItem value="">
                         <em></em>
                       </MenuItem>
                       {
-                        Object.keys(religions).map(religion => <MenuItem value={religion}>{ religions[religion] }</MenuItem>)
+                        Object.keys(religions).map((religion, i) => (
+                          <MenuItem key={i} value={religion}>{ religions[religion] }</MenuItem>
+                        ))
                       }
                     </Select>
                   </FormControl>
@@ -591,10 +597,9 @@ const UserForm = props => {
                         name="sect"
                         label={ i18next.attr('user', 'sect') }
                         autoComplete="off"
-                        defaultValue=""
                         value={ str(user.sect) }
                         onChange={handleChange}
-                        error={errors.sect}
+                        error={!!errors.sect}
                         fullWidth
                     />
                   </FormControl>
@@ -606,15 +611,14 @@ const UserForm = props => {
                     name="church"
                     label={ i18next.attr('user', 'church') }
                     autoComplete="off"
-                    defaultValue=""
                     value={ str(user.church) }
                     onChange={handleChange}
-                    error={errors.church}
+                    error={!!errors.church}
                     fullWidth
                 />
               </FormControl>
 
-              <Grid fullWidth container spacing={4} >
+              <Grid container spacing={4} >
                 <Grid item xs={6}>
                   <FormControl fullWidth>
                     <FormControlLabel
@@ -630,14 +634,13 @@ const UserForm = props => {
                         label={ i18next.attr('user', 'baptized_year') }
                         type="number"
                         autoComplete="off"
-                        defaultValue=""
                         value={ str(user.baptized_year) }
                         onChange={handleChange}
                         InputLabelProps={{
                           shrink: true
                         }}
                         disabled={!user.baptized}
-                        error={errors.baptized_year}
+                        error={!!errors.baptized_year}
                         fullWidth
                     />
                   </FormControl>
@@ -651,7 +654,7 @@ const UserForm = props => {
                 title={ i18next.t('views.user.location') }
             />
             <CardContent>
-              <Grid fullWidth container spacing={4} >
+              <Grid container spacing={4} >
                 <Grid item xs={6}>
                   <FormControl fullWidth>
                     <InputLabel htmlFor="country">{ i18next.attr('user', 'country') }</InputLabel>
@@ -662,7 +665,7 @@ const UserForm = props => {
                         name: "country",
                         id: "user_country"
                       }}
-                      error={errors.lang}
+                      error={!!errors.lang}
                       fullWidth
                     >
                       <MenuItem value="">
@@ -681,17 +684,16 @@ const UserForm = props => {
                         name="zip"
                         label={ i18next.attr('user', 'zip') }
                         autoComplete="off"
-                        defaultValue=""
                         value={ str(user.zip) }
                         onChange={handleChange}
-                        error={errors.zip}
+                        error={!!errors.zip}
                         fullWidth
                     />
                   </FormControl>
                 </Grid>
               </Grid>
 
-              <Grid fullWidth container spacing={4} >
+              <Grid container spacing={4} >
                 <Grid item xs={6}>
                   <FormControl fullWidth>
                     <InputLabel htmlFor="prefecture">{ i18next.attr('user', 'prefecture') }</InputLabel>
@@ -702,14 +704,16 @@ const UserForm = props => {
                           name: "prefecture",
                           id: "user_prefecture"
                         }}
-                        error={errors.prefecture}
+                        error={!!errors.prefecture}
                         fullWidth
                     >
                       <MenuItem value="">
                         <em></em>
                       </MenuItem>
                       {
-                        Object.keys(prefectures).map(prefecture => <MenuItem value={prefecture}>{ prefectures[prefecture] }</MenuItem>)
+                        Object.keys(prefectures).map((prefecture, i) => (
+                          <MenuItem key={i} value={prefecture}>{ prefectures[prefecture] }</MenuItem>
+                        ))
                       }
                     </Select>
                   </FormControl>
@@ -720,10 +724,9 @@ const UserForm = props => {
                         name="city"
                         label={ i18next.attr('user', 'city') }
                         autoComplete="off"
-                        defaultValue=""
                         value={ str(user.city) }
                         onChange={handleChange}
-                        error={errors.city}
+                        error={!!errors.city}
                         fullWidth
                     />
                   </FormControl>
@@ -735,10 +738,9 @@ const UserForm = props => {
                   name="street"
                   label={ i18next.attr('user', 'street') }
                   autoComplete="off"
-                  defaultValue=""
                   value={ str(user.street) }
                   onChange={handleChange}
-                  error={errors.street}
+                  error={!!errors.street}
                   fullWidth
                 />
               </FormControl>
@@ -748,10 +750,9 @@ const UserForm = props => {
                     name="building"
                     label={ i18next.attr('user', 'building') }
                     autoComplete="off"
-                    defaultValue=""
                     value={ str(user.building) }
                     onChange={handleChange}
-                    error={errors.building}
+                    error={!!errors.building}
                     fullWidth
                 />
               </FormControl>
@@ -761,10 +762,9 @@ const UserForm = props => {
                     name="tel"
                     label={ i18next.attr('user', 'tel') }
                     autoComplete="off"
-                    defaultValue=""
                     value={ str(user.tel) }
                     onChange={handleChange}
-                    error={errors.tel}
+                    error={!!errors.tel}
                     fullWidth
                 />
               </FormControl>
@@ -774,10 +774,9 @@ const UserForm = props => {
                     name="mobile"
                     label={ i18next.attr('user', 'mobile') }
                     autoComplete="off"
-                    defaultValue=""
                     value={ str(user.mobile) }
                     onChange={handleChange}
-                    error={errors.mobile}
+                    error={!!errors.mobile}
                     fullWidth
                 />
               </FormControl>
@@ -787,10 +786,9 @@ const UserForm = props => {
                     name="fax"
                     label={ i18next.attr('user', 'fax') }
                     autoComplete="off"
-                    defaultValue=""
                     value={ str(user.fax) }
                     onChange={handleChange}
-                    error={errors.fax}
+                    error={!!errors.fax}
                     fullWidth
                 />
               </FormControl>
@@ -801,17 +799,16 @@ const UserForm = props => {
                 title={ i18next.t('views.user.misc') }
             />
             <CardContent>
-              <Grid fullWidth container spacing={4} >
+              <Grid container spacing={4} >
                 <Grid item xs={8}>
                   <FormControl fullWidth>
                     <TextField
                         name="job"
                         label={ i18next.attr('user', 'job') }
                         autoComplete="off"
-                        defaultValue=""
                         value={ str(user.job) }
                         onChange={handleChange}
-                        error={errors.job}
+                        error={!!errors.job}
                         fullWidth
                     />
                   </FormControl>
@@ -823,10 +820,9 @@ const UserForm = props => {
                         type="number"
                         label={ i18next.attr('user', 'income') }
                         autoComplete="off"
-                        defaultValue=""
                         value={ str(user.income) }
                         onChange={handleChange}
-                        error={errors.income}
+                        error={!!errors.income}
                         fullWidth
                     />
                   </FormControl>
@@ -838,10 +834,9 @@ const UserForm = props => {
                     name="education"
                     label={ i18next.attr('user', 'education') }
                     autoComplete="off"
-                    defaultValue=""
                     value={ str(user.education) }
                     onChange={handleChange}
-                    error={errors.education}
+                    error={!!errors.education}
                     fullWidth
                 />
               </FormControl>
@@ -851,10 +846,9 @@ const UserForm = props => {
                     name="hobby"
                     label={ i18next.attr('user', 'hobby') }
                     autoComplete="off"
-                    defaultValue=""
                     value={ str(user.hobby) }
                     onChange={handleChange}
-                    error={errors.hobby}
+                    error={!!errors.hobby}
                     fullWidth
                 />
               </FormControl>
@@ -879,7 +873,7 @@ const UserForm = props => {
                     onChange={handleChange}
                     variant="outlined"
                     margin="normal"
-                    error={errors.bio}
+                    error={!!errors.bio}
                 />
               </FormControl>
 
@@ -895,7 +889,7 @@ const UserForm = props => {
                     onChange={handleChange}
                     variant="outlined"
                     margin="normal"
-                    error={errors.remark}
+                    error={!!errors.remark}
                 />
               </FormControl>
             </CardContent>

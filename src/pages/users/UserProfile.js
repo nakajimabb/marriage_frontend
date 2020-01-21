@@ -59,12 +59,12 @@ const UserFriend = props => {
   const {state: {session}} = useContext(AppContext);
   const { user, user_friend, onRequest } = props;
   const me = session.user;
-  const request_ok = me.role_matchmaker && user.role_matchmaker && me.id != user.id;
+  const request_ok = me.role_matchmaker && user.role_matchmaker && me.id !== user.id;
 
   if(request_ok) {
     if(user_friend) {
       let label = '';
-      if(user_friend.status == 'accepted') {
+      if(user_friend.status === 'accepted') {
         label = i18next.t('views.user_friend.friend');
       } else {
         label = i18next.t('views.user_friend.sent');
@@ -141,7 +141,11 @@ const UserProfile = props => {
             <List component="nav">
               <ListItem button>
                 <ListItemIcon>
-                  { i18next.attr('user', 'nickname') }
+                  <ListItemText
+                    inset
+                    primary={ i18next.attr('user', 'nickname') }
+                    className={classes.text_half}
+                  />
                 </ListItemIcon>
                 <ListItemText
                   inset
@@ -149,7 +153,11 @@ const UserProfile = props => {
                   className={classes.text_half}
                 />
                 <ListItemIcon>
-                  { i18next.attr('user', 'sex') }
+                  <ListItemText
+                    inset
+                    primary={ i18next.attr('user', 'sex') }
+                    className={classes.text_half}
+                  />
                 </ListItemIcon>
                 <ListItemText
                   inset
@@ -159,7 +167,11 @@ const UserProfile = props => {
               </ListItem>
               <ListItem button>
                 <ListItemIcon>
-                  { i18next.attr('user', 'age') }
+                  <ListItemText
+                    inset
+                    primary={ i18next.attr('user', 'age') }
+                    className={classes.text_half}
+                  />
                 </ListItemIcon>
                 <ListItemText
                   inset
@@ -167,7 +179,11 @@ const UserProfile = props => {
                   className={classes.text_half}
                 />
                 <ListItemIcon>
-                  { i18next.attr('user', 'marital_status') }
+                  <ListItemText
+                    inset
+                    primary={ i18next.attr('user', 'marital_status') }
+                    className={classes.text_half}
+                  />
                 </ListItemIcon>
                 <ListItemText
                   inset
@@ -177,7 +193,11 @@ const UserProfile = props => {
               </ListItem>
               <ListItem button>
                 <ListItemIcon>
-                  { i18next.t('views.user.roles') }
+                  <ListItemText
+                    inset
+                    primary={ i18next.t('views.user.roles') }
+                    className={classes.text_half}
+                  />
                 </ListItemIcon>
                 <ListItemText
                   inset
@@ -190,7 +210,11 @@ const UserProfile = props => {
                   (
                     <ListItem button >
                       <ListItemIcon>
-                        { i18next.attr('user', 'courtships_size') }
+                        <ListItemText
+                          inset
+                          primary={ i18next.attr('user', 'courtships_size') }
+                          className={classes.text_half}
+                        />
                       </ListItemIcon>
                       <ListItemText
                         inset
@@ -198,7 +222,11 @@ const UserProfile = props => {
                         className={classes.text_half}
                       />
                       <ListItemIcon>
-                        { i18next.attr('user', 'member_sharing') }
+                        <ListItemText
+                          inset
+                          primary={ i18next.attr('user', 'member_sharing') }
+                          className={classes.text_half}
+                        />
                       </ListItemIcon>
                       <ListItemText
                         inset
@@ -219,7 +247,11 @@ const UserProfile = props => {
             <List component="nav">
               <ListItem button>
                 <ListItemIcon>
-                  { i18next.attr('user', 'blood') }
+                  <ListItemText
+                    inset
+                    primary={ i18next.attr('user', 'blood') }
+                    className={classes.text_half}
+                  />
                 </ListItemIcon>
                 <ListItemText
                   inset
@@ -229,7 +261,11 @@ const UserProfile = props => {
               </ListItem>
               <ListItem button>
                 <ListItemIcon>
-                  { i18next.attr('user', 'height') }
+                  <ListItemText
+                    inset
+                    primary={ i18next.attr('user', 'height') }
+                    className={classes.text_half}
+                  />
                 </ListItemIcon>
                 <ListItemText
                   inset
@@ -237,7 +273,11 @@ const UserProfile = props => {
                   className={classes.text_half}
                 />
                 <ListItemIcon>
-                  { i18next.attr('user', 'weight') }
+                  <ListItemText
+                    inset
+                    primary={ i18next.attr('user', 'weight') }
+                    className={classes.text_half}
+                  />
                 </ListItemIcon>
                 <ListItemText
                   inset
@@ -247,7 +287,11 @@ const UserProfile = props => {
               </ListItem>
               <ListItem button>
                 <ListItemIcon>
-                  { i18next.attr('user', 'drinking') }
+                  <ListItemText
+                    inset
+                    primary={ i18next.attr('user', 'drinking') }
+                    className={classes.text_half}
+                  />
                 </ListItemIcon>
                 <ListItemText
                   inset
@@ -255,7 +299,11 @@ const UserProfile = props => {
                   className={classes.text_half}
                 />
                 <ListItemIcon>
-                  { i18next.attr('user', 'smoking') }
+                  <ListItemText
+                    inset
+                    primary={ i18next.attr('user', 'smoking') }
+                    className={classes.text_half}
+                  />
                 </ListItemIcon>
                 <ListItemText
                   inset
@@ -265,7 +313,11 @@ const UserProfile = props => {
               </ListItem>
               <ListItem button>
                 <ListItemIcon>
-                  { i18next.t('views.user.sickness') }
+                  <ListItemText
+                    inset
+                    primary={ i18next.t('views.user.sickness') }
+                    className={classes.text_half}
+                  />
                 </ListItemIcon>
                 <ListItemText
                   inset
@@ -285,7 +337,11 @@ const UserProfile = props => {
             <List component="nav">
               <ListItem button>
                 <ListItemIcon>
-                  { i18next.attr('user', 'religion') }
+                  <ListItemText
+                    inset
+                    primary={ i18next.attr('user', 'religion')}
+                    className={classes.text_half}
+                  />
                 </ListItemIcon>
                 <ListItemText
                   inset
@@ -293,7 +349,11 @@ const UserProfile = props => {
                   className={classes.text_half}
                 />
                 <ListItemIcon>
-                  { i18next.attr('user', 'sect') }
+                  <ListItemText
+                    inset
+                    primary={ i18next.attr('user', 'sect')}
+                    className={classes.text_half}
+                  />
                 </ListItemIcon>
                 <ListItemText
                   inset
@@ -303,7 +363,11 @@ const UserProfile = props => {
               </ListItem>
               <ListItem button>
                 <ListItemIcon>
-                  { i18next.attr('user', 'church') }
+                  <ListItemText
+                    inset
+                    primary={ i18next.attr('user', 'church')}
+                    className={classes.text_half}
+                  />
                 </ListItemIcon>
                 <ListItemText
                   inset
@@ -313,7 +377,11 @@ const UserProfile = props => {
               </ListItem>
               <ListItem button>
                 <ListItemIcon>
-                  { i18next.t('views.user.baptism') }
+                  <ListItemText
+                    inset
+                    primary={ i18next.t('views.user.baptism') }
+                    className={classes.text_half}
+                  />
                 </ListItemIcon>
                 <ListItemText
                   inset
@@ -321,7 +389,11 @@ const UserProfile = props => {
                   className={classes.text_half}
                 />
                 <ListItemIcon>
-                  { i18next.attr('user', 'baptized_year') }
+                  <ListItemText
+                    inset
+                    primary={ i18next.attr('user', 'baptized_year') }
+                    className={classes.text_half}
+                  />
                 </ListItemIcon>
                 <ListItemText
                   inset
@@ -340,7 +412,11 @@ const UserProfile = props => {
             <List component="nav">
               <ListItem button>
                 <ListItemIcon>
-                  { i18next.attr('user', 'job') }
+                  <ListItemText
+                    inset
+                    primary={ i18next.attr('user', 'job') }
+                    className={classes.text_half}
+                  />
                 </ListItemIcon>
                 <ListItemText
                   inset
@@ -348,7 +424,11 @@ const UserProfile = props => {
                   className={classes.text_half}
                 />
                 <ListItemIcon>
-                  { i18next.attr('user', 'income') }
+                  <ListItemText
+                    inset
+                    primary={ i18next.attr('user', 'income') }
+                    className={classes.text_half}
+                  />
                 </ListItemIcon>
                 <ListItemText
                   inset
@@ -358,7 +438,11 @@ const UserProfile = props => {
               </ListItem>
               <ListItem button>
                 <ListItemIcon>
-                  { i18next.attr('user', 'education') }
+                  <ListItemText
+                    inset
+                    primary={ i18next.attr('user', 'education') }
+                    className={classes.text_half}
+                  />
                 </ListItemIcon>
                 <ListItemText
                   inset
@@ -368,7 +452,11 @@ const UserProfile = props => {
               </ListItem>
               <ListItem button>
                 <ListItemIcon>
-                  { i18next.attr('user', 'hobby') }
+                  <ListItemText
+                    inset
+                    primary={ i18next.attr('user', 'hobby') }
+                    className={classes.text_half}
+                  />
                 </ListItemIcon>
                 <ListItemText
                   inset

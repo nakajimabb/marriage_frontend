@@ -130,7 +130,11 @@ const UserSelf = props => {
             <List component="nav">
               <ListItem button>
                 <ListItemIcon>
-                  { i18next.attr('user', 'name') }
+                  <ListItemText
+                    inset
+                    primary={ i18next.attr('user', 'name') }
+                    className={classes.list_text}
+                  />
                 </ListItemIcon>
                 <ListItemText
                   inset
@@ -140,7 +144,11 @@ const UserSelf = props => {
               </ListItem>
               <ListItem button>
                 <ListItemIcon>
-                  { i18next.attr('user', 'kana') }
+                  <ListItemText
+                    inset
+                    primary={ i18next.attr('user', 'kana') }
+                    className={classes.list_text}
+                  />
                 </ListItemIcon>
                 <ListItemText
                   inset
@@ -150,7 +158,11 @@ const UserSelf = props => {
               </ListItem>
               <ListItem button>
                 <ListItemIcon>
-                  { i18next.attr('user', 'nickname') }
+                  <ListItemText
+                    inset
+                    primary={ i18next.attr('user', 'nickname') }
+                    className={classes.list_text}
+                  />
                 </ListItemIcon>
                 <ListItemText
                   inset
@@ -158,7 +170,11 @@ const UserSelf = props => {
                   className={classes.text_half}
                 />
                 <ListItemIcon>
-                  { i18next.attr('user', 'sex') }
+                  <ListItemText
+                    inset
+                    primary={ i18next.attr('user', 'sex') }
+                    className={classes.list_text}
+                  />
                 </ListItemIcon>
                 <ListItemText
                   inset
@@ -168,7 +184,11 @@ const UserSelf = props => {
               </ListItem>
               <ListItem button>
                 <ListItemIcon>
-                  { i18next.attr('user', 'age') }
+                  <ListItemText
+                    inset
+                    primary={ i18next.attr('user', 'age') }
+                    className={classes.list_text}
+                  />
                 </ListItemIcon>
                 <ListItemText
                   inset
@@ -176,7 +196,11 @@ const UserSelf = props => {
                   className={classes.text_half}
                 />
                 <ListItemIcon>
-                  { i18next.attr('user', 'marital_status') }
+                  <ListItemText
+                    inset
+                    primary={ i18next.attr('user', 'marital_status') }
+                    className={classes.list_text}
+                  />
                 </ListItemIcon>
                 <ListItemText
                   inset
@@ -186,7 +210,11 @@ const UserSelf = props => {
               </ListItem>
               <ListItem button>
                 <ListItemIcon>
-                  { i18next.attr('user', 'email') }
+                  <ListItemText
+                    inset
+                    primary={ i18next.attr('user', 'email') }
+                    className={classes.list_text}
+                  />
                 </ListItemIcon>
                 <ListItemText
                   inset
@@ -196,7 +224,11 @@ const UserSelf = props => {
               </ListItem>
               <ListItem button>
                 <ListItemIcon>
-                  { i18next.attr('user', 'birthday') }
+                  <ListItemText
+                    inset
+                    primary={ i18next.attr('user', 'birthday') }
+                    className={classes.list_text}
+                  />
                 </ListItemIcon>
                 <ListItemText
                   inset
@@ -216,7 +248,7 @@ const UserSelf = props => {
                     name: "lang",
                     id: "user_lang"
                   }}
-                  error={errors.lang}
+                  error={!!errors.lang}
                   fullWidth
                 >
                   <MenuItem value="">
@@ -235,7 +267,7 @@ const UserSelf = props => {
                   autoComplete="new-password"
                   value={ str(user.password) }
                   onChange={handleChange}
-                  error={errors.password}
+                  error={!!errors.password}
                 />
               </FormControl>
 
@@ -247,7 +279,7 @@ const UserSelf = props => {
                   autoComplete="new-password"
                   value={ str(user.password_confirmation) }
                   onChange={handleChange}
-                  error={errors.password_confirmation}
+                  error={!!errors.password_confirmation}
                 />
               </FormControl>
             </CardContent>
@@ -260,7 +292,11 @@ const UserSelf = props => {
             <List component="nav">
               <ListItem button>
                 <ListItemIcon>
-                  { i18next.attr('user', 'country') }
+                  <ListItemText
+                    inset
+                    primary={ i18next.attr('user', 'country') }
+                    className={classes.list_text}
+                  />
                 </ListItemIcon>
                 <ListItemText
                   inset
@@ -268,7 +304,11 @@ const UserSelf = props => {
                   className={classes.text_half}
                 />
                 <ListItemIcon>
-                  { i18next.attr('user', 'zip') }
+                  <ListItemText
+                    inset
+                    primary={ i18next.attr('user', 'zip') }
+                    className={classes.list_text}
+                  />
                 </ListItemIcon>
                 <ListItemText
                   inset
@@ -278,7 +318,11 @@ const UserSelf = props => {
               </ListItem>
               <ListItem button>
                 <ListItemIcon>
-                  { i18next.t('views.user.address') }
+                  <ListItemText
+                    inset
+                    primary={ i18next.t('views.user.address') }
+                    className={classes.list_text}
+                  />
                 </ListItemIcon>
                 <ListItemText
                   inset
@@ -288,7 +332,11 @@ const UserSelf = props => {
               </ListItem>
               <ListItem button>
                 <ListItemIcon>
-                  { i18next.attr('user', 'tel') }
+                  <ListItemText
+                    inset
+                    primary={ i18next.attr('user', 'tel') }
+                    className={classes.list_text}
+                  />
                 </ListItemIcon>
                 <ListItemText
                   inset
@@ -298,7 +346,11 @@ const UserSelf = props => {
               </ListItem>
               <ListItem button>
                 <ListItemIcon>
-                  { i18next.attr('user', 'mobile') }
+                  <ListItemText
+                    inset
+                    primary={ i18next.attr('user', 'mobile') }
+                    className={classes.list_text}
+                  />
                 </ListItemIcon>
                 <ListItemText
                   inset
@@ -308,7 +360,11 @@ const UserSelf = props => {
               </ListItem>
               <ListItem button>
                 <ListItemIcon>
-                  { i18next.attr('user', 'fax') }
+                  <ListItemText
+                    inset
+                    primary={ i18next.attr('user', 'fax') }
+                    className={classes.list_text}
+                  />
                 </ListItemIcon>
                 <ListItemText
                   inset
@@ -338,7 +394,7 @@ const UserSelf = props => {
                   onChange={handleChange}
                   variant="outlined"
                   margin="normal"
-                  error={errors.bio}
+                  error={!!errors.bio}
                 />
               </FormControl>
 
@@ -354,7 +410,7 @@ const UserSelf = props => {
                   onChange={handleChange}
                   variant="outlined"
                   margin="normal"
-                  error={errors.remark}
+                  error={!!errors.remark}
                 />
               </FormControl>
             </CardContent>

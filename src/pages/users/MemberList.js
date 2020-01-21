@@ -5,14 +5,12 @@ import axios from 'axios'
 
 import env from 'src/environment';
 import i18next from 'src/i18n'
-import { logout } from 'src/redux/actions/sessionActions';
 import AppContext from 'src/contexts/AppContext';
 import UserList from './UserList';
 
 
-const MemberList = props => {
-  const {state: {session}, dispatch} = useContext(AppContext);
-  const { history } = props;
+const MemberList = () => {
+  const {state: {session}} = useContext(AppContext);
   const [data, setData] = useState([i18next.t('views.app.list')]);
   const title = i18next.t('views.user.members');
   const item_labels = [
@@ -33,8 +31,7 @@ const MemberList = props => {
         });
     }
     else {
-      dispatch(logout());
-      history.push('/auth/sign-in');
+      alert(i18next.t('errors.app.occurred'));
     }
   }, [session.headers]);
 
@@ -47,7 +44,7 @@ const MemberList = props => {
           .then((results) => {
             let user = results.data.user;
             let data2 = Array.from(data);
-            const index = data.findIndex(u => u.id == user.id)
+            const index = data.findIndex(u => u.id === user.id);
             if(~index) {
               data2[index] = user;
             } else {

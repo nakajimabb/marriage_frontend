@@ -39,7 +39,6 @@ function a11yProps(index) {
 const MyProfile = () => {
   const {state: {session}} = useContext(AppContext);
   const [user, setUser] = useState(session.user);
-  const [matchmakers, setMatchmakers] = useState([]);
   const title = i18next.t('views.user.account');
   const [tab, setTab] = React.useState(0);
 
@@ -65,7 +64,7 @@ const MyProfile = () => {
       </TitleBar>
       <Box>
         <TabPanel value={tab} index={0}>
-          <UserSelf user={user} matchmakers={matchmakers} setUser={setUser} />
+          <UserSelf user={user} setUser={setUser} />
         </TabPanel>
         <TabPanel value={tab} index={1}>
           <UserProfile user={user} open />

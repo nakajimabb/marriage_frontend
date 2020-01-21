@@ -87,13 +87,13 @@ const UserPage = props => {
       const full_name = session.user.last_name + ' ' + session.user.first_name;
       setMatchmakers([{id: session.user.id, full_name: full_name}]);
 
-      let user2 = Object.assign({}, user);
       const title = i18next.t('views.user.new');
+      let user2 = {};
       user2.matchmaker_id = session.user.id;
       setUser(user2);
       setTitle(title);
     }
-  }, [user_id, session.headers]);
+  }, [user_id, session.headers, session.user, action, setTitle]);
 
   function a11yProps(index) {
     return {

@@ -122,9 +122,9 @@ const UserRequirement = props => {
         open={ Object.keys(errors).length > 0 }
         variant="error"
         message={
-          Object.keys(errors).map(key => {
+          Object.keys(errors).map((key, i) => {
             return (
-              <div>{errors[key]}</div>
+              <div key={i}>{errors[key]}</div>
             );
           })
         }
@@ -152,11 +152,10 @@ const UserRequirement = props => {
                         name="min_age"
                         type="number"
                         autoComplete="off"
-                        defaultValue=""
                         value={ str(requirement.min_age) }
                         onChange={handleChange}
                         className={classes.number}
-                        error={errors.min_age}
+                        error={!!errors.min_age}
                         fullWidth
                       />
                     </FormControl>
@@ -168,11 +167,10 @@ const UserRequirement = props => {
                         name="max_age"
                         type="number"
                         autoComplete="off"
-                        defaultValue=""
                         value={ str(requirement.max_age) }
                         onChange={handleChange}
                         className={classes.number}
-                        error={errors.max_age}
+                        error={!!errors.max_age}
                         fullWidth
                       />
                     </FormControl>
@@ -206,14 +204,18 @@ const UserRequirement = props => {
                         name: "religion",
                         id: "requirement_religion"
                       }}
-                      error={errors.religion}
+                      error={!!errors.religion}
                       fullWidth
                     >
                       <MenuItem value="">
                         <em></em>
                       </MenuItem>
                       {
-                        Object.keys(religions).map(religion => <MenuItem value={religion}>{ religions[religion] }</MenuItem>)
+                        Object.keys(religions).map((religion, i) => (
+                          <MenuItem key={i} value={religion}>
+                            { religions[religion] }
+                          </MenuItem>
+                        ))
                       }
                     </Select>
                   </FormControl>
@@ -246,14 +248,18 @@ const UserRequirement = props => {
                         name: "marital_status",
                         id: "requirement_marital_status"
                       }}
-                      error={errors.marital_status}
+                      error={!!errors.marital_status}
                       fullWidth
                     >
                       <MenuItem value="">
                         <em></em>
                       </MenuItem>
                       {
-                        Object.keys(marital_statuses).map(marital_status => <MenuItem value={marital_status}>{ marital_statuses[marital_status] }</MenuItem>)
+                        Object.keys(marital_statuses).map((marital_status, i) => (
+                          <MenuItem key={i} value={marital_status}>
+                            { marital_statuses[marital_status] }
+                          </MenuItem>
+                        ))
                       }
                     </Select>
                   </FormControl>
@@ -284,11 +290,10 @@ const UserRequirement = props => {
                         name="min_income"
                         type="number"
                         autoComplete="off"
-                        defaultValue=""
                         value={ str(requirement.min_income) }
                         onChange={handleChange}
                         className={classes.number}
-                        error={errors.min_income}
+                        error={!!errors.min_income}
                         fullWidth
                       />
                     </FormControl>
@@ -300,11 +305,10 @@ const UserRequirement = props => {
                         name="max_income"
                         type="number"
                         autoComplete="off"
-                        defaultValue=""
                         value={ str(requirement.max_income) }
                         onChange={handleChange}
                         className={classes.number}
-                        error={errors.max_income}
+                        error={!!errors.max_income}
                         fullWidth
                       />
                     </FormControl>
@@ -336,11 +340,10 @@ const UserRequirement = props => {
                         name="min_height"
                         type="number"
                         autoComplete="off"
-                        defaultValue=""
                         value={ str(requirement.min_height) }
                         onChange={handleChange}
                         className={classes.number}
-                        error={errors.min_height}
+                        error={!!errors.min_height}
                         fullWidth
                       />
                     </FormControl>
@@ -352,11 +355,10 @@ const UserRequirement = props => {
                         name="max_height"
                         type="number"
                         autoComplete="off"
-                        defaultValue=""
                         value={ str(requirement.max_height) }
                         onChange={handleChange}
                         className={classes.number}
-                        error={errors.max_height}
+                        error={!!errors.max_height}
                         fullWidth
                       />
                     </FormControl>

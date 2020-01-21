@@ -41,7 +41,7 @@ const SignIn = props => {
   useEffect(() => {
     const theme = Cookies.get('theme') || 0;
     dispatch(setTheme(theme));
-  }, [user]);
+  }, [user, dispatch]);
 
   const handleChange = name => event => {
     let user2 = Object.assign({}, user);

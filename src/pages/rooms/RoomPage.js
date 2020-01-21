@@ -94,7 +94,6 @@ const RoomPage = props => {
           })
           .catch(({response}) => {
             alert(response.status + ' ' + response.statusText);
-            onClose();
           });
       }
     }
@@ -108,68 +107,98 @@ const RoomPage = props => {
           <List component="nav" className={classes.list}>
             <ListItem button className={classes.item} >
               <ListItemIcon className={classes.name} >
-                { i18next.attr('room', 'name') }
+                <ListItemText
+                  primary={ i18next.attr('room', 'name') }
+                  className={classes.list_text}
+                />
               </ListItemIcon>
-              <ListItemText >
-                { str(room.name) }
-              </ListItemText>
+              <ListItemText
+                primary={ str(room.name) }
+                className={classes.list_text}
+              />
             </ListItem>
             <ListItem button className={classes.item} >
               <ListItemIcon className={classes.name} >
-                { i18next.attr('room', 'user') }
+                <ListItemText
+                  primary={ i18next.attr('room', 'user') }
+                  className={classes.list_text}
+                />
               </ListItemIcon>
-              <ListItemText >
-                { str(room_user.nickname) }
-                &ensp;
-                { i18next.enum('user', 'sex', user.sex) }
-              </ListItemText>
+              <ListItemText
+                primary={ str(room_user.nickname) }
+                className={classes.list_text}
+              />
             </ListItem>
             <ListItem button className={classes.item} >
               <ListItemIcon className={classes.name} >
-                { i18next.attr('room', 'room_type') }
+                <ListItemText
+                  primary={ i18next.attr('room', 'room_type') }
+                  className={classes.list_text}
+                />
               </ListItemIcon>
-              <ListItemText >
-                { i18next.enum('room', 'room_type', room.room_type) }
-              </ListItemText>
+              <ListItemText
+                primary={ i18next.enum('room', 'room_type', room.room_type) }
+                className={classes.list_text}
+              />
             </ListItem>
             <ListItem button className={classes.item} >
               <ListItemIcon className={classes.name} >
-                { i18next.attr('room', 'dated_on') }
+                <ListItemText
+                  primary={ i18next.attr('room', 'dated_on') }
+                  className={classes.list_text}
+                />
               </ListItemIcon>
-              <ListItemText >
-                { str(room.dated_on).replace(/-/g, '/') }
-              </ListItemText>
+              <ListItemText
+                primary={ str(room.dated_on).replace(/-/g, '/') }
+                className={classes.list_text}
+              />
             </ListItem>
             <ListItem button className={classes.item} >
               <ListItemIcon className={classes.name} >
-                { i18next.attr('room', 'fixed_on') }
+                <ListItemText
+                  primary={ i18next.attr('room', 'fixed_on') }
+                  className={classes.list_text}
+                />
               </ListItemIcon>
-              <ListItemText >
-                { str(room.fixed_on).replace(/-/g, '/') }
-              </ListItemText>
+              <ListItemText
+                primary={ str(room.fixed_on).replace(/-/g, '/') }
+                className={classes.list_text}
+              />
             </ListItem>
             <ListItem button className={classes.item} >
               <ListItemIcon className={classes.name} >
-                { i18next.t('views.room.user_count') }
+                <ListItemText
+                  primary={ i18next.t('views.room.user_count') }
+                  className={classes.list_text}
+                />
               </ListItemIcon>
-              <ListItemText >
-                { i18next.enum('user', 'sex', 'male') } ({ str(room.male_count) }{ i18next.t('views.app.human_number_unit') })
-              </ListItemText>
-              <ListItemText >
-                { i18next.enum('user', 'sex', 'female') } ({ str(room.female_count) }{ i18next.t('views.app.human_number_unit') })
-              </ListItemText>
+              <ListItemText
+                primary={ i18next.enum('user', 'sex', 'male') + str(room.male_count) + i18next.t('views.app.human_number_unit') }
+                className={classes.list_text}
+              />
+              <ListItemText
+                primary={ i18next.enum('user', 'sex', 'female') + str(room.female_count) + i18next.t('views.app.human_number_unit') }
+                className={classes.list_text}
+              />
             </ListItem>
             <ListItem button className={classes.item} >
               <ListItemIcon className={classes.name} >
-                { i18next.attr('user', 'age') }
+                <ListItemText
+                  primary={ i18next.attr('user', 'age') }
+                  className={classes.list_text}
+                />
               </ListItemIcon>
-              <ListItemText >
-                {room.min_age}~{room.max_age} {i18next.t('views.app.age_year')}
-              </ListItemText>
+              <ListItemText
+                primary={ str(room.min_age) + ' ~ ' + str(room.max_age) + i18next.t('views.app.age_year') }
+                className={classes.list_text}
+              />
             </ListItem>
             <ListItem button className={classes.item} >
               <ListItemIcon className={classes.name} >
-                { i18next.t('views.room.place') }
+                <ListItemText
+                  primary={ i18next.t('views.room.place') }
+                  className={classes.list_text}
+                />
               </ListItemIcon>
               <ListItemText >
                 { room.prefecture ? prefectures[room.prefecture] : null }
@@ -178,7 +207,10 @@ const RoomPage = props => {
             </ListItem>
             <ListItem button >
               <ListItemIcon className={classes.name} >
-                { i18next.attr('room', 'remark') }
+                <ListItemText
+                  primary={ i18next.attr('room', 'remark') }
+                  className={classes.list_text}
+                />
               </ListItemIcon>
               <ListItemText >
                 <Typography className={classes.remark}>

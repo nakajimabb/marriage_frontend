@@ -78,15 +78,15 @@ const UserBreadcrumbs = props => {
     <Breadcrumbs aria-label="Breadcrumb" mt={2}>
       {
         (items || []).map(
-          item => {
+          (item, i) => {
             if(item[1]) {
               return (
-                <Link to="#" onClick={ item[1] } className={classes.link} >
+                <Link key={i} to="#" onClick={ item[1] } className={classes.link} >
                   { item[0] }
                 </Link>
               );
             } else {
-              return (<Typography>{ item[0] }</Typography>);
+              return (<Typography key={i}>{ item[0] }</Typography>);
             }
           }
         )
@@ -143,7 +143,7 @@ const UserList = props => {
 
   const handleSearchChange = event => {
     let search2 = Object.assign({}, search);
-    if(event.target.type == 'checkbox') {
+    if(event.target.type === 'checkbox') {
       search2[event.target.name] = event.target.checked;
     } else {
       search2[event.target.name] = event.target.value;
@@ -191,7 +191,7 @@ const UserList = props => {
   function equalData(array, search, keys) {
     const options = keys.map(key => [key, search[key]]).filter(a => a[1]);
     if(Object.keys(options).length) {
-      return array.filter(n => options.every(option => n[option[0]] == option[1]));
+      return array.filter(n => options.every(option => n[option[0]] === option[1]));
     } else {
       return array;
     }
@@ -202,7 +202,7 @@ const UserList = props => {
       return user.avatar_url;
     }
     else {
-      return user.sex == 'male' ? '/static/img/avatars/male.png' : '/static/img/avatars/female.png'
+      return user.sex === 'male' ? '/static/img/avatars/male.png' : '/static/img/avatars/female.png'
     }
   }
 
@@ -240,7 +240,6 @@ const UserList = props => {
                   <InputLabel htmlFor="search">{ i18next.t('views.app.search') }</InputLabel>
                   <Input id="search_name"
                          name="name"
-                         defaultValue=""
                          value={search.name}
                          placeholder={ i18next.attr('user', 'name') + '(' + i18next.attr('user', 'kana') + ') or ' + i18next.attr('user', 'nickname') }
                          onChange={handleSearchChange} />
@@ -252,7 +251,7 @@ const UserList = props => {
                 <FormControl className={classes.control} style={{width: 60}} >
                   <InputLabel htmlFor="sex">{ i18next.attr('user', 'sex') }</InputLabel>
                   <Select
-                    value={search.sex}
+                    value={str(search.sex)}
                     name="sex"
                     onChange={handleSearchChange}
                     inputProps={{
@@ -286,7 +285,9 @@ const UserList = props => {
                       <em></em>
                     </MenuItem>
                     {
-                      Object.keys(prefectures).map(prefecture => <MenuItem value={prefecture}>{ prefectures[prefecture] }</MenuItem>)
+                      Object.keys(prefectures).map((prefecture, i) => (
+                        <MenuItem key={i} value={prefecture}>{ prefectures[prefecture] }</MenuItem>
+                      ))
                     }
                   </Select>
                 </FormControl>
@@ -301,7 +302,6 @@ const UserList = props => {
                       type="number"
                       label={i18next.attr('user', 'age') + '~'}
                       autoComplete="off"
-                      defaultValue=""
                       value={str(search.min_age)}
                       onChange={handleSearchChange}
                     />
@@ -312,7 +312,6 @@ const UserList = props => {
                       type="number"
                       label={ '~' + i18next.attr('user', 'age') }
                       autoComplete="off"
-                      defaultValue=""
                       value={ str(search.max_age) }
                       onChange={handleSearchChange}
                     />
@@ -336,8 +335,12 @@ const UserList = props => {
                       <em></em>
                     </MenuItem>
                     {
-                      Object.keys(religions).map(religion => <MenuItem
-                        value={religion}>{religions[religion]}</MenuItem>)
+                      Object.keys(religions).map((religion,i) => (
+                        <MenuItem
+                          key={i}
+                          value={religion}>{religions[religion]}
+                        </MenuItem>
+                      ))
                     }
                   </Select>
                 </FormControl>
@@ -370,8 +373,12 @@ const UserList = props => {
                       <em></em>
                     </MenuItem>
                     {
-                      Object.keys(member_sharings).map(member_sharing => <MenuItem
-                        value={member_sharing}>{member_sharings[member_sharing]}</MenuItem>)
+                      Object.keys(member_sharings).map((member_sharing, i) => (
+                        <MenuItem
+                          key={i}
+                          value={member_sharing}>{member_sharings[member_sharing]}
+                        </MenuItem>
+                      ))
                     }
                   </Select>
                 </FormControl>
@@ -407,9 +414,9 @@ const UserList = props => {
 
         <Grid container spacing={6} className={classes.main} >
           {
-            target_array.map(user => {
+            target_array.map((user, i) => {
               return (
-                <Grid item xs={6} md={4} lg={3} xl={2} className={classes.grid} >
+                <Grid key={i} item xs={6} md={4} lg={3} xl={2} className={classes.grid} >
                   <Card className={classes.card}>
                     <CardActionArea onClick={openUserPage(user)}>
                       <CardMedia
@@ -420,7 +427,7 @@ const UserList = props => {
                     </CardActionArea>
                     <CardContent className={classes.content} >
                       {
-                        (item_labels || default_labels).map(f => (<Box>{ f(user) }</Box>))
+                        (item_labels || default_labels).map((f, i) => (<Box key={i}>{ f(user) }</Box>))
                       }
                     </CardContent>
                   </Card>

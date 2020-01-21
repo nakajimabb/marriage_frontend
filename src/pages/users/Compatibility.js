@@ -23,7 +23,6 @@ import clsx from 'clsx';
 import env from 'src/environment';
 import i18next from 'src/i18n'
 import { str } from 'src/helpers';
-import { logout } from 'src/redux/actions/sessionActions';
 import AppContext from 'src/contexts/AppContext';
 
 
@@ -124,13 +123,13 @@ const QuestionItem = props => {
                              return obj;
                            }, {}) : null;
   const value_labels = values ? values.reduce((arr,value) => {
-                                  if(value.user_id == user.id)          arr[0].push(labels[value.value]);
-                                  else if(value.user_id == partner.id)  arr[1].push(labels[value.value]);
+                                  if(value.user_id === user.id)          arr[0].push(labels[value.value]);
+                                  else if(value.user_id === partner.id)  arr[1].push(labels[value.value]);
                                   return arr;
                                 }, [[], []]) : null;
   const note_labels = notes ? notes.reduce((arr,note) => {
-                                if(note.user_id == user.id)           arr[0].push(note.note);
-                                else if(note.user_id == partner.id)  arr[1].push(note.note);
+                                if(note.user_id === user.id)           arr[0].push(note.note);
+                                else if(note.user_id === partner.id)  arr[1].push(note.note);
                                 return arr;
                               }, [[], []]) : null;
 
@@ -160,8 +159,8 @@ const QuestionCompatibility = props => {
       <Table className={classes.table} size="small" aria-label="a dense table">
         <TableBody>
           <AvatarRow user={user} partner={partner} />
-          {questions.map(question => (
-            <QuestionItem user={user} partner={partner} question={question} />
+          {questions.map((question, i) => (
+            <QuestionItem key={i} user={user} partner={partner} question={question} />
           ))}
         </TableBody>
       </Table>
@@ -206,8 +205,8 @@ const ProfileCompatibility = props => {
 };
 
 const Compatibility = props => {
-  const {state: {session}, dispatch} = useContext(AppContext);
-  const { history, user, onClose, partner_id } = props;
+  const {state: {session}} = useContext(AppContext);
+  const { user, onClose, partner_id } = props;
   const [partner, setPartner] = React.useState({});
   const [question_type, setQuestionType] = useState('profile');
   const [questions, setQuestions] = useState([[], []]);
@@ -234,8 +233,8 @@ const Compatibility = props => {
   useEffect(() => {
     const headers  = session.headers;
     if(headers && headers['access-token'] && headers['client'] && headers['uid']) {
-      if(question_type != 'profile') {
-        const url = env.API_ORIGIN + `api/questions?question_type=${question_type}` + `&answer=true&user_id=${user.id},${partner.id}`;
+      if(question_type !== 'profile') {
+        const url = env.API_ORIGIN + `api/questions?question_type=${question_type}&answer=true&user_id=${user.id},${partner.id}`;
         axios.get(url, {headers})
           .then((results) => {
             setQuestions(results.data.questions);
@@ -246,11 +245,10 @@ const Compatibility = props => {
       }
     }
     else {
-      dispatch(logout());
-      history.push('/auth/sign-in');
+      alert(i18next.t('errors.app.occurred'));
     }
 
-  }, [session.headers, question_type, partner_id]);
+  }, [session.headers, question_type, user.id, partner.id]);
 
   const changeQuestionType = event => {
     setQuestionType(event.target.value);
@@ -273,12 +271,14 @@ const Compatibility = props => {
               { i18next.t('views.user.profile') }
             </MenuItem>
             {
-              Object.keys(question_types).map(question_type => <MenuItem value={question_type}>{ question_types[question_type] }</MenuItem>)
+              Object.keys(question_types).map((question_type, i) => (
+                <MenuItem key={i} value={question_type}>{ question_types[question_type] }</MenuItem>
+              ))
             }
           </Select>
         </FormControl>
 
-        { question_type == 'profile' ? (
+        { question_type === 'profile' ? (
             <ProfileCompatibility
               user={user}
               partner={partner}

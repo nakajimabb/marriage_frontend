@@ -92,11 +92,6 @@ const Input = styled(InputBase)`
   }
 `;
 
-const Flag = styled.img`
-  border-radius: 50%;
-  width: 22px;
-  height: 22px;
-`;
 
 const MuiUserMenu = props => {
   const { dispatch } = useContext(AppContext);
