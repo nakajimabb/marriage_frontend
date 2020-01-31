@@ -1,5 +1,4 @@
 import React, { useEffect, useContext } from 'react';
-import { withRouter } from 'react-router-dom';
 import {
   Box,
   Card,
@@ -408,4 +407,4 @@ const RoomList = () => {
   );
 };
 
-export default withRouter(RoomList);
+export default RoomList;

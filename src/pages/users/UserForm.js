@@ -1,5 +1,4 @@
 import React, {useContext, useRef, useState} from 'react';
-import { withRouter } from 'react-router-dom';
 import {
   AppBar,
   FormControl,
@@ -923,4 +922,4 @@ const UserForm = props => {
   );
 };
 
-export default withRouter(UserForm);
+export default UserForm;

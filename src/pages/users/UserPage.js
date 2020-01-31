@@ -1,5 +1,4 @@
 import React, {useContext, useEffect, useState} from 'react';
-import { withRouter } from 'react-router-dom';
 import {
   Divider,
   Box,
@@ -164,4 +163,4 @@ const UserPage = props => {
   );
 };
 
-export default withRouter(UserPage);
+export default UserPage;

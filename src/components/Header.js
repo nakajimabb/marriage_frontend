@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { withRouter } from 'react-router-dom';
+import { useHistory } from 'react-router';
 import {
   Bell,
   MessageSquare,
@@ -93,9 +93,9 @@ const Input = styled(InputBase)`
 `;
 
 
-const MuiUserMenu = props => {
+const UserMenu = () => {
   const { dispatch } = useContext(AppContext);
-  const { history } = props;
+  const history = useHistory();
   const [state, setState] = useState(null);
   const open = Boolean(state);
 
@@ -147,7 +147,6 @@ const MuiUserMenu = props => {
     );
 };
 
-const UserMenu = withRouter(MuiUserMenu);
 
 const Header = ({ onDrawerToggle, onMobileToggle }) => {
   const {state: {notification}} = useContext(AppContext);
@@ -210,4 +209,4 @@ const Header = ({ onDrawerToggle, onMobileToggle }) => {
   );
 };
 
-export default withRouter(Header);
+export default Header;

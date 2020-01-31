@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { withRouter } from 'react-router-dom';
 import { AllInclusive } from '@material-ui/icons';
 import axios from 'axios'
 
@@ -45,4 +44,4 @@ const MatchmakerList = props => {
   );
 };
 
-export default withRouter(MatchmakerList);
+export default MatchmakerList;

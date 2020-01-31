@@ -1,5 +1,4 @@
 import React, {useContext, useEffect, useState} from 'react';
-import { withRouter } from 'react-router-dom';
 import {
   AppBar,
   FormGroup,
@@ -409,4 +408,4 @@ const UserRequirement = props => {
   );
 };
 
-export default withRouter(UserRequirement);
+export default UserRequirement;

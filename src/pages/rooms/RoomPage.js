@@ -1,5 +1,4 @@
 import React, {useContext, useEffect, useState} from 'react';
-import { withRouter } from 'react-router-dom';
 import {
   AppBar,
   Grid,
@@ -272,4 +271,4 @@ const RoomPage = props => {
   );
 };
 
-export default withRouter(RoomPage);
+export default RoomPage;

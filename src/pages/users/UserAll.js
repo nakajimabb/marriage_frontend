@@ -1,5 +1,4 @@
 import React, {useContext, useEffect, useState} from 'react';
-import { withRouter } from 'react-router-dom';
 import { Users } from 'react-feather';
 import axios from 'axios'
 
@@ -80,4 +79,4 @@ const UserAll = () => {
   );
 };
 
-export default withRouter(UserAll);
+export default UserAll;

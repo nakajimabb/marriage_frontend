@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { useLocation } from 'react-router';
 import {
   Avatar,
   Box as MuiBox,
@@ -14,7 +15,7 @@ import {
 import { ExpandLess, ExpandMore } from '@material-ui/icons';
 import { spacing } from '@material-ui/system';
 import styled from 'styled-components';
-import { NavLink as RouterNavLink, withRouter } from 'react-router-dom';
+import { NavLink as RouterNavLink } from 'react-router-dom';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import { rgba, darken } from 'polished';
 
@@ -256,9 +257,10 @@ const getState = (pathname, roles) => {
 
 const Sidebar = props => {
   const {state: {session}} = useContext(AppContext);
-  const { classes, staticContext, location, ...other } = props;
+  const { classes, staticContext, ...other } = props;
+  const location = useLocation();
   const user = session.user;
-  const [state, setState] = useState({});
+  const [state, setState] = useState(getState(location.pathname, session.roles));
 
   useEffect(() => {
     setState(getState(location.pathname, session.roles));
@@ -352,4 +354,4 @@ const Sidebar = props => {
     );
 };
 
-export default withRouter(Sidebar);
+export default Sidebar;

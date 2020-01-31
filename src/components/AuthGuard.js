@@ -1,6 +1,6 @@
 import React, { Fragment, useContext, useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
-import { withRouter } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router';
 import axios from "axios";
 
 import env from 'src/environment';
@@ -12,7 +12,8 @@ import AppContext from 'src/contexts/AppContext';
 
 const AuthGuard = props => {
   const {state: {session, notification}, dispatch} = useContext(AppContext);
-  const { location, history } = props;
+  const history = useHistory();
+  const location = useLocation();
   const [user, setUser] = useState(session.user);
   const [count, setCount] = useState(notification.count);
   const str_headers = Cookies.get('headers');
@@ -43,7 +44,7 @@ const AuthGuard = props => {
           setCount(+user2.notification_count || 0);
         })
         .catch(({response}) => {
-          alert(response.status + ' ' + response.statusText);
+          // alert(response.status + ' ' + response.statusText);
           redirectSignIn();
         });
     } else {
@@ -72,4 +73,4 @@ const AuthGuard = props => {
   return (!session.loggedIn || !session.user) ? null : <Fragment>{ props.children }</Fragment>;
 };
 
-export default withRouter(AuthGuard);
+export default AuthGuard;

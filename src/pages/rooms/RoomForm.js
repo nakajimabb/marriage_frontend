@@ -1,5 +1,4 @@
 import React, {useContext, useEffect, useState} from 'react';
-import { withRouter } from 'react-router-dom';
 import {
   AppBar,
   FormGroup,
@@ -414,4 +413,4 @@ const RoomForm = props => {
   );
 };
 
-export default withRouter(RoomForm);
+export default RoomForm;

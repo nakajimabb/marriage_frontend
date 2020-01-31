@@ -1,5 +1,4 @@
 import React, {useContext, useEffect, useState} from 'react';
-import { withRouter } from 'react-router-dom';
 import {
   AppBar,
   Grid,
@@ -376,4 +375,4 @@ const QuestionForm = props => {
   );
 };
 
-export default withRouter(QuestionForm);
+export default QuestionForm;

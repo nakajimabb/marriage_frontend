@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { withRouter } from 'react-router-dom';
 import { UserPlus } from 'react-feather';
 import axios from 'axios'
 
@@ -81,4 +80,4 @@ const MemberList = () => {
   );
 };
 
-export default withRouter(MemberList);
+export default MemberList;

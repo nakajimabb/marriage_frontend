@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { withRouter } from 'react-router-dom';
 import {
   AppBar,
   Toolbar,
@@ -395,4 +394,4 @@ const PartnerList = props => {
   );
 };
 
-export default withRouter(PartnerList);
+export default PartnerList;

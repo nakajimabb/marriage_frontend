@@ -1,5 +1,4 @@
 import React, {useContext, useEffect, useState} from 'react';
-import { withRouter } from 'react-router-dom';
 import {
   Grid,
   Box,
@@ -452,4 +451,4 @@ const QuestionAll = () => {
   );
 };
 
-export default withRouter(QuestionAll);
+export default QuestionAll;

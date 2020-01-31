@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { withRouter } from 'react-router-dom';
 import {
   AppBar,
   Avatar,
@@ -313,4 +312,4 @@ const Compatibility = props => {
   );
 };
 
-export default withRouter(Compatibility);
+export default Compatibility;

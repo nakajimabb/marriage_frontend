@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { withRouter } from 'react-router-dom';
 import { Heart } from 'react-feather';
 import axios from 'axios'
 
@@ -9,7 +8,7 @@ import AppContext from 'src/contexts/AppContext';
 import UserList from './UserList';
 
 
-const PermittedList = props => {
+const PermittedList = () => {
   const {state: {session}} = useContext(AppContext);
   const [data, setData] = useState([]);
   const title = i18next.t('views.user.permitted_users');
@@ -45,4 +44,4 @@ const PermittedList = props => {
   );
 };
 
-export default withRouter(PermittedList);
+export default PermittedList;

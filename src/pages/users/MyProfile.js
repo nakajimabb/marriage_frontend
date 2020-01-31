@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react';
-import { withRouter } from 'react-router-dom';
 import { Box, Tab, Tabs, Typography } from '@material-ui/core';
 import { Settings } from 'react-feather';
 
@@ -80,4 +79,4 @@ const MyProfile = () => {
   );
 };
 
-export default withRouter(MyProfile);
+export default MyProfile;

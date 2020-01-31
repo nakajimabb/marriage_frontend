@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import { withRouter } from 'react-router-dom';
 import {
   Grid,
   Box,
@@ -462,4 +461,4 @@ const UserList = props => {
   );
 };
 
-export default withRouter(UserList);
+export default UserList;

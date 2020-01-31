@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
+import { useHistory } from 'react-router';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Cookies from 'js-cookie';
@@ -32,7 +33,7 @@ const Wrapper = styled(Paper)`
 
 const SignIn = props => {
   const { dispatch } = useContext(AppContext);
-  const { history } = props;
+  const history = useHistory();
   const [user, setUser] = useState({nickname: '', password: ''});
 
   useEffect(() => {

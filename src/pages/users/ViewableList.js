@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { withRouter } from 'react-router-dom';
 import { Users } from 'react-feather';
 import axios from 'axios'
 
@@ -46,4 +45,4 @@ const ViewableList = props => {
   );
 };
 
-export default withRouter(ViewableList);
+export default ViewableList;

@@ -1,5 +1,4 @@
 import React, {useContext, useState} from 'react';
-import { withRouter } from 'react-router-dom';
 import {
   AppBar,
   Toolbar,
@@ -434,4 +433,4 @@ const UserSelf = props => {
   );
 };
 
-export default withRouter(UserSelf);
+export default UserSelf;
