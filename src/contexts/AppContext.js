@@ -1,6 +1,7 @@
-import React, { createContext, useReducer } from 'react';
+import React, { Suspense, createContext, useReducer } from 'react';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { MuiThemeProvider, StylesProvider } from '@material-ui/core/styles';
+import { LinearProgress } from '@material-ui/core';
 import { ThemeProvider } from 'styled-components';
 import DateFnsUtils from '@date-io/date-fns';
 
@@ -19,7 +20,9 @@ export const AppContextProvider = props => {
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <MuiThemeProvider theme={maTheme[currentTheme]}>
             <ThemeProvider theme={maTheme[currentTheme]}>
-              {props.children}
+              <Suspense fallback={<LinearProgress />}>
+                {props.children}
+              </Suspense>
             </ThemeProvider>
           </MuiThemeProvider>
         </MuiPickersUtilsProvider>

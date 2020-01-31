@@ -1,26 +1,24 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import { SupervisedUserCircle, AllInclusive, EventNote } from '@material-ui/icons';
 import { Heart, UserPlus, Users, Settings } from 'react-feather';
 
-import async from 'src/components/Async';
-
 
 // Auth components
-const SignIn = async(() => import("../pages/auth/SignIn"));
-const SignUp = async(() => import("../pages/auth/SignUp"));
-const ResetPassword = async(() => import("../pages/auth/ResetPassword"));
-const Page404 = async(() => import("../pages/auth/Page404"));
-const Page500 = async(() => import("../pages/auth/Page500"));
+const SignIn = lazy(() => import("../pages/auth/SignIn"));
+const SignUp = lazy(() => import("../pages/auth/SignUp"));
+const ResetPassword = lazy(() => import("../pages/auth/ResetPassword"));
+const Page404 = lazy(() => import("../pages/auth/Page404"));
+const Page500 = lazy(() => import("../pages/auth/Page500"));
 
 // Users
-const MemberList = async(() => import("../pages/users/MemberList"));
-const ViewableList = async(() => import("../pages/users/ViewableList"));
-const MatchmakerList = async(() => import("../pages/users/MatchmakerList"));
-const UserAll = async(() => import("../pages/users/UserAll"));
-const MyProfile = async(() => import("../pages/users/MyProfile"));
-const PermittedList = async(() => import("../pages/users/PermittedList"));
-const QuestionAll = async(() => import("../pages/questions/QuestionAll"));
-const RoomList = async(() => import("../pages/rooms/RoomList"));
+const MemberList = lazy(() => import("../pages/users/MemberList"));
+const ViewableList = lazy(() => import("../pages/users/ViewableList"));
+const MatchmakerList = lazy(() => import("../pages/users/MatchmakerList"));
+const UserAll = lazy(() => import("../pages/users/UserAll"));
+const MyProfile = lazy(() => import("../pages/users/MyProfile"));
+const PermittedList = lazy(() => import("../pages/users/PermittedList"));
+const QuestionAll = lazy(() => import("../pages/questions/QuestionAll"));
+const RoomList = lazy(() => import("../pages/rooms/RoomList"));
 
 const courtshipRoutes = [
   {
