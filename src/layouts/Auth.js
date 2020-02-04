@@ -1,5 +1,5 @@
-import React from 'react';
-import { CssBaseline } from '@material-ui/core';
+import React, {Suspense} from 'react';
+import { CssBaseline, LinearProgress } from '@material-ui/core';
 import styled, { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
@@ -28,7 +28,9 @@ const Page = ({ children }) => {
     <Root>
       <CssBaseline />
       <GlobalStyle />
-      {children}
+      <Suspense fallback={<LinearProgress />}>
+        {children}
+      </Suspense>
     </Root>
   );
 };

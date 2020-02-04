@@ -1,10 +1,11 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, { Suspense, lazy, useContext, useEffect, useState } from 'react';
 import {
   Divider,
   Box,
   Tab,
   Tabs,
   Typography,
+  LinearProgress,
   makeStyles,
 } from '@material-ui/core';
 import axios from 'axios'
@@ -14,10 +15,12 @@ import i18next from 'src/i18n'
 import { str } from 'src/helpers';
 import QuestionForm from 'src/pages/questions/QuestionForm';
 import AppContext from 'src/contexts/AppContext';
-import UserForm from './UserForm';
-import UserProfile from './UserProfile';
-import UserRequirement from './UserRequirement';
-import PartnerList from './PartnerList';
+
+const UserForm = lazy(() => import('./UserForm'));
+const UserProfile = lazy(() => import('./UserProfile'));
+const UserRequirement = lazy(() => import('./UserRequirement'));
+const PartnerList = lazy(() => import('./PartnerList'));
+
 
 const useStyles = makeStyles(theme => ({
   tabs: {
@@ -51,6 +54,7 @@ const UserPage = props => {
   const {state: {session}} = useContext(AppContext);
   const { mode, user_id, onClose, form, profile, requirement, partners, question, action, setTitle } = props;
   const [user, setUser] = useState({});
+  const [flags, setFlags] = useState({0: true});
   const [user_friend, setUserFriend] = useState({});
   const [matchmakers, setMatchmakers] = useState([]);
   const [tab, setTab] = React.useState(0);
@@ -102,11 +106,12 @@ const UserPage = props => {
   }
 
   const tabChange = (event, newValue) => {
+    setFlags({...flags, [newValue]: true});
     setTab(newValue);
   };
 
   return (
-    <React.Fragment>
+    <Suspense fallback={<LinearProgress />}>
       {
         (Object.keys(tab_indexes).length >= 2) ? (
           <React.Fragment>
@@ -131,35 +136,46 @@ const UserPage = props => {
         {
           form ?
             (<TabPanel value={tab} index={tab_indexes.form} style={{position: 'relative'}}>
-              <UserForm mode={mode} user={user} matchmakers={matchmakers} setUser={setUser} onClose={onClose} />
+              { flags[tab_indexes.form] ?
+                <UserForm mode={mode} user={user} matchmakers={matchmakers} setUser={setUser} onClose={onClose}/> : null
+              }
             </TabPanel>) : null
         }
         {
           profile ?
             (<TabPanel value={tab} index={tab_indexes.profile}>
-              <UserProfile user={user} user_friend={user_friend} setUserFriend={setUserFriend} onClose={onClose} />
+              { flags[tab_indexes.profile] ?
+                <UserProfile user={user} user_friend={user_friend} setUserFriend={setUserFriend} onClose={onClose}/> : null
+              }
             </TabPanel>) : null
         }
         {
           requirement ?
             (<TabPanel value={tab} index={tab_indexes.requirement}>
-              <UserRequirement user={user} onClose={onClose} />
+              { flags[tab_indexes.requirement] ?
+                <UserRequirement user={user} onClose={onClose}/> : null
+              }
             </TabPanel>) : null
         }
+        { console.log({flags}) }
         {
           question ?
             (<TabPanel value={tab} index={tab_indexes.question}>
-              <QuestionForm user={user} onClose={onClose} />
+              { flags[tab_indexes.question] ?
+                <QuestionForm user={user} onClose={onClose} active={tab === tab_indexes.question} /> : null
+              }
             </TabPanel>) : null
         }
         {
           partners ?
             (<TabPanel value={tab} index={tab_indexes.partners}>
-              <PartnerList user={user} all onClose={onClose} />
+              { flags[tab_indexes.partners] ?
+                <PartnerList user={user} all onClose={onClose}/> : null
+              }
             </TabPanel>) : null
         }
       </Box>
-    </React.Fragment>
+    </Suspense>
   );
 };
 

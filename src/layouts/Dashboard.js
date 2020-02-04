@@ -1,12 +1,13 @@
-import React from 'react';
+import React, {Suspense} from 'react';
 import { spacing } from '@material-ui/system';
 import {
   Hidden,
   CssBaseline,
   Paper as MuiPaper,
-  withWidth
+  LinearProgress,
+  withWidth,
 } from '@material-ui/core';
-import styled, { createGlobalStyle } from 'styled-components';
+import styled, {createGlobalStyle} from 'styled-components';
 
 import Sidebar from 'src/components/Sidebar';
 import Header from 'src/components/Header';
@@ -100,7 +101,9 @@ class Dashboard extends React.Component {
         <AppContent>
           <Header onDrawerToggle={this.handleDrawerToggle} onMobileToggle={this.handleMobileToggle} />
           <MainContent>
-            {children}
+            <Suspense fallback={<LinearProgress />}>
+              {children}
+            </Suspense>
           </MainContent>
           <Footer />
         </AppContent>

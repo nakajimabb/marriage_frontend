@@ -1,14 +1,15 @@
-import React, { useContext, useState } from 'react';
-import { Box, Tab, Tabs, Typography } from '@material-ui/core';
+import React, { Suspense, lazy, useContext, useState } from 'react';
+import { Box, LinearProgress, Tab, Tabs, Typography } from '@material-ui/core';
 import { Settings } from 'react-feather';
 
 import i18next from 'src/i18n'
 import TitleBar from 'src/pages/components/TitleBar';
 import QuestionForm from 'src/pages/questions/QuestionForm';
 import AppContext from 'src/contexts/AppContext';
-import UserRequirement from './UserRequirement';
-import UserProfile from './UserProfile';
-import UserForm from './UserForm';
+
+const UserForm = lazy(() => import('./UserForm'));
+const UserProfile = lazy(() => import('./UserProfile'));
+const UserRequirement = lazy(() => import('./UserRequirement'));
 
 
 const TabPanel = props => {
@@ -40,13 +41,15 @@ const MyProfile = () => {
   const [user, setUser] = useState(session.user);
   const title = i18next.t('views.user.account');
   const [tab, setTab] = React.useState(0);
+  const [flags, setFlags] = useState({0: true});
 
   const tabChange = (event, newValue) => {
+    setFlags({...flags, [newValue]: true});
     setTab(newValue);
   };
 
   return (
-    <React.Fragment>
+    <Suspense fallback={<LinearProgress />}>
       <TitleBar title={title} icon={<Settings />} variant="dense" >
         <Tabs
           value={tab}
@@ -63,19 +66,19 @@ const MyProfile = () => {
       </TitleBar>
       <Box>
         <TabPanel value={tab} index={0}>
-          <UserForm user={user} setUser={setUser} mode={'self'} />
+          { flags[0] ? <UserForm user={user} setUser={setUser} mode={'self'}/> : null }
         </TabPanel>
         <TabPanel value={tab} index={1}>
-          <UserProfile user={user} open />
+          { flags[1] ? <UserProfile user={user} open /> : null }
         </TabPanel>
         <TabPanel value={tab} index={2}>
-          <QuestionForm user={user} />
+          { flags[2] ? <QuestionForm user={user} /> : null }
         </TabPanel>
         <TabPanel value={tab} index={3}>
-          <UserRequirement user={user} />
+          { flags[3] ? <UserRequirement user={user} /> : null }
         </TabPanel>
       </Box>
-    </React.Fragment>
+    </Suspense>
   );
 };
 
