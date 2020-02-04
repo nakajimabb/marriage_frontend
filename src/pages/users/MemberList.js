@@ -61,6 +61,7 @@ const MemberList = () => {
   return (
     <React.Fragment>
       <UserList
+        mode={'matchmaker'}
         title={title}
         icon={<UserPlus />}
         data={data}

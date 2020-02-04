@@ -49,7 +49,7 @@ const TabPanel = props => {
 
 const UserPage = props => {
   const {state: {session}} = useContext(AppContext);
-  const { user_id, onClose, form, profile, requirement, partners, question, action, setTitle } = props;
+  const { mode, user_id, onClose, form, profile, requirement, partners, question, action, setTitle } = props;
   const [user, setUser] = useState({});
   const [user_friend, setUserFriend] = useState({});
   const [matchmakers, setMatchmakers] = useState([]);
@@ -131,7 +131,7 @@ const UserPage = props => {
         {
           form ?
             (<TabPanel value={tab} index={tab_indexes.form} style={{position: 'relative'}}>
-              <UserForm user={user} matchmakers={matchmakers} setUser={setUser} onClose={onClose} />
+              <UserForm mode={mode} user={user} matchmakers={matchmakers} setUser={setUser} onClose={onClose} />
             </TabPanel>) : null
         }
         {

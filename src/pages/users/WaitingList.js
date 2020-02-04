@@ -8,7 +8,7 @@ import AppContext from 'src/contexts/AppContext';
 import UserList from "./UserList";
 
 
-const UserAll = () => {
+const WaitingList = () => {
   const {state: {session}} = useContext(AppContext);
   const [data, setData] = useState([]);
   const title = i18next.t('views.user.list');
@@ -20,7 +20,7 @@ const UserAll = () => {
   useEffect(() => {
     const headers  = session.headers;
     if(headers && headers['access-token'] && headers['client'] && headers['uid']) {
-      const url = env.API_ORIGIN + 'api/users';
+      const url = env.API_ORIGIN + 'api/users?status=check_head';
       axios.get(url, {headers})
         .then((results) => {
           setData(results.data.users);
@@ -61,6 +61,7 @@ const UserAll = () => {
   return (
     <React.Fragment>
       <UserList
+        mode={'head'}
         title={title}
         icon={<Users />}
         data={data}
@@ -79,4 +80,4 @@ const UserAll = () => {
   );
 };
 
-export default UserAll;
+export default WaitingList;

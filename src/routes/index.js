@@ -15,6 +15,7 @@ const MemberList = lazy(() => import("../pages/users/MemberList"));
 const ViewableList = lazy(() => import("../pages/users/ViewableList"));
 const MatchmakerList = lazy(() => import("../pages/users/MatchmakerList"));
 const UserAll = lazy(() => import("../pages/users/UserAll"));
+const WaitingList = lazy(() => import("../pages/users/WaitingList"));
 const MyProfile = lazy(() => import("../pages/users/MyProfile"));
 const PermittedList = lazy(() => import("../pages/users/PermittedList"));
 const QuestionAll = lazy(() => import("../pages/questions/QuestionAll"));
@@ -82,6 +83,11 @@ const headRoutes = [
         path: "/head/user_all",
         name: 'views.user.list',
         component: UserAll
+      },
+      {
+        path: "/head/waiting_list",
+        name: 'views.user.waiting_list',
+        component: WaitingList
       },
       {
         path: "/head/question_all",

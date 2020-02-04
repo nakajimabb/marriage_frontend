@@ -69,6 +69,36 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+
+const ageFilter = (array, min_age, max_age) => {
+  if(min_age || max_age) {
+    return array.filter(n => n.age && (!min_age || +n.age >= +min_age) && (!max_age || +n.age <= +max_age));
+  } else {
+    return array;
+  }
+};
+
+const matchName = (array, name, columns) => {
+  if(name) {
+    return array.filter(n => columns.some(c => ~str(c(n)).indexOf(name)));
+  } else {
+    return array;
+  }
+};
+
+const equalData = (array, search, keys) => {
+  const options = keys.map(key => [key, search[key]]).filter(a => a[1]);
+  if(Object.keys(options).length) {
+    return array.filter(n => options.every(option => n[option[0]] === option[1]));
+  } else {
+    return array;
+  }
+};
+
+const filterUser = (array, search, columns, keys, ages) => {
+  return matchName(equalData(ageFilter(array, ages[0], ages[1]), search, keys), search.name, columns);
+};
+
 const UserBreadcrumbs = props => {
   const { items } = props;
   const classes = useStyles();
@@ -95,7 +125,7 @@ const UserBreadcrumbs = props => {
 };
 
 const UserList = props => {
-  const { title, icon, data, new_user, item_labels, updateUser,
+  const { mode, title, icon, data, new_user, item_labels, updateUser,
     all, form, profile, requirement, partners, question, action, search_items } = props;
   const [open, setOpen] = useState(false);
   const [user_id, setUserId] = useState(null);
@@ -167,49 +197,21 @@ const UserList = props => {
     if(user_id) updateUser(user_id)
   };
 
-  function filterUser(array, search, columns, keys, ages) {
-    return matchName(equalData(ageFilter(array, ages[0], ages[1]), search, keys), search.name, columns);
-  }
-
-  function ageFilter(array, min_age, max_age) {
-    if(min_age || max_age) {
-      return array.filter(n => n.age && (!min_age || +n.age >= +min_age) && (!max_age || +n.age <= +max_age));
-    } else {
-      return array;
-    }
-  }
-
-  function matchName(array, name, columns) {
-    if(name) {
-      return array.filter(n => columns.some(c => ~str(c(n)).indexOf(name)));
-    } else {
-      return array;
-    }
-  }
-
-  function equalData(array, search, keys) {
-    const options = keys.map(key => [key, search[key]]).filter(a => a[1]);
-    if(Object.keys(options).length) {
-      return array.filter(n => options.every(option => n[option[0]] === option[1]));
-    } else {
-      return array;
-    }
-  }
-
-  function avatar_url(user) {
+  const avatarUrl = user => {
     if(user.avatar_url) {
       return user.avatar_url;
     }
     else {
       return user.sex === 'male' ? '/static/img/avatars/male.png' : '/static/img/avatars/female.png'
     }
-  }
+  };
 
   if(open) {
     return (
       <React.Fragment>
         <TitleBar title={page_title} variant="dense" sub_menu={ <UserBreadcrumbs items={items} /> } />
         <UserPage
+          mode={mode}
           user_id={user_id}
           open={open}
           fullScreen
@@ -420,7 +422,7 @@ const UserList = props => {
                     <CardActionArea onClick={openUserPage(user)}>
                       <CardMedia
                         className={classes.media}
-                        image={ avatar_url(user) }
+                        image={ avatarUrl(user) }
                         title={user.nickname}
                       />
                     </CardActionArea>

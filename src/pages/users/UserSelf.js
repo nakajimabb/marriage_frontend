@@ -1,7 +1,5 @@
-import React, {useContext, useState} from 'react';
+import React from 'react';
 import {
-  AppBar,
-  Toolbar,
   FormControl,
   Grid,
   InputLabel,
@@ -14,21 +12,15 @@ import {
   Card,
   CardHeader,
   CardContent,
-  Button,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
   makeStyles,
 } from '@material-ui/core';
-import axios from 'axios';
 
-import env from 'src/environment';
 import i18next from 'src/i18n'
-import { str, full_name, age, collectErrors, createFormData } from 'src/helpers';
-import { login } from 'src/redux/actions/sessionActions';
-import CustomizedSnackbar from 'src/pages/components/CustomizedSnackbar';
-import AppContext from 'src/contexts/AppContext';
+import { str, full_name, age } from 'src/helpers';
 
 
 const useStyles = makeStyles(theme => ({
@@ -54,62 +46,15 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const UserSelf = props => {
-  const {state: {session}, dispatch} = useContext(AppContext);
-  const { user, setUser } = props;
-  const [errors, setErrors] = useState({});
-  const [message, setMessage] = useState(null);
+  const { user, errors, OnChange } = props;
   const classes = useStyles();
   const user_age = age(user.birthday) || user.age;
   const prefecture = user.prefecture ? i18next.t('prefecture.' + user.prefecture): '';
   const address = prefecture + str(user.city) + str(user.street) + str(user.building);
-
-  const onSave = async () => {
-    const headers  = session.headers;
-
-    if(headers && headers['access-token'] && headers['client'] && headers['uid']) {
-      let url = env.API_ORIGIN + 'api/users/update_self';
-      let user_params = createFormData(user, 'user');
-
-      let promise = axios.patch(url, user_params, { headers });
-      promise
-        .then((results) => {
-          dispatch(login({headers, user}));
-          setErrors({});
-          setMessage(i18next.t('views.app.save_done'));
-        })
-        .catch((data) => {
-          setErrors(collectErrors(data.response, 'user'));
-        });
-    }
-  };
-
-  const handleChange = event => {
-    let user2 = Object.assign({}, user);
-    user2[event.target.name] = event.target.value;
-    setUser(user2);
-  };
+  const statuses = i18next.data_list('enum', 'user', 'status');
 
   return (
     <React.Fragment>
-      <CustomizedSnackbar
-        open={ Object.keys(errors).length > 0 }
-        variant="error"
-        message={
-          Object.keys(errors).map(key => {
-            return (
-              <div>{errors[key]}</div>
-            );
-          })
-        }
-        onClose={() => setErrors({})}
-      />
-      <CustomizedSnackbar
-        open={ message }
-        variant="info"
-        message={ message }
-        onClose={() => setMessage(null)}
-      />
-
       <Grid container spacing={6}>
         <Grid item xs={12} md={6}>
           <Card className={classes.card}>
@@ -127,6 +72,20 @@ const UserSelf = props => {
             </Grid>
 
             <List component="nav">
+              <ListItem button>
+                <ListItemIcon>
+                  <ListItemText
+                    inset
+                    primary={ i18next.attr('user', 'status') }
+                    className={classes.list_text}
+                  />
+                </ListItemIcon>
+                <ListItemText
+                  inset
+                  primary={ statuses[user.status] }
+                  className={classes.list_text}
+                />
+              </ListItem>
               <ListItem button>
                 <ListItemIcon>
                   <ListItemText
@@ -242,7 +201,7 @@ const UserSelf = props => {
                 <InputLabel htmlFor="lang">{ i18next.attr('user', 'lang') }</InputLabel>
                 <Select
                   value={ str(user.lang) }
-                  onChange={handleChange}
+                  onChange={OnChange}
                   inputProps={{
                     name: "lang",
                     id: "user_lang"
@@ -265,7 +224,7 @@ const UserSelf = props => {
                   type="password"
                   autoComplete="new-password"
                   value={ str(user.password) }
-                  onChange={handleChange}
+                  onChange={OnChange}
                   error={!!errors.password}
                 />
               </FormControl>
@@ -277,7 +236,7 @@ const UserSelf = props => {
                   type="password"
                   autoComplete="new-password"
                   value={ str(user.password_confirmation) }
-                  onChange={handleChange}
+                  onChange={OnChange}
                   error={!!errors.password_confirmation}
                 />
               </FormControl>
@@ -390,7 +349,7 @@ const UserSelf = props => {
                   rows="5"
                   rowsMax="10"
                   value={ str(user.bio) }
-                  onChange={handleChange}
+                  onChange={OnChange}
                   variant="outlined"
                   margin="normal"
                   error={!!errors.bio}
@@ -406,7 +365,7 @@ const UserSelf = props => {
                   rows="30"
                   rowsMax="50"
                   value={ str(user.remark) }
-                  onChange={handleChange}
+                  onChange={OnChange}
                   variant="outlined"
                   margin="normal"
                   error={!!errors.remark}
@@ -416,19 +375,6 @@ const UserSelf = props => {
           </Card>
         </Grid>
       </Grid>
-
-      <AppBar position="fixed" color="default" className={classes.appBar} >
-        <Toolbar className={classes.toolbar} >
-          <Grid container spacing={6}>
-            <Grid item xs />
-            <Grid item>
-              <Button onClick={onSave} color="primary">
-                { i18next.t('views.app.save') }
-              </Button>
-            </Grid>
-          </Grid>
-        </Toolbar>
-      </AppBar>
     </React.Fragment>
   );
 };

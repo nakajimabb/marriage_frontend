@@ -8,7 +8,7 @@ import QuestionForm from 'src/pages/questions/QuestionForm';
 import AppContext from 'src/contexts/AppContext';
 import UserRequirement from './UserRequirement';
 import UserProfile from './UserProfile';
-import UserSelf from './UserSelf';
+import UserForm from './UserForm';
 
 
 const TabPanel = props => {
@@ -63,7 +63,7 @@ const MyProfile = () => {
       </TitleBar>
       <Box>
         <TabPanel value={tab} index={0}>
-          <UserSelf user={user} setUser={setUser} />
+          <UserForm user={user} setUser={setUser} mode={'self'} />
         </TabPanel>
         <TabPanel value={tab} index={1}>
           <UserProfile user={user} open />

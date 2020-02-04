@@ -44,7 +44,7 @@ const useStyles = makeStyles(theme => ({
     width: 80,
   },
   name: {
-    width: 100,
+    width: 160,
   },
   appBar: {
     top: 'auto',
