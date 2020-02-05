@@ -5,7 +5,7 @@ import {
   Tab,
   Tabs,
   Typography,
-  LinearProgress,
+  CircularProgress,
   makeStyles,
 } from '@material-ui/core';
 import axios from 'axios'
@@ -116,7 +116,7 @@ const UserPage = props => {
   };
 
   return (
-    <Suspense fallback={<LinearProgress />}>
+    <React.Fragment>
       {
         (Object.keys(tab_indexes).length >= 2) ? (
           <React.Fragment>
@@ -138,6 +138,7 @@ const UserPage = props => {
         ) : null
       }
       <Box className={classes.content}>
+        <Suspense fallback={<CircularProgress />}>
         {
           form ?
             (<TabPanel value={tab} index={tab_indexes.form} style={{position: 'relative'}}>
@@ -179,8 +180,9 @@ const UserPage = props => {
               }
             </TabPanel>) : null
         }
+        </Suspense>
       </Box>
-    </Suspense>
+    </React.Fragment>
   );
 };
 

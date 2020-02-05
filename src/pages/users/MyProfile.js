@@ -1,5 +1,5 @@
 import React, { Suspense, lazy, useContext, useState } from 'react';
-import { Box, LinearProgress, Tab, Tabs, Typography } from '@material-ui/core';
+import {Box, CircularProgress, Tab, Tabs, Typography} from '@material-ui/core';
 import { Settings } from 'react-feather';
 
 import i18next from 'src/i18n'
@@ -49,7 +49,7 @@ const MyProfile = () => {
   };
 
   return (
-    <Suspense fallback={<LinearProgress />}>
+    <React.Fragment>
       <TitleBar title={title} icon={<Settings />} variant="dense" >
         <Tabs
           value={tab}
@@ -65,20 +65,22 @@ const MyProfile = () => {
         </Tabs>
       </TitleBar>
       <Box>
-        <TabPanel value={tab} index={0}>
-          { flags[0] ? <UserForm user={user} setUser={setUser} mode={'self'}/> : null }
-        </TabPanel>
-        <TabPanel value={tab} index={1}>
-          { flags[1] ? <UserProfile user={user} open /> : null }
-        </TabPanel>
-        <TabPanel value={tab} index={2}>
-          { flags[2] ? <QuestionForm user={user} /> : null }
-        </TabPanel>
-        <TabPanel value={tab} index={3}>
-          { flags[3] ? <UserRequirement user={user} /> : null }
-        </TabPanel>
+        <Suspense fallback={<CircularProgress />}>
+          <TabPanel value={tab} index={0}>
+            { flags[0] ? <UserForm user={user} setUser={setUser} mode={'self'}/> : null }
+          </TabPanel>
+          <TabPanel value={tab} index={1}>
+            { flags[1] ? <UserProfile user={user} open /> : null }
+          </TabPanel>
+          <TabPanel value={tab} index={2}>
+            { flags[2] ? <QuestionForm user={user} /> : null }
+          </TabPanel>
+          <TabPanel value={tab} index={3}>
+            { flags[3] ? <UserRequirement user={user} /> : null }
+          </TabPanel>
+        </Suspense>
       </Box>
-    </Suspense>
+    </React.Fragment>
   );
 };
 
