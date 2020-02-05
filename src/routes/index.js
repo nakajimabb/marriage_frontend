@@ -2,7 +2,6 @@ import React, { lazy } from 'react';
 import { SupervisedUserCircle, AllInclusive, EventNote, Group } from '@material-ui/icons';
 import { Heart, UserPlus, Users, Settings, Meh } from 'react-feather';
 import i18next from 'src/i18n'
-import UserList from "../pages/users/UserList";
 
 
 // Auth components

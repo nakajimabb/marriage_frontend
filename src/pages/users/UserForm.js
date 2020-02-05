@@ -1,6 +1,7 @@
 import React, {useContext, useRef, useState} from 'react';
 import {
   AppBar,
+  Link,
   FormControl,
   Grid,
   FormControlLabel,
@@ -18,8 +19,13 @@ import {
   Toolbar,
   Button,
   Typography,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
   makeStyles,
 } from '@material-ui/core';
+import { Download } from 'react-feather';
 import axios from 'axios';
 
 import env from 'src/environment';
@@ -34,6 +40,13 @@ const useStyles = makeStyles(theme => ({
   card: {
     marginTop: 10,
     marginBottom: 10,
+  },
+  card_header: {
+    paddingBottom: 5,
+  },
+  card_content: {
+    paddingTop: 0,
+    paddingBottom: '10px !important',
   },
   appBar: {
     top: 'auto',
@@ -54,6 +67,18 @@ const useStyles = makeStyles(theme => ({
   check_head: {
     color: 'blue',
     fontWeight: 'bold',
+  },
+  list_item: {
+    padding: 0,
+  },
+  list_text: {
+    padding: 5,
+    margin: 0,
+  },
+  text_half: {
+    padding: 5,
+    width: 80,
+    margin: 0,
   },
 }));
 
@@ -90,8 +115,8 @@ const UserBasic = props => {
 
   return (
     <Card className={classes.card}>
-      <CardHeader title={ i18next.t('views.user.basic') } />
-      <CardContent>
+      <CardHeader title={ i18next.t('views.user.basic') } className={classes.card_header} />
+      <CardContent className={classes.card_content} >
         <Grid container justify="center">
           <Box m={3}>
             <Avatar
@@ -141,7 +166,6 @@ const UserBasic = props => {
             )
           }
         </Grid>
-
 
         <Grid container spacing={4} >
           <Grid item xs={6}>
@@ -311,6 +335,54 @@ const UserBasic = props => {
 };
 
 
+const UserCertificate = props => {
+  const { user } = props;
+  const classes = useStyles();
+  const identification = useRef();
+  const singleness = useRef();
+  const revenue = useRef();
+  const items = {identification, singleness, revenue};
+
+  return (
+    <Card className={classes.card}>
+      <CardHeader title={ i18next.t('views.user.certificate') } className={classes.card_header} />
+      <CardContent className={classes.card_content} >
+        <List component="nav">
+          {
+            Object.keys(items).map(item => {
+              const url = item + '_url';
+              return (
+                <ListItem className={classes.list_item}>
+                  <ListItemIcon>
+                    <ListItemText
+                      inset
+                      primary={ i18next.attr('user', item) }
+                      className={classes.text_half}
+                    />
+                  </ListItemIcon>
+                  <ListItemText inset className={classes.list_text} >
+                    <FormControl fullWidth>
+                      <input
+                        id={item}
+                        name={item}
+                        type="file"
+                        ref={ items[item] }
+                      />
+                    </FormControl>
+                  </ListItemText>
+                  <ListItemText inset className={classes.list_text} >
+                    { user[url] ? <Link href={user[url]} target='_blank' ><Download /></Link> : null }
+                  </ListItemText>
+                </ListItem>
+              )
+            })
+          }
+        </List>
+      </CardContent>
+    </Card>
+  );
+};
+
 const UserPhysical = props => {
   const { user, errors, OnChange } = props;
   const classes = useStyles();
@@ -320,8 +392,8 @@ const UserPhysical = props => {
 
   return (
     <Card className={classes.card}>
-      <CardHeader title={ i18next.t('views.user.physical') } />
-      <CardContent>
+      <CardHeader title={ i18next.t('views.user.physical') } className={classes.card_header} />
+      <CardContent className={classes.card_content} >
         <FormControl fullWidth>
           <InputLabel htmlFor="blood">{ i18next.attr('user', 'blood') }</InputLabel>
           <Select
@@ -469,8 +541,8 @@ const UserMarital = props => {
 
   return (
     <Card className={classes.card}>
-      <CardHeader title={ i18next.t('views.user.marital') } />
-      <CardContent>
+      <CardHeader title={ i18next.t('views.user.marital') } className={classes.card_header} />
+      <CardContent className={classes.card_content} >
         <Grid container spacing={2} >
           <Grid item xs={4}>
             <FormControl fullWidth>
@@ -587,8 +659,8 @@ const UserReligion = props => {
 
   return (
     <Card className={classes.card}>
-      <CardHeader title={ i18next.t('views.user.religion') } />
-      <CardContent>
+      <CardHeader title={ i18next.t('views.user.religion') } className={classes.card_header} />
+      <CardContent className={classes.card_content} >
         <Grid container spacing={4} >
           <Grid item xs={6}>
             <FormControl fullWidth>
@@ -682,8 +754,8 @@ const UserLocation = props => {
 
   return (
     <Card className={classes.card}>
-      <CardHeader title={ i18next.t('views.user.location') } />
-      <CardContent>
+      <CardHeader title={ i18next.t('views.user.location') } className={classes.card_header} />
+      <CardContent className={classes.card_content} >
         <Grid container spacing={4} >
           <Grid item xs={6}>
             <FormControl fullWidth>
@@ -834,8 +906,8 @@ const UserMisc = props => {
 
   return (
     <Card className={classes.card}>
-      <CardHeader title={ i18next.t('views.user.misc') } />
-      <CardContent>
+      <CardHeader title={ i18next.t('views.user.misc') } className={classes.card_header} />
+      <CardContent className={classes.card_content} >
         <Grid container spacing={4} >
           <Grid item xs={8}>
             <FormControl fullWidth>
@@ -901,8 +973,8 @@ const UserComment = props => {
 
   return (
     <Card className={classes.card}>
-      <CardHeader title={ i18next.t('views.user.comment') } />
-      <CardContent>
+      <CardHeader title={ i18next.t('views.user.comment') } className={classes.card_header} />
+      <CardContent className={classes.card_content} >
         <FormControl fullWidth>
           <TextField
             name="bio"
@@ -1003,6 +1075,18 @@ const UserForm = props => {
       if(avatar && avatar.files.length > 0) {
         user_params.append('user[avatar]', avatar.files[0]);
       }
+      const identification = document.getElementById('identification');
+      if(identification && identification.files.length > 0) {
+        user_params.append('user[identification]', identification.files[0]);
+      }
+      const singleness = document.getElementById('singleness');
+      if(singleness && singleness.files.length > 0) {
+        user_params.append('user[singleness]', singleness.files[0]);
+      }
+      const revenue = document.getElementById('revenue');
+      if(revenue && revenue.files.length > 0) {
+        user_params.append('user[revenue]', revenue.files[0]);
+      }
 
       if(user_id) {
         promise = axios.patch(url, user_params, { headers });
@@ -1055,6 +1139,7 @@ const UserForm = props => {
           <Grid container spacing={6}>
             <Grid item xs={12} md={6} lg={4}>
               <UserBasic user={user} errors={errors} mode={mode} OnChange={handleChange}/>
+              <UserCertificate user={user} errors={errors} mode={mode} OnChange={handleChange}/>
               <UserPhysical user={user} errors={errors} OnChange={handleChange}/>
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
