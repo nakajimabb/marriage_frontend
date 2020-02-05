@@ -83,7 +83,7 @@ const enableSubmit = (mode, status) => {
 };
 
 const UserBasic = props => {
-  const { user, errors, OnChange } = props;
+  const { user, errors, mode, OnChange } = props;
   const classes = useStyles();
   const avatar = useRef();
   const statuses = i18next.data_list('enum', 'user', 'status');
@@ -111,12 +111,37 @@ const UserBasic = props => {
         </Grid>
 
         <Grid container>
-          <Box mb={3}>
-            <Typography className={classes[user.status]} variant="subtitle1">
-              { i18next.attr('user', 'status') }: { statuses[user.status] }
-            </Typography>
-          </Box>
+          { mode === 'admin' ?
+            (
+              <FormControl fullWidth>
+                <InputLabel htmlFor="status">{ i18next.attr('user', 'status') }</InputLabel>
+                <Select
+                  value={ str(user.status) }
+                  onChange={OnChange}
+                  inputProps={{
+                    name: "status",
+                    id: "user_status"
+                  }}
+                  error={!!errors.status}
+                  fullWidth
+                >
+                  {
+                    Object.keys(statuses).map((status, i) => (
+                      <MenuItem key={i} value={status}>{ statuses[status] }</MenuItem>
+                    ))
+                  }
+                </Select>
+              </FormControl>
+            ) : (
+            <Box mb={3}>
+              <Typography className={classes[user.status]} variant="subtitle1">
+                { i18next.attr('user', 'status') }: { statuses[user.status] }
+              </Typography>
+            </Box>
+            )
+          }
         </Grid>
+
 
         <Grid container spacing={4} >
           <Grid item xs={6}>
@@ -437,7 +462,7 @@ const UserPhysical = props => {
 
 
 const UserMarital = props => {
-  const {user, errors, matchmakers, is_head, OnChange} = props;
+  const {user, errors, matchmakers, mode, OnChange} = props;
   const classes = useStyles();
   const member_sharings = i18next.data_list('enum', 'user', 'member_sharing');
   const marital_statuses = i18next.data_list('enum', 'user', 'marital_status');
@@ -496,7 +521,7 @@ const UserMarital = props => {
                       name: "matchmaker_id",
                       id: "user_matchmaker_id"
                     }}
-                    disabled={!is_head}
+                    disabled={mode !== 'admin'}
                     error={!!errors.matchmaker_id}
                     fullWidth
                   >
@@ -518,7 +543,7 @@ const UserMarital = props => {
           <Grid item xs={6}>
             <FormControl fullWidth>
               <FormControlLabel
-                control={<Checkbox name="role_matchmaker" checked={ !!user.role_matchmaker } disabled={!is_head} onChange={ OnChange } value={ 1 } />}
+                control={<Checkbox name="role_matchmaker" checked={ !!user.role_matchmaker } disabled={mode !== 'admin'} onChange={ OnChange } value={ 1 } />}
                 label= { i18next.attr('user', 'role_matchmaker') }
               />
             </FormControl>
@@ -914,13 +939,12 @@ const UserComment = props => {
   );
 };
 
-
+// mode => self, matchmaker, head, admin
 const UserForm = props => {
   const {state: {session}} = useContext(AppContext);
   const { user, setUser, matchmakers, mode, onClose } = props;
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState(null);
-  const is_head = ~session.roles.indexOf('head');
   const classes = useStyles();
   const user_id = user.id;
   const [prev_status, next_status] = enableSubmit(mode, user.status);
@@ -1013,13 +1037,13 @@ const UserForm = props => {
         ) : (
           <Grid container spacing={6}>
             <Grid item xs={12} md={6} lg={4}>
-              <UserBasic user={user} errors={errors} is_head={is_head} OnChange={handleChange}/>
+              <UserBasic user={user} errors={errors} mode={mode} OnChange={handleChange}/>
               <UserPhysical user={user} errors={errors} OnChange={handleChange}/>
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
               {
                 (mode !== 'self') ? (
-                  <UserMarital user={user} errors={errors} matchmakers={matchmakers} is_head={is_head}
+                  <UserMarital user={user} errors={errors} matchmakers={matchmakers} mode={mode}
                                OnChange={handleChange}/>
                 ) : null
               }

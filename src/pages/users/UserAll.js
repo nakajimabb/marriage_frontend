@@ -61,6 +61,7 @@ const UserAll = () => {
   return (
     <React.Fragment>
       <UserList
+        mode={'admin'}
         title={title}
         icon={<Users />}
         data={data}
