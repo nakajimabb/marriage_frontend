@@ -1,6 +1,8 @@
 import React, { lazy } from 'react';
-import { SupervisedUserCircle, AllInclusive, EventNote } from '@material-ui/icons';
-import { Heart, UserPlus, Users, Settings } from 'react-feather';
+import { SupervisedUserCircle, AllInclusive, EventNote, Group } from '@material-ui/icons';
+import { Heart, UserPlus, Users, Settings, Meh } from 'react-feather';
+import i18next from 'src/i18n'
+import UserList from "../pages/users/UserList";
 
 
 // Auth components
@@ -11,15 +13,56 @@ const Page404 = lazy(() => import("../pages/auth/Page404"));
 const Page500 = lazy(() => import("../pages/auth/Page500"));
 
 // Users
-const MemberList = lazy(() => import("../pages/users/MemberList"));
-const ViewableList = lazy(() => import("../pages/users/ViewableList"));
-const MatchmakerList = lazy(() => import("../pages/users/MatchmakerList"));
-const UserAll = lazy(() => import("../pages/users/UserAll"));
-const WaitingList = lazy(() => import("../pages/users/WaitingList"));
+const MuiUserAll = lazy(() => import("../pages/users/UserAll"));
 const MyProfile = lazy(() => import("../pages/users/MyProfile"));
 const PermittedList = lazy(() => import("../pages/users/PermittedList"));
 const QuestionAll = lazy(() => import("../pages/questions/QuestionAll"));
 const RoomList = lazy(() => import("../pages/rooms/RoomList"));
+
+const item_labels = [
+  (u => (u.last_name + ' ' + u.first_name + ' (' + u.nickname + ')')),
+  (u => (i18next.age(u.age) + ' ' + (u.prefecture ? i18next.t('prefecture.' + u.prefecture) : ''))),
+];
+
+const UserAll = () => (<MuiUserAll mode={'admin'}
+                                   title={i18next.t('views.user.list')}
+                                   icon={<Group />}
+                                   api={{get: 'edit'}}
+                                   tabs={['form', 'profile', 'requirement', 'partners', 'question']}
+                                   item_labels={item_labels}
+                                   search_items={['name', 'sex', 'prefecture', 'age', 'religion', 'role_matchmaker', 'member_sharing']}
+                        />);
+const WaitingList = () => (<MuiUserAll mode={'head'}
+                                       title={i18next.t('views.user.waiting_list')}
+                                       icon={<Meh />}
+                                       api={{get: 'edit'}}
+                                       tabs={['form', 'profile', 'question']}
+                                       item_labels={item_labels}
+                                       params={{status: 'check_head'}}
+                            />);
+
+const MemberList = () => (<MuiUserAll mode={'matchmaker'}
+                                      title={i18next.t('views.user.members')}
+                                      icon={<UserPlus />}
+                                      api={{list: 'members', get: 'edit'}}
+                                      item_labels={item_labels}
+                                      tabs={['form', 'profile', 'requirement', 'partners', 'question']}
+                            />);
+const ViewableList = () => (<MuiUserAll mode={'matchmaker'}
+                                      title={i18next.t('views.user.viewable')}
+                                      icon={<Users />}
+                                      api={{list: 'viewable'}}
+                                      tabs={['profile']}
+                          />);
+
+const MatchmakerList = () => (<MuiUserAll mode={'matchmaker'}
+                                        title={i18next.t('views.user.matchmakers')}
+                                        icon={<AllInclusive />}
+                                        api={{list: 'matchmakers'}}
+                                        tabs={['profile']}
+                                        search_items={['name', 'sex', 'prefecture', 'age', 'religion', 'member_sharing', 'friend']}
+                                />);
+
 
 const courtshipRoutes = [
   {

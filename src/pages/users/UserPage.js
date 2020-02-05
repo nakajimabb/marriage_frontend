@@ -52,12 +52,17 @@ const TabPanel = props => {
 
 const UserPage = props => {
   const {state: {session}} = useContext(AppContext);
-  const { mode, user_id, onClose, form, profile, requirement, partners, question, action, setTitle } = props;
+  const { mode, user_id, onClose, api_get, setTitle, tabs } = props;
   const [user, setUser] = useState({});
   const [flags, setFlags] = useState({0: true});
   const [user_friend, setUserFriend] = useState({});
   const [matchmakers, setMatchmakers] = useState([]);
   const [tab, setTab] = React.useState(0);
+  const form = ~tabs.indexOf('form');
+  const profile = ~tabs.indexOf('profile');
+  const requirement = ~tabs.indexOf('requirement');
+  const partners = ~tabs.indexOf('partners');
+  const question = ~tabs.indexOf('question');
   const classes = useStyles();
 
   let index = 0, tab_indexes = {};
@@ -71,7 +76,7 @@ const UserPage = props => {
     if(user_id) {
       const headers  = session.headers;
       if(headers && headers['access-token'] && headers['client'] && headers['uid']) {
-        const url = env.API_ORIGIN + 'api/users/' + user_id + '/' + str(action);
+        const url = env.API_ORIGIN + `api/users/${user_id}/${api_get}`;
         axios.get(url, {headers})
           .then((results) => {
             const data = results.data;
@@ -96,7 +101,7 @@ const UserPage = props => {
       setUser(user2);
       setTitle(title);
     }
-  }, [user_id, session.headers, session.user, action, setTitle]);
+  }, [user_id, session.headers, session.user, api_get, setTitle]);
 
   function a11yProps(index) {
     return {

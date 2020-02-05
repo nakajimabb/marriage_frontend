@@ -1,5 +1,4 @@
 import React, {useContext, useEffect, useState} from 'react';
-import { Users } from 'react-feather';
 import axios from 'axios'
 
 import env from 'src/environment';
@@ -8,20 +7,19 @@ import AppContext from 'src/contexts/AppContext';
 import UserList from "./UserList";
 
 
-const UserAll = () => {
+const UserAll = props => {
   const {state: {session}} = useContext(AppContext);
+  const {title, mode, params, icon, item_labels, tabs, api} = props;
+  const api_list = (api || {}).list || '';
+  const api_get = (api || {}).get || '';
+  const search_items = props.search_items || ['name', 'sex', 'prefecture', 'age', 'religion'];
   const [data, setData] = useState([]);
-  const title = i18next.t('views.user.list');
-  const item_labels = [
-                        (u => (u.last_name + ' ' + u.first_name + ' (' + u.nickname + ')')),
-                        (u => (i18next.age(u.age) + ' ' + (u.prefecture ? i18next.t('prefecture.' + u.prefecture) : ''))),
-                      ];
 
   useEffect(() => {
     const headers  = session.headers;
     if(headers && headers['access-token'] && headers['client'] && headers['uid']) {
-      const url = env.API_ORIGIN + 'api/users';
-      axios.get(url, {headers})
+      const url = env.API_ORIGIN + `api/users/${api_list}`;
+      axios.get(url, {headers, params})
         .then((results) => {
           setData(results.data.users);
         })
@@ -38,7 +36,7 @@ const UserAll = () => {
     if(user_id) {
       const headers  = session.headers;
       if(headers && headers['access-token'] && headers['client'] && headers['uid']) {
-        const url = env.API_ORIGIN + 'api/users/' + user_id + '/get';
+        const url = env.API_ORIGIN + `api/users/${user_id}/${api_get}`;
         axios.get(url, {headers})
           .then((results) => {
             let user = results.data.user;
@@ -61,20 +59,16 @@ const UserAll = () => {
   return (
     <React.Fragment>
       <UserList
-        mode={'admin'}
+        mode={mode}
         title={title}
-        icon={<Users />}
+        icon={icon}
         data={data}
         item_labels={item_labels}
         new_user
-        form
-        profile
-        requirement
-        partners
-        question
-        action="edit"
+        tabs={tabs}
+        api_get={api_get}
         updateUser={updateUser}
-        search_items={['name', 'sex', 'prefecture', 'age', 'religion', 'role_matchmaker', 'member_sharing']}
+        search_items={search_items}
       />
     </React.Fragment>
   );

@@ -125,8 +125,7 @@ const UserBreadcrumbs = props => {
 };
 
 const UserList = props => {
-  const { mode, title, icon, data, new_user, item_labels, updateUser,
-    all, form, profile, requirement, partners, question, action, search_items } = props;
+  const { mode, title, icon, data, new_user, updateUser, all, api_get, search_items, tabs } = props;
   const [open, setOpen] = useState(false);
   const [user_id, setUserId] = useState(null);
   const [search, setSearch] = useState({});
@@ -142,10 +141,11 @@ const UserList = props => {
   const items =[[title, (() => setOpen(false))],
                 [page_title, null]];
 
-  const default_labels = [
-    (u => u.nickname),
-    (u => (i18next.age(u.age) + ' ' + (u.prefecture ? i18next.t('prefecture.' + u.prefecture) : ''))),
-  ];
+  const item_labels = props.item_labels ||
+    [
+      (u => u.nickname),
+      (u => (i18next.age(u.age) + ' ' + (u.prefecture ? i18next.t('prefecture.' + u.prefecture) : ''))),
+    ];
 
   const columns = [ (n => str(n.last_name) + str(n.first_name)),
     (n => str(n.last_name_kana) + str(n.first_name_kana)),
@@ -215,12 +215,8 @@ const UserList = props => {
           user_id={user_id}
           open={open}
           fullScreen
-          form={form}
-          profile={profile}
-          requirement={requirement}
-          partners={partners}
-          question={question}
-          action={action}
+          tabs={tabs}
+          api_get={api_get}
           maxWidth="md"
           onClose={closeUserPage}
           setTitle={setPageTitle}
@@ -428,7 +424,7 @@ const UserList = props => {
                     </CardActionArea>
                     <CardContent className={classes.content} >
                       {
-                        (item_labels || default_labels).map((f, i) => (<Box key={i}>{ f(user) }</Box>))
+                        item_labels.map((f, i) => (<Box key={i}>{ f(user) }</Box>))
                       }
                     </CardContent>
                   </Card>
