@@ -896,7 +896,7 @@ const UserMisc = props => {
 
 
 const UserComment = props => {
-  const {user, errors, OnChange} = props;
+  const {user, errors, mode, OnChange} = props;
   const classes = useStyles();
 
   return (
@@ -921,17 +921,34 @@ const UserComment = props => {
 
         <FormControl fullWidth>
           <TextField
-            name="remark"
-            label={ i18next.attr('user', 'remark') }
+            name="remark_self"
+            label={ i18next.attr('user', 'remark_self') }
             autoComplete="off"
             multiline
-            rows="30"
+            rows="20"
             rowsMax="50"
-            value={ str(user.remark) }
+            value={ str(user.remark_self) }
             onChange={OnChange}
             variant="outlined"
             margin="normal"
-            error={!!errors.remark}
+            error={!!errors.remark_self}
+          />
+        </FormControl>
+
+        <FormControl fullWidth>
+          <TextField
+            name="remark_matchmaker"
+            label={ i18next.attr('user', 'remark_matchmaker') }
+            autoComplete="off"
+            multiline
+            rows="20"
+            rowsMax="50"
+            value={ str(user.remark_matchmaker) }
+            onChange={OnChange}
+            variant="outlined"
+            margin="normal"
+            disabled={mode === 'self'}
+            error={!!errors.remark_matchmaker}
           />
         </FormControl>
       </CardContent>
@@ -1052,7 +1069,7 @@ const UserForm = props => {
               <UserMisc user={user} errors={errors} OnChange={handleChange}/>
             </Grid>
             <Grid item xs={12} md={12} lg={4}>
-              <UserComment user={user} errors={errors} OnChange={handleChange}/>
+              <UserComment user={user} errors={errors} mode={mode} OnChange={handleChange}/>
             </Grid>
           </Grid>
         )

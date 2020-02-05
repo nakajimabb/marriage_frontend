@@ -478,13 +478,23 @@ const UserProfile = props => {
             </CardContent>
           </Card>
 
-          <Card className={classes.remark}>
+          <Card className={classes.card}>
             <CardHeader
-              title={ i18next.attr('user', 'remark') }
+              title={ i18next.attr('user', 'remark_self') }
               className={classes.card_header}
             />
             <CardContent>
-              { user.remark }
+              { user.remark_self }
+            </CardContent>
+          </Card>
+
+          <Card className={classes.card}>
+            <CardHeader
+              title={ i18next.attr('user', 'remark_matchmaker') }
+              className={classes.card_header}
+            />
+            <CardContent>
+              { user.remark_matchmaker }
             </CardContent>
           </Card>
         </Grid>
