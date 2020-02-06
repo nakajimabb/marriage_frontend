@@ -29,7 +29,7 @@ const UserAll = () => (<MuiUserAll mode={'admin'}
                                    api={{get: 'edit'}}
                                    tabs={['form', 'profile', 'requirement', 'partners', 'question']}
                                    item_labels={item_labels}
-                                   search_items={['name', 'sex', 'prefecture', 'age', 'religion', 'role_matchmaker', 'member_sharing']}
+                                   search_items={['name', 'sex', 'prefecture', 'age', 'religion', 'status', 'role_matchmaker', 'member_sharing']}
                         />);
 const WaitingUsers = () => (<MuiUserAll mode={'head'}
                                        title={i18next.t('views.user.waiting_users')}
@@ -46,6 +46,7 @@ const MemberList = () => (<MuiUserAll mode={'matchmaker'}
                                       api={{list: 'members', get: 'edit'}}
                                       item_labels={item_labels}
                                       tabs={['form', 'profile', 'requirement', 'partners', 'question']}
+                                      search_items={['name', 'sex', 'prefecture', 'age', 'religion', 'status']}
                             />);
 const WaitingMembers = () => (<MuiUserAll mode={'matchmaker'}
                                       title={i18next.t('views.user.waiting_members')}
@@ -108,17 +109,17 @@ const matchmakerRoutes = [
     children: null,
   },
   {
-    id: 'views.user.viewable',
-    path: "/matchmaker/viewable",
-    icon: <Users />,
-    component: ViewableList,
-    children: null,
-  },
-  {
     id: 'views.user.waiting_members',
     path: "/matchmaker/waiting_members",
     icon: <Meh />,
     component: WaitingMembers,
+    children: null,
+  },
+  {
+    id: 'views.user.viewable',
+    path: "/matchmaker/viewable",
+    icon: <Users />,
+    component: ViewableList,
     children: null,
   },
   {

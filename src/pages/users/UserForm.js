@@ -647,9 +647,6 @@ const UserMarital = props => {
                     disabled={!user.role_matchmaker}
                     fullWidth
                   >
-                    <MenuItem value="">
-                      <em></em>
-                    </MenuItem>
                     {
                       Object.keys(member_sharings).map((member_sharing, i) => (
                         <MenuItem key={i} value={member_sharing}>{ member_sharings[member_sharing] }</MenuItem>

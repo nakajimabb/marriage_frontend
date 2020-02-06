@@ -136,7 +136,8 @@ const UserList = props => {
   const prefectures = i18next.data_list('prefecture');
   const religions = i18next.data_list('enum', 'user', 'religion');
   const member_sharings = i18next.data_list('enum', 'user', 'member_sharing');
-  const keys = ['sex', 'prefecture', 'religion', 'role_matchmaker', 'member_sharing', 'friend'];
+  const statuses = i18next.data_list('enum', 'user', 'status');
+  const keys = ['sex', 'prefecture', 'religion', 'role_matchmaker', 'member_sharing', 'status', 'friend'];
   const ages = [search.min_age, search.max_age];
   const items =[[title, (() => setOpen(false))],
                 [page_title, null]];
@@ -336,6 +337,33 @@ const UserList = props => {
                         <MenuItem
                           key={i}
                           value={religion}>{religions[religion]}
+                        </MenuItem>
+                      ))
+                    }
+                  </Select>
+                </FormControl>
+              ) : null
+            }
+            {
+              (search_items || []).includes('status') ? (
+                <FormControl className={classes.control} style={{width: 100}}>
+                  <InputLabel htmlFor="status">{i18next.attr('user', 'status')}</InputLabel>
+                  <Select
+                    value={str(search.status)}
+                    onChange={handleSearchChange}
+                    inputProps={{
+                      name: "status",
+                    }}
+                    fullWidth
+                  >
+                    <MenuItem value="">
+                      <em></em>
+                    </MenuItem>
+                    {
+                      Object.keys(statuses).map((status,i) => (
+                        <MenuItem
+                          key={i}
+                          value={status}>{statuses[status]}
                         </MenuItem>
                       ))
                     }
