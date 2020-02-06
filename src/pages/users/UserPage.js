@@ -163,7 +163,6 @@ const UserPage = props => {
               }
             </TabPanel>) : null
         }
-        { console.log({flags}) }
         {
           question ?
             (<TabPanel value={tab} index={tab_indexes.question}>

@@ -20,6 +20,7 @@ import env from 'src/environment';
 import i18next from 'src/i18n'
 import { str, age } from 'src/helpers';
 import AppContext from 'src/contexts/AppContext';
+import UserImages from "./UserImages";
 
 
 const useStyles = makeStyles(theme => ({
@@ -328,6 +329,8 @@ const UserProfile = props => {
         </Grid>
 
         <Grid item xs={12} md={6} lg={4}>
+          <UserImages user={user} />
+
           <Card className={classes.card}>
             <CardHeader
               title={ i18next.t('views.user.religion') }

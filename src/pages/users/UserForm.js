@@ -34,6 +34,7 @@ import { str, collectErrors, createFormData } from 'src/helpers';
 import CustomizedSnackbar from 'src/pages/components/CustomizedSnackbar';
 import AppContext from 'src/contexts/AppContext';
 import UserSelf from "./UserSelf";
+import UserImages from "./UserImages";
 
 
 const useStyles = makeStyles(theme => ({
@@ -79,6 +80,12 @@ const useStyles = makeStyles(theme => ({
     padding: 5,
     width: 80,
     margin: 0,
+  },
+  images: {
+    marginBottom: 10,
+  },
+  thumbnail: {
+    padding: 2,
   },
 }));
 
@@ -349,10 +356,10 @@ const UserCertificate = props => {
       <CardContent className={classes.card_content} >
         <List component="nav">
           {
-            Object.keys(items).map(item => {
+            Object.keys(items).map((item, i) => {
               const url = item + '_url';
               return (
-                <ListItem className={classes.list_item}>
+                <ListItem key={i} className={classes.list_item}>
                   <ListItemIcon>
                     <ListItemText
                       inset
@@ -650,7 +657,6 @@ const UserMarital = props => {
     </Card>
   );
 };
-
 
 const UserReligion = props => {
   const {user, errors, OnChange} = props;
@@ -1087,6 +1093,10 @@ const UserForm = props => {
       if(revenue && revenue.files.length > 0) {
         user_params.append('user[revenue]', revenue.files[0]);
       }
+      const images = document.getElementById('images');
+      if(images && images.files.length > 0) {
+        user_params.append('user[images][]', images.files[0]);
+      }
 
       if(user_id) {
         promise = axios.patch(url, user_params, { headers });
@@ -1126,7 +1136,7 @@ const UserForm = props => {
         onClose={() => setErrors({})}
       />
       <CustomizedSnackbar
-        open={ message }
+        open={ !!message }
         variant="info"
         message={ message }
         onClose={() => setMessage(null)}
@@ -1149,6 +1159,7 @@ const UserForm = props => {
                                OnChange={handleChange}/>
                 ) : null
               }
+              <UserImages user={user} form={{id: 'images'}} />
               <UserReligion user={user} errors={errors} OnChange={handleChange}/>
               <UserLocation user={user} errors={errors} OnChange={handleChange}/>
               <UserMisc user={user} errors={errors} OnChange={handleChange}/>

@@ -299,7 +299,7 @@ const QuestionForm = props => {
         onClose={() => setErrors({})}
       />
       <CustomizedSnackbar
-        open={ message }
+        open={ !!message }
         variant="info"
         message={ message }
         onClose={() => setMessage(null)}
