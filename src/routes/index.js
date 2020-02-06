@@ -31,8 +31,8 @@ const UserAll = () => (<MuiUserAll mode={'admin'}
                                    item_labels={item_labels}
                                    search_items={['name', 'sex', 'prefecture', 'age', 'religion', 'role_matchmaker', 'member_sharing']}
                         />);
-const WaitingList = () => (<MuiUserAll mode={'head'}
-                                       title={i18next.t('views.user.waiting_list')}
+const WaitingUsers = () => (<MuiUserAll mode={'head'}
+                                       title={i18next.t('views.user.waiting_users')}
                                        icon={<Meh />}
                                        api={{get: 'edit'}}
                                        tabs={['form', 'profile', 'question']}
@@ -47,6 +47,14 @@ const MemberList = () => (<MuiUserAll mode={'matchmaker'}
                                       item_labels={item_labels}
                                       tabs={['form', 'profile', 'requirement', 'partners', 'question']}
                             />);
+const WaitingMembers = () => (<MuiUserAll mode={'matchmaker'}
+                                      title={i18next.t('views.user.waiting_members')}
+                                      icon={<Meh />}
+                                      api={{list: 'members', get: 'edit'}}
+                                      item_labels={item_labels}
+                                      params={{status: 'check_matchmaker'}}
+                                      tabs={['form', 'profile', 'requirement', 'partners', 'question']}
+                          />);
 const ViewableList = () => (<MuiUserAll mode={'matchmaker'}
                                       title={i18next.t('views.user.viewable')}
                                       icon={<Users />}
@@ -107,6 +115,13 @@ const matchmakerRoutes = [
     children: null,
   },
   {
+    id: 'views.user.waiting_members',
+    path: "/matchmaker/waiting_members",
+    icon: <Meh />,
+    component: WaitingMembers,
+    children: null,
+  },
+  {
     id: 'views.user.matchmakers',
     path: "/matchmaker/matchmakers",
     icon: <AllInclusive />,
@@ -127,9 +142,9 @@ const headRoutes = [
         component: UserAll
       },
       {
-        path: "/head/waiting_list",
-        name: 'views.user.waiting_list',
-        component: WaitingList
+        path: "/head/waiting_users",
+        name: 'views.user.waiting_users',
+        component: WaitingUsers
       },
       {
         path: "/head/question_all",
