@@ -14,7 +14,6 @@ const Page500 = lazy(() => import("../pages/auth/Page500"));
 // Users
 const MuiUserAll = lazy(() => import("../pages/users/UserAll"));
 const MyProfile = lazy(() => import("../pages/users/MyProfile"));
-const PermittedList = lazy(() => import("../pages/users/PermittedList"));
 const QuestionAll = lazy(() => import("../pages/questions/QuestionAll"));
 const RoomList = lazy(() => import("../pages/rooms/RoomList"));
 
@@ -25,6 +24,7 @@ const item_labels = [
 
 const UserAll = () => (<MuiUserAll mode={'admin'}
                                    title={i18next.t('views.user.list')}
+                                   new_user
                                    icon={<Group />}
                                    api={{get: 'edit'}}
                                    tabs={['form', 'profile', 'requirement', 'partners', 'question']}
@@ -42,6 +42,7 @@ const WaitingUsers = () => (<MuiUserAll mode={'head'}
 
 const MemberList = () => (<MuiUserAll mode={'matchmaker'}
                                       title={i18next.t('views.user.members')}
+                                      new_user
                                       icon={<UserPlus />}
                                       api={{list: 'members', get: 'edit'}}
                                       item_labels={item_labels}
@@ -71,13 +72,21 @@ const MatchmakerList = () => (<MuiUserAll mode={'matchmaker'}
                                         search_items={['name', 'sex', 'prefecture', 'age', 'religion', 'member_sharing', 'friend']}
                                 />);
 
+const PartnerMatches = () => (<MuiUserAll mode={'matchmaker'}
+                                        title={i18next.t('views.user.my_partner_matches')}
+                                        icon={<Heart />}
+                                        api={{list: 'my_partner_matches'}}
+                                        tabs={['profile']}
+                                        search_items={['name', 'prefecture', 'age', 'religion']}
+                            />);
+
 
 const courtshipRoutes = [
   {
-    id: 'views.user.permitted_users',
-    path: "/courtship/permitted_users",
+    id: 'views.user.my_partner_matches',
+    path: "/courtship/my_partner_matches",
     icon: <Heart />,
-    component: PermittedList,
+    component: PartnerMatches,
     children: null
   },
 ];

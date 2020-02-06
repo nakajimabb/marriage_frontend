@@ -625,7 +625,7 @@ const UserMarital = props => {
                   <FormControlLabel
                     control={
                       <Checkbox name="role_matchmaker"
-                                checked={ user.role_matchmaker }
+                                checked={ !!user.role_matchmaker }
                                 disabled={mode !== 'admin'}
                                 onChange={ OnChange } value={ 1 } />
                     }
