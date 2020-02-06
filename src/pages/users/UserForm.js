@@ -590,7 +590,7 @@ const UserMarital = props => {
           </Grid>
           <Grid item xs={6}>
             {
-              matchmakers.length > 0 ?
+              (matchmakers && matchmakers.length > 0) ?
                 <FormControl fullWidth>
                   <InputLabel htmlFor="matchmaker_id">{i18next.attr('user', 'matchmaker_id')}</InputLabel>
                   <Select
@@ -617,42 +617,50 @@ const UserMarital = props => {
             }
           </Grid>
         </Grid>
-
-        <Grid container spacing={4} >
-          <Grid item xs={6}>
-            <FormControl fullWidth>
-              <FormControlLabel
-                control={<Checkbox name="role_matchmaker" checked={ !!user.role_matchmaker } disabled={mode !== 'admin'} onChange={ OnChange } value={ 1 } />}
-                label= { i18next.attr('user', 'role_matchmaker') }
-              />
-            </FormControl>
-          </Grid>
-          <Grid item xs={6}>
-            <FormControl fullWidth>
-              <InputLabel htmlFor="member_sharing">{ i18next.attr('user', 'member_sharing') }</InputLabel>
-              <Select
-                value={ str(user.member_sharing) }
-                onChange={OnChange}
-                inputProps={{
-                  name: "member_sharing",
-                  id: "user_member_sharing"
-                }}
-                error={!!errors.member_sharing}
-                disabled={!user.role_matchmaker}
-                fullWidth
-              >
-                <MenuItem value="">
-                  <em></em>
-                </MenuItem>
-                {
-                  Object.keys(member_sharings).map((member_sharing, i) => (
-                    <MenuItem key={i} value={member_sharing}>{ member_sharings[member_sharing] }</MenuItem>
-                  ))
-                }
-              </Select>
-            </FormControl>
-          </Grid>
-        </Grid>
+        {
+          ((mode === 'admin') || user.role_matchmaker) ? (
+            <Grid container spacing={4} >
+              <Grid item xs={6}>
+                <FormControl fullWidth>
+                  <FormControlLabel
+                    control={
+                      <Checkbox name="role_matchmaker"
+                                checked={ user.role_matchmaker }
+                                disabled={mode !== 'admin'}
+                                onChange={ OnChange } value={ 1 } />
+                    }
+                    label= { i18next.attr('user', 'role_matchmaker') }
+                  />
+                </FormControl>
+              </Grid>
+              <Grid item xs={6}>
+                <FormControl fullWidth>
+                  <InputLabel htmlFor="member_sharing">{ i18next.attr('user', 'member_sharing') }</InputLabel>
+                  <Select
+                    value={ str(user.member_sharing) }
+                    onChange={OnChange}
+                    inputProps={{
+                      name: "member_sharing",
+                      id: "user_member_sharing"
+                    }}
+                    error={!!errors.member_sharing}
+                    disabled={!user.role_matchmaker}
+                    fullWidth
+                  >
+                    <MenuItem value="">
+                      <em></em>
+                    </MenuItem>
+                    {
+                      Object.keys(member_sharings).map((member_sharing, i) => (
+                        <MenuItem key={i} value={member_sharing}>{ member_sharings[member_sharing] }</MenuItem>
+                      ))
+                    }
+                  </Select>
+                </FormControl>
+              </Grid>
+            </Grid>
+          ) : null
+        }
       </CardContent>
     </Card>
   );
@@ -1153,12 +1161,7 @@ const UserForm = props => {
               <UserPhysical user={user} errors={errors} OnChange={handleChange}/>
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
-              {
-                (mode !== 'self') ? (
-                  <UserMarital user={user} errors={errors} matchmakers={matchmakers} mode={mode}
-                               OnChange={handleChange}/>
-                ) : null
-              }
+              <UserMarital user={user} errors={errors} matchmakers={matchmakers} mode={mode} OnChange={handleChange}/>
               <UserImages user={user} form={{id: 'images'}} />
               <UserReligion user={user} errors={errors} OnChange={handleChange}/>
               <UserLocation user={user} errors={errors} OnChange={handleChange}/>
