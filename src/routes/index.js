@@ -10,6 +10,7 @@ const SignUp = lazy(() => import("../pages/auth/SignUp"));
 const ResetPassword = lazy(() => import("../pages/auth/ResetPassword"));
 const Page404 = lazy(() => import("../pages/auth/Page404"));
 const Page500 = lazy(() => import("../pages/auth/Page500"));
+const UserAccept = lazy(() => import("../pages/users/UserAccept"));
 
 // Users
 const MuiUserAll = lazy(() => import("../pages/users/UserAll"));
@@ -42,7 +43,7 @@ const WaitingUsers = () => (<MuiUserAll mode={'head'}
 
 const MemberList = () => (<MuiUserAll mode={'matchmaker'}
                                       title={i18next.t('views.user.members')}
-                                      new_user
+                                      invite_user
                                       icon={<UserPlus />}
                                       api={{list: 'members', get: 'edit'}}
                                       item_labels={item_labels}
@@ -186,6 +187,11 @@ export const authRoutes = {
       component: ResetPassword
     },
     {
+      path: "/auth/accept/:invitation_token",
+      name: "accept",
+      component: UserAccept
+    },
+    {
       path: "/auth/404",
       name: "404 Page",
       component: Page404
@@ -194,7 +200,7 @@ export const authRoutes = {
       path: "/auth/500",
       name: "500 Page",
       component: Page500
-    }
+    },
   ]
 };
 

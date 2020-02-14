@@ -28,6 +28,7 @@ import i18next from 'src/i18n'
 import { str } from 'src/helpers';
 import TitleBar from 'src/pages/components/TitleBar';
 import UserPage from './UserPage';
+import UserInvitation from './UserInvitation';
 
 
 const useStyles = makeStyles(theme => ({
@@ -124,10 +125,12 @@ const UserBreadcrumbs = props => {
   );
 };
 
+
 const UserList = props => {
-  const { mode, title, icon, data, new_user, updateUser, all, api_get, search_items, tabs } = props;
+  const { mode, title, icon, data, new_user, invite_user, updateUser, all, api_get, search_items, tabs } = props;
   const [open, setOpen] = useState(false);
   const [user_id, setUserId] = useState(null);
+  const [open_invitation, setOpenInvitation] = useState(false);
   const [search, setSearch] = useState({});
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(all ? -1 : 12);
@@ -187,6 +190,14 @@ const UserList = props => {
     setUserId(null);
   };
 
+  const openInvitation = () => {
+    setOpenInvitation(true);
+  };
+
+  const closeInvitation = () => {
+    setOpenInvitation(false);
+  };
+
   const openUserPage = (n) => () => {
     setOpen(true);
     setUserId(n.id);
@@ -228,6 +239,7 @@ const UserList = props => {
 
   return (
     <React.Fragment>
+      <UserInvitation open={open_invitation} handleClose={closeInvitation} />
       <TitleBar title={title} icon={icon} variant="dense" />
       <Box px={5} py={2} >
         <Grid container spacing={6} >
@@ -423,17 +435,22 @@ const UserList = props => {
           </Grid>
           <Grid item xs />
           {
-            (() => {
-              if(new_user) {
-                return (
-                  <Grid item>
-                    <Tooltip title={i18next.t('views.user.add_user')}>
-                      <Fab size="medium" onClick={openUserNewForm} ><AddIcon/></Fab>
-                    </Tooltip>
-                  </Grid>
-                  );
-              }
-            })()
+              new_user ? (
+                <Grid item>
+                  <Tooltip title={i18next.t('views.user.add_user')}>
+                    <Fab size="medium" onClick={openUserNewForm} ><AddIcon/></Fab>
+                  </Tooltip>
+                </Grid>
+              ) : null
+          }
+          {
+            invite_user ? (
+              <Grid item>
+                <Tooltip title={i18next.t('views.user.invite_user')}>
+                  <Fab size="medium" onClick={openInvitation} ><AddIcon/></Fab>
+                </Tooltip>
+              </Grid>
+            ) : null
           }
         </Grid>
 

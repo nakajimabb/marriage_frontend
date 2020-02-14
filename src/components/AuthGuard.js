@@ -21,7 +21,7 @@ const AuthGuard = props => {
   const theme = session.theme || Cookies.get('theme') || 0;
 
   const redirectSignIn = () => {
-    if(location.pathname !== '/auth/sign-in') {
+    if(location.pathname !== '/auth/sign-in' && location.pathname.indexOf('/auth/accept/') === -1) {
       dispatch(logout());
       history.push('/auth/sign-in');
     }

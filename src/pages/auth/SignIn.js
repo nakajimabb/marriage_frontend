@@ -34,7 +34,7 @@ const Wrapper = styled(Paper)`
 const SignIn = props => {
   const { dispatch } = useContext(AppContext);
   const history = useHistory();
-  const [user, setUser] = useState({nickname: '', password: ''});
+  const [user, setUser] = useState({login: '', password: ''});
 
   useEffect(() => {
     const theme = Cookies.get('theme') || 0;
@@ -42,9 +42,7 @@ const SignIn = props => {
   }, [user, dispatch]);
 
   const handleChange = name => event => {
-    let user2 = Object.assign({}, user);
-    user2[name] = event.target.value;
-    setUser(user2);
+    setUser({...user, [name]: event.target.value});
   };
 
   const handleSubmit = async event => {
@@ -52,7 +50,14 @@ const SignIn = props => {
 
     const url = env.API_ORIGIN + 'auth/sign_in';
     const headers = { 'Content-Type': 'application/json;charset=utf-8' };
-    const body = {nickname: user.nickname, password: user.password};
+    let body = {password: user.password};
+    const re = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/; // Regular expression for email
+
+    if(user.login.match(re)) {
+      body['email'] = user.login;
+    } else {
+      body['nickname'] = user.login;
+    }
 
     let response = await fetch(url, {method: 'POST', headers, body: JSON.stringify(body)});
     if(response.ok) {
@@ -81,13 +86,13 @@ const SignIn = props => {
         <form onSubmit={handleSubmit}>
           <FormControl margin="normal" required fullWidth>
             <TextField
-              id="nickname"
-              name="nickname"
-              label={ i18next.attr('user', 'nickname') }
+              id="login"
+              name="login"
+              label={ i18next.t('views.user.email_or_nickname') }
               autoComplete="nickname"
               autoFocus
-              value={user.nickname}
-              onChange={handleChange('nickname')}
+              value={user.login}
+              onChange={handleChange('login')}
               InputLabelProps={{
                 shrink: true
               }}

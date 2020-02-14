@@ -9,7 +9,7 @@ import UserList from "./UserList";
 
 const UserAll = props => {
   const {state: {session}} = useContext(AppContext);
-  const {title, mode, new_user, params, icon, item_labels, tabs, api} = props;
+  const {title, mode, new_user, invite_user, params, icon, item_labels, tabs, api} = props;
   const api_list = (api || {}).list || '';
   const api_get = (api || {}).get || '';
   const search_items = props.search_items || ['name', 'sex', 'prefecture', 'age', 'religion'];
@@ -65,6 +65,7 @@ const UserAll = props => {
         data={data}
         item_labels={item_labels}
         new_user={new_user}
+        invite_user={invite_user}
         tabs={tabs}
         api_get={api_get}
         updateUser={updateUser}
