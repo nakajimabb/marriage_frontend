@@ -72,7 +72,7 @@ const UserInvitation = props => {
                     margin="dense"
                     id="name"
                     name="email"
-                    label="Email Address"
+                    label={ i18next.attr('user', 'email') }
                     type="email"
                     value={user.email}
                     onChange={handleChange}

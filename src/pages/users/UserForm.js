@@ -1049,22 +1049,6 @@ const UserForm = props => {
   const user_id = user.id;
   const [prev_status, next_status] = enableSubmit(mode, user.status);
 
-  const onSendMail = () => {
-    const headers  = session.headers;
-
-    if(headers && headers['access-token'] && headers['client'] && headers['uid']) {
-      let url = env.API_ORIGIN + `api/users/${user_id}/send_invitation`;
-      axios.post(url, {}, { headers })
-        .then((results) => {
-          setMessage(i18next.t('views.user.sent_invitation'));
-        })
-        .catch(({response}) => {
-          alert(response.status + ' ' + response.statusText);
-        });
-
-    }
-  };
-
   const onSubmit = (status, message) => () => {
     if(window.confirm(message)) {
       console.log({status});
@@ -1176,13 +1160,6 @@ const UserForm = props => {
           <Grid container spacing={6}>
             <Grid item xs />
             <Grid item>
-              {
-                (user_id && user.status === 'check_self') ? (
-                  <Button onClick={onSendMail} color="primary">
-                    { i18next.t('views.user.send_invitation') }
-                  </Button>
-                ): null
-              }
               {
                 onClose ? (
                   <Button onClick={() => onClose(null)} color="primary">
