@@ -23,6 +23,7 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import { PersonAdd as AddIcon } from '@material-ui/icons';
+import { UserPlus } from 'react-feather';
 
 import i18next from 'src/i18n'
 import { str } from 'src/helpers';
@@ -127,10 +128,10 @@ const UserBreadcrumbs = props => {
 
 
 const UserList = props => {
-  const { mode, title, icon, data, new_user, invite_user, updateUser, all, api_get, search_items, tabs } = props;
+  const { mode, title, icon, data, new_user, invite_courtship, invite_matchmaker, updateUser, all, api_get, search_items, tabs } = props;
   const [open, setOpen] = useState(false);
   const [user_id, setUserId] = useState(null);
-  const [open_invitation, setOpenInvitation] = useState(false);
+  const [open_invitation, setOpenInvitation] = useState({courtship: false, matchmaker: false});
   const [search, setSearch] = useState({});
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(all ? -1 : 12);
@@ -190,12 +191,12 @@ const UserList = props => {
     setUserId(null);
   };
 
-  const openInvitation = () => {
-    setOpenInvitation(true);
+  const openInvitation = user_type => () => {
+    setOpenInvitation({...open_invitation, [user_type]: true});
   };
 
-  const closeInvitation = () => {
-    setOpenInvitation(false);
+  const closeInvitation = user_type => () => {
+    setOpenInvitation({...open_invitation, [user_type]: false});
   };
 
   const openUserPage = (n) => () => {
@@ -239,7 +240,18 @@ const UserList = props => {
 
   return (
     <React.Fragment>
-      <UserInvitation open={open_invitation} handleClose={closeInvitation} />
+      <UserInvitation
+        open={open_invitation['courtship']}
+        role_courtship
+        title={i18next.t('views.user.invite_courtship')}
+        handleClose={closeInvitation('courtship')}
+      />
+      <UserInvitation
+        open={open_invitation['matchmaker']}
+        role_matchmaker
+        title={i18next.t('views.user.invite_matchmaker')}
+        handleClose={closeInvitation('matchmaker')}
+      />
       <TitleBar title={title} icon={icon} variant="dense" />
       <Box px={5} py={2} >
         <Grid container spacing={6} >
@@ -438,16 +450,25 @@ const UserList = props => {
               new_user ? (
                 <Grid item>
                   <Tooltip title={i18next.t('views.user.add_user')}>
-                    <Fab size="medium" onClick={openUserNewForm} ><AddIcon/></Fab>
+                    <Fab size="medium" onClick={openUserNewForm} ><UserPlus/></Fab>
                   </Tooltip>
                 </Grid>
               ) : null
           }
           {
-            invite_user ? (
+            invite_courtship ? (
               <Grid item>
-                <Tooltip title={i18next.t('views.user.invite_user')}>
-                  <Fab size="medium" onClick={openInvitation} ><AddIcon/></Fab>
+                <Tooltip title={i18next.t('views.user.invite_courtship')}>
+                  <Fab size="medium" onClick={openInvitation('courtship')} ><AddIcon/></Fab>
+                </Tooltip>
+              </Grid>
+            ) : null
+          }
+          {
+            invite_matchmaker ? (
+              <Grid item>
+                <Tooltip title={i18next.t('views.user.invite_matchmaker')}>
+                  <Fab size="medium" onClick={openInvitation('matchmaker')} ><AddIcon/></Fab>
                 </Tooltip>
               </Grid>
             ) : null

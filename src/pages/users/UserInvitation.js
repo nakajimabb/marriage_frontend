@@ -20,8 +20,8 @@ import axios from "axios";
 
 
 const UserInvitation = props => {
-  const {open, handleClose} = props;
-  const [user, setUser] = useState({email: '', sex: ''});
+  const {open, title, role_courtship, role_matchmaker, handleClose} = props;
+  const [user, setUser] = useState({email: '', sex: '', role_courtship: !!role_courtship, role_matchmaker: !!role_matchmaker});
   const [message, setMessage] = useState(null);
   const {state: {session}} = useContext(AppContext);
 
@@ -36,7 +36,7 @@ const UserInvitation = props => {
 
     if(headers && headers['access-token'] && headers['client'] && headers['uid']) {
       let url = env.API_ORIGIN + `api/users/invite`;
-      axios.post(url, {email: user.email, sex: user.sex}, { headers })
+      axios.post(url, user, { headers })
         .then((results) => {
           handleClose();
         })
@@ -58,7 +58,7 @@ const UserInvitation = props => {
       />
       <Dialog open={open} onClose={handleClose}>
         <form onSubmit={handleSubmit}>
-          <DialogTitle id="form-dialog-title">{ i18next.t('views.user.invite_user') }</DialogTitle>
+          <DialogTitle id="form-dialog-title">{ title }</DialogTitle>
           <DialogContent>
             <DialogContentText>
               { i18next.t('views.user.invite_user_subtitle') }

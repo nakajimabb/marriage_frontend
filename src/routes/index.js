@@ -25,6 +25,7 @@ const item_labels = [
 
 const UserAll = () => (<MuiUserAll mode={'admin'}
                                    title={i18next.t('views.user.list')}
+                                   invite_matchmaker
                                    new_user
                                    icon={<Group />}
                                    api={{get: 'edit'}}
@@ -43,7 +44,7 @@ const WaitingUsers = () => (<MuiUserAll mode={'head'}
 
 const MemberList = () => (<MuiUserAll mode={'matchmaker'}
                                       title={i18next.t('views.user.members')}
-                                      invite_user
+                                      invite_courtship
                                       icon={<UserPlus />}
                                       api={{list: 'members', get: 'edit'}}
                                       item_labels={item_labels}
