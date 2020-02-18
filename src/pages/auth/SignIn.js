@@ -35,6 +35,7 @@ const SignIn = props => {
   const { dispatch } = useContext(AppContext);
   const history = useHistory();
   const [user, setUser] = useState({login: '', password: ''});
+  const remember_me = false;
 
   useEffect(() => {
     const theme = Cookies.get('theme') || 0;
@@ -112,10 +113,12 @@ const SignIn = props => {
               }}
             />
           </FormControl>
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary"/>}
-            label="Remember me"
-          />
+          { remember_me ?
+            <FormControlLabel
+              control={<Checkbox value="remember" color="primary"/>}
+              label={ i18next.attr('user', 'remember_me') }
+            /> : null
+          }
           <Button
             fullWidth
             variant="contained"
@@ -123,7 +126,7 @@ const SignIn = props => {
             type="submit"
             mb={2}
           >
-            Sign in
+            { i18next.t('devise.sessions.new.sign_in') }
           </Button>
           <Button
             component={Link}
@@ -131,7 +134,7 @@ const SignIn = props => {
             fullWidth
             color="primary"
           >
-            Forgot password
+            { i18next.t('devise.shared.links.forgot_your_password') }
           </Button>
         </form>
       </Wrapper>

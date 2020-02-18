@@ -10,7 +10,8 @@ const SignUp = lazy(() => import("../pages/auth/SignUp"));
 const ResetPassword = lazy(() => import("../pages/auth/ResetPassword"));
 const Page404 = lazy(() => import("../pages/auth/Page404"));
 const Page500 = lazy(() => import("../pages/auth/Page500"));
-const UserAccept = lazy(() => import("../pages/users/UserAccept"));
+const UserAccept = lazy(() => import("../pages/auth/UserAccept"));
+const ChangePassword = lazy(() => import("../pages/auth/ChangePassword"));
 
 // Users
 const MuiUserAll = lazy(() => import("../pages/users/UserAll"));
@@ -191,6 +192,11 @@ export const authRoutes = {
       path: "/auth/accept/:invitation_token",
       name: "accept",
       component: UserAccept
+    },
+    {
+      path: "/auth/change-password/:reset_password_token",
+      name: "Change Password",
+      component: ChangePassword
     },
     {
       path: "/auth/404",

@@ -10,6 +10,8 @@ import requirement from './ja/requirement.yml';
 import question from './ja/question.yml';
 import question_choice from './ja/question_choice.yml';
 import room from './ja/room.yml';
+import devise from './ja/devise.yml';
+import devise_invitable from './ja/devise_invitable.yml';
 
 export const ja = merge.all([country, lang, message, prefecture, app, user, user_friend, requirement,
-  question, question_choice, room]).ja;
+  question, question_choice, room, devise, devise_invitable]).ja;

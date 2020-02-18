@@ -29,7 +29,7 @@ import i18next from 'src/i18n'
 import { str } from 'src/helpers';
 import TitleBar from 'src/pages/components/TitleBar';
 import UserPage from './UserPage';
-import UserInvitation from './UserInvitation';
+import UserInvitation from 'src/pages/auth/UserInvitation';
 
 
 const useStyles = makeStyles(theme => ({

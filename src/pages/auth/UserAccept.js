@@ -26,8 +26,8 @@ const Wrapper = styled(Paper)`
   }
 `;
 
-const UserAccept = props => {
-  const {dispatch, state: {session}} = useContext(AppContext);
+const UserAccept = () => {
+  const {dispatch} = useContext(AppContext);
   const {invitation_token} = useParams();
   const [user, setUser] = useState({password: '', password_confirmation: ''});
   const [message, setMessage] = useState(null);
@@ -61,10 +61,9 @@ const UserAccept = props => {
   const handleSubmit = async event => {
     event.preventDefault();
 
-    const headers  = session.headers;
     let url = env.API_ORIGIN + 'api/users/accept';
     const {password, password_confirmation} = user;
-    axios.post(url, {invitation_token, password, password_confirmation}, { headers })
+    axios.post(url, {invitation_token, password, password_confirmation})
       .then((results) => {
         handleSignIn(results.data.user.email);
       })

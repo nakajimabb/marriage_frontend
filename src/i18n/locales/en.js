@@ -10,6 +10,8 @@ import requirement from './en/requirement.yml';
 import question from './en/question.yml';
 import question_choice from './en/question_choice.yml';
 import room from './en/room.yml';
+import devise from './en/devise.yml';
+import devise_invitable from './en/devise_invitable.yml';
 
 export const en = merge.all([country, lang, message, prefecture, app, user, user_friend, requirement,
-  question, question_choice, room]).en;
+  question, question_choice, room, devise, devise_invitable]).en;
