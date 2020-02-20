@@ -127,7 +127,7 @@ const UserBasic = props => {
         <Grid container justify="center">
           <Box m={3}>
             <Avatar
-              alt={ str(user.nickname) }
+              alt={ str(user.code) }
               src={ user.avatar_url }
               style={ {width: 160, height: 160, margin: 10} }
             />
@@ -143,6 +143,18 @@ const UserBasic = props => {
         </Grid>
 
         <Grid container>
+          <FormControl fullWidth>
+            <TextField
+              name="code"
+              label={ i18next.attr('user', 'code') }
+              autoComplete="off"
+              value={ str(user.code) }
+              disabled
+              error={!!errors.code}
+              fullWidth
+            />
+          </FormControl>
+
           { mode === 'admin' ?
             (
               <FormControl fullWidth>
@@ -277,18 +289,6 @@ const UserBasic = props => {
               shrink: true
             }}
             error={!!errors.birthday}
-            fullWidth
-          />
-        </FormControl>
-
-        <FormControl fullWidth>
-          <TextField
-            name="nickname"
-            label={ i18next.attr('user', 'nickname') }
-            autoComplete="off"
-            value={ str(user.nickname) }
-            onChange={OnChange}
-            error={!!errors.nickname}
             fullWidth
           />
         </FormControl>

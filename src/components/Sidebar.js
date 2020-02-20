@@ -335,7 +335,7 @@ const Sidebar = props => {
           <Grid container spacing={2}>
             <Grid item>
               <Avatar
-                alt={ user.nickname }
+                alt={ user.code }
                 src={ user.avatar_url }
               />
             </Grid>

@@ -148,13 +148,13 @@ const UserList = props => {
 
   const item_labels = props.item_labels ||
     [
-      (u => u.nickname),
+      (u => u.code),
       (u => (i18next.age(u.age) + ' ' + (u.prefecture ? i18next.t('prefecture.' + u.prefecture) : ''))),
     ];
 
   const columns = [ (n => str(n.last_name) + str(n.first_name)),
     (n => str(n.last_name_kana) + str(n.first_name_kana)),
-    (n => n.nickname)
+    (n => n.code)
   ];
 
   const array = filterUser(data, search, columns, keys, ages);
@@ -263,7 +263,7 @@ const UserList = props => {
                   <Input id="search_name"
                          name="name"
                          value={search.name}
-                         placeholder={ i18next.attr('user', 'name') + '(' + i18next.attr('user', 'kana') + ') or ' + i18next.attr('user', 'nickname') }
+                         placeholder={ i18next.attr('user', 'name') + '(' + i18next.attr('user', 'kana') + ') or ' + i18next.attr('user', 'code') }
                          onChange={handleSearchChange} />
                 </FormControl>
               ) : null
@@ -485,7 +485,7 @@ const UserList = props => {
                       <CardMedia
                         className={classes.media}
                         image={ avatarUrl(user) }
-                        title={user.nickname}
+                        title={user.code}
                       />
                     </CardActionArea>
                     <CardContent className={classes.content} >

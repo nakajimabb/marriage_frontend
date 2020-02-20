@@ -57,7 +57,7 @@ const SignIn = props => {
     if(user.login.match(re)) {
       body['email'] = user.login;
     } else {
-      body['nickname'] = user.login;
+      body['code'] = user.login;
     }
 
     let response = await fetch(url, {method: 'POST', headers, body: JSON.stringify(body)});
@@ -89,8 +89,8 @@ const SignIn = props => {
             <TextField
               id="login"
               name="login"
-              label={ i18next.t('views.user.email_or_nickname') }
-              autoComplete="nickname"
+              label={ i18next.t('views.user.email_or_code') }
+              autoComplete="code"
               autoFocus
               value={user.login}
               onChange={handleChange('login')}

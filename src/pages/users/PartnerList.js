@@ -89,13 +89,13 @@ const PartnerList = props => {
   const user_id = user.id;
 
   const default_labels = [
-    (u => u.nickname),
+    (u => u.code),
     (u => (i18next.age(u.age) + ' ' + (u.prefecture ? i18next.t('prefecture.' + u.prefecture) : ''))),
   ];
 
   const columns = [ (n => str(n.last_name) + str(n.first_name)),
     (n => str(n.last_name_kana) + str(n.first_name_kana)),
-    (n => n.nickname)];
+    (n => n.code)];
 
   const array = filterUser(data, search, columns, keys, ages);
   let target_array;
@@ -226,7 +226,7 @@ const PartnerList = props => {
             <Input id="search_name"
                    name="name"
                    value={search.name}
-                   placeholder={ i18next.attr('user', 'name') + '(' + i18next.attr('user', 'kana') + ') or ' + i18next.attr('user', 'nickname') }
+                   placeholder={ i18next.attr('user', 'name') + '(' + i18next.attr('user', 'kana') + ') or ' + i18next.attr('user', 'code') }
                    onChange={handleSearchChange} />
           </FormControl>
           <FormControl className={classes.control} style={{width: 60}} >
@@ -325,7 +325,7 @@ const PartnerList = props => {
                     <CardMedia
                       className={classes.media}
                       image={ avatar_url(user) }
-                      title={user.nickname}
+                      title={user.code}
                     />
                   </CardActionArea>
                   <CardContent className={classes.content} >

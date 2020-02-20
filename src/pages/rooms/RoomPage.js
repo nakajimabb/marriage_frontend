@@ -124,7 +124,7 @@ const RoomPage = props => {
                 />
               </ListItemIcon>
               <ListItemText
-                primary={ str(room_user.nickname) }
+                primary={ str(room_user.code) }
                 className={classes.list_text}
               />
             </ListItem>
@@ -231,7 +231,7 @@ const RoomPage = props => {
                     return (
                       <ListItem button className={clsx(classes.item, classes[user.sex])} >
                         <ListItemIcon className={classes.name} >
-                          { user.nickname }
+                          { user.code }
                         </ListItemIcon>
                         <ListItemText >
                           { user.sex ? <span>{ i18next.enum('user', 'sex', user.sex) }&ensp;</span> : null }

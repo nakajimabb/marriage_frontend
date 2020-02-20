@@ -80,7 +80,7 @@ const UserPage = props => {
         axios.get(url, {headers})
           .then((results) => {
             const data = results.data;
-            const title = str(data.user.nickname) + i18next.t('views.user.page_of');
+            const title = str(data.user.code) + i18next.t('views.user.page_of');
             setUser(data.user);
             setUserFriend(data.user_friend);
             setMatchmakers(data.matchmakers);

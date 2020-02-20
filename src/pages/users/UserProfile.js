@@ -131,7 +131,7 @@ const UserProfile = props => {
             <CardContent className={classes.card_content} >
               <Grid container justify = "center">
                 <Avatar
-                    alt={ str(user.nickname) }
+                    alt={ str(user.code) }
                     src={ user.avatar_url }
                     style={ {width: 160, height: 160, margin: 10} }
                 />
@@ -143,13 +143,13 @@ const UserProfile = props => {
                 <ListItemIcon>
                   <ListItemText
                     inset
-                    primary={ i18next.attr('user', 'nickname') }
+                    primary={ i18next.attr('user', 'code') }
                     className={classes.text_half}
                   />
                 </ListItemIcon>
                 <ListItemText
                   inset
-                  primary={ user.nickname }
+                  primary={ user.code }
                   className={classes.text_half}
                 />
                 <ListItemIcon>

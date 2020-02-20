@@ -20,7 +20,7 @@ const QuestionAll = lazy(() => import("../pages/questions/QuestionAll"));
 const RoomList = lazy(() => import("../pages/rooms/RoomList"));
 
 const item_labels = [
-  (u => (u.last_name + ' ' + u.first_name + ' (' + u.nickname + ')')),
+  (u => (u.last_name + ' ' + u.first_name + ' (' + u.code + ')')),
   (u => (i18next.age(u.age) + ' ' + (u.prefecture ? i18next.t('prefecture.' + u.prefecture) : ''))),
 ];
 

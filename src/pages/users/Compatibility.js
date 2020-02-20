@@ -84,26 +84,26 @@ const AvatarRow = props => {
       <TableCell className={classes.left}>
         <Grid container justify = "center">
           <Avatar
-            alt={ str(user.nickname) }
+            alt={ str(user.code) }
             src={ user.avatar_url }
             style={ {width: 100, height: 100, margin: 10} }
           />
         </Grid>
         <Grid container justify = "center">
-          { user.nickname }
+          { user.code }
         </Grid>
       </TableCell>
       <TableCell></TableCell>
       <TableCell className={classes.left}>
         <Grid container justify = "center">
           <Avatar
-            alt={ str(partner.nickname) }
+            alt={ str(partner.code) }
             src={ partner.avatar_url }
             style={ {width: 100, height: 100, margin: 10} }
           />
         </Grid>
         <Grid container justify = "center">
-          { partner.nickname }
+          { partner.code }
         </Grid>
       </TableCell>
     </TableRow>
