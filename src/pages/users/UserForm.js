@@ -105,7 +105,7 @@ const enableSubmit = (mode, status) => {
     case 'check_head':
       if(mode === 'head') {
         prev_status = 'check_matchmaker';
-        next_status = 'active';
+        next_status = 'fixed';
       }
       break;
     default:
