@@ -803,7 +803,7 @@ const UserLocation = props => {
             <FormControl fullWidth>
               <TextField
                 name="zip"
-                label={ i18next.attr('user', 'zip') }
+                label={ i18next.attr('user', 'zip') + ' [' + i18next.t('views.app.half_width_digit') + ']' }
                 autoComplete="off"
                 value={ str(user.zip) }
                 onChange={OnChange}
@@ -1114,7 +1114,38 @@ const UserForm = props => {
 
   const handleChange = event => {
     const value = (event.target.type === 'checkbox') ? event.target.checked : event.target.value;
-    setUser({...user, [event.target.name]: value});
+    if(event.target.name === 'zip') {
+      changeAddress(value);
+    } else {
+      setUser({...user, [event.target.name]: value});
+    }
+  };
+
+  const validZip = zipcode => {
+    return user.country === 'jpn' && zipcode.match(/^\d{7}$/);
+  };
+
+  const formatZip = zipcode => {
+    return zipcode.replace(/[^\d]/g, '');
+  };
+
+  const changeAddress = value => {
+    const zipcode = formatZip(value);
+    setUser({...user, zip: zipcode});
+
+    if(validZip(zipcode)) {
+      const url = 'https://api.zipaddress.net/';
+      const params = {zipcode};
+      axios.get(url, {params})
+        .then((results) => {
+          if(results.status === 200 && results.data.code === 200) {
+            const data = results.data.data;
+            const prefectures = i18next.data_list('prefecture');
+            const prefecture = Object.keys(prefectures).find(code => prefectures[code] === data.pref);
+            setUser({...user, zip: zipcode, prefecture, city: data.city, street: data.town});
+          }
+        })
+    }
   };
 
   return (
