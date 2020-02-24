@@ -216,30 +216,6 @@ const UserSelf = props => {
                   <MenuItem value='ja'>{ i18next.t('lang.ja') }</MenuItem>
                 </Select>
               </FormControl>
-
-              <FormControl fullWidth>
-                <InputLabel htmlFor="password">{ i18next.attr('user', 'password') }</InputLabel>
-                <Input
-                  name="password"
-                  type="password"
-                  autoComplete="new-password"
-                  value={ str(user.password) }
-                  onChange={OnChange}
-                  error={!!errors.password}
-                />
-              </FormControl>
-
-              <FormControl fullWidth>
-                <InputLabel htmlFor="password_confirmation">{ i18next.attr('user', 'password_confirmation') }</InputLabel>
-                <Input
-                  name="password_confirmation"
-                  type="password"
-                  autoComplete="new-password"
-                  value={ str(user.password_confirmation) }
-                  onChange={OnChange}
-                  error={!!errors.password_confirmation}
-                />
-              </FormControl>
             </CardContent>
           </Card>
 

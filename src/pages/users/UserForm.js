@@ -313,29 +313,37 @@ const UserBasic = props => {
           </Select>
         </FormControl>
 
-        <FormControl fullWidth>
-          <InputLabel htmlFor="password">{ i18next.attr('user', 'password') }</InputLabel>
-          <Input
-            name="password"
-            type="password"
-            autoComplete="new-password"
-            value={ str(user.password) }
-            onChange={OnChange}
-            error={!!errors.password}
-          />
-        </FormControl>
+        {
+          (mode === 'admin') ? (
+            <FormControl fullWidth>
+              <InputLabel htmlFor="password">{ i18next.attr('user', 'password') }</InputLabel>
+              <Input
+                name="password"
+                type="password"
+                autoComplete="new-password"
+                value={ str(user.password) }
+                onChange={OnChange}
+                error={!!errors.password}
+              />
+            </FormControl>
+          ) : null
+        }
 
-        <FormControl fullWidth>
-          <InputLabel htmlFor="password_confirmation">{ i18next.attr('user', 'password_confirmation') }</InputLabel>
-          <Input
-            name="password_confirmation"
-            type="password"
-            autoComplete="new-password"
-            value={ str(user.password_confirmation) }
-            onChange={OnChange}
-            error={!!errors.password_confirmation}
-          />
-        </FormControl>
+        {
+          (mode === 'admin') ? (
+            <FormControl fullWidth>
+              <InputLabel htmlFor="password_confirmation">{ i18next.attr('user', 'password_confirmation') }</InputLabel>
+              <Input
+                name="password_confirmation"
+                type="password"
+                autoComplete="new-password"
+                value={ str(user.password_confirmation) }
+                onChange={OnChange}
+                error={!!errors.password_confirmation}
+              />
+            </FormControl>
+          ) : null
+        }
       </CardContent>
     </Card>
   );
@@ -1051,7 +1059,6 @@ const UserForm = props => {
 
   const onSubmit = (status, message) => () => {
     if(window.confirm(message)) {
-      console.log({status});
       onSave(status)();
     }
   };

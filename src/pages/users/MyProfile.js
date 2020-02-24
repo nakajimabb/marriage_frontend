@@ -1,5 +1,5 @@
 import React, {Suspense, lazy, useContext, useState, useEffect} from 'react';
-import {Box, CircularProgress, Tab, Tabs, Typography} from '@material-ui/core';
+import {Box, CircularProgress, Tab, Tabs, Typography, makeStyles} from '@material-ui/core';
 import { Settings } from 'react-feather';
 
 import env from 'src/environment';
@@ -11,6 +11,7 @@ import axios from "axios";
 
 const UserForm = lazy(() => import('./UserForm'));
 const UserProfile = lazy(() => import('./UserProfile'));
+const UserPassword = lazy(() => import('./UserPassword'));
 const UserRequirement = lazy(() => import('./UserRequirement'));
 
 
@@ -76,9 +77,10 @@ const MyProfile = () => {
           aria-label="simple tabs example"
         >
           <Tab label={i18next.t('views.user.edit_self')} {...a11yProps(0)} />
-          <Tab label={i18next.t('views.user.public_profile')} {...a11yProps(1)} />
-          <Tab label={i18next.model('question')} {...a11yProps(2)} />
-          <Tab label={i18next.model('requirement')} {...a11yProps(3)} />
+          <Tab label={i18next.t('views.user.edit_password')} {...a11yProps(1)} />
+          <Tab label={i18next.t('views.user.public_profile')} {...a11yProps(2)} />
+          <Tab label={i18next.model('question')} {...a11yProps(3)} />
+          <Tab label={i18next.model('requirement')} {...a11yProps(4)} />
         </Tabs>
       </TitleBar>
       <Box>
@@ -87,13 +89,16 @@ const MyProfile = () => {
             { flags[0] ? <UserForm user={user} setUser={setUser} mode={'self'}/> : null }
           </TabPanel>
           <TabPanel value={tab} index={1}>
-            { flags[1] ? <UserProfile user={user} open /> : null }
+            { flags[1] ? <UserPassword user={user} setUser={setUser} /> : null }
           </TabPanel>
           <TabPanel value={tab} index={2}>
-            { flags[2] ? <QuestionForm user={user} /> : null }
+            { flags[2] ? <UserProfile user={user} open /> : null }
           </TabPanel>
           <TabPanel value={tab} index={3}>
-            { flags[3] ? <UserRequirement user={user} /> : null }
+            { flags[3] ? <QuestionForm user={user} /> : null }
+          </TabPanel>
+          <TabPanel value={tab} index={4}>
+            { flags[4] ? <UserRequirement user={user} /> : null }
           </TabPanel>
         </Suspense>
       </Box>
