@@ -23,7 +23,7 @@
     "@material-ui/pickers": "3.2.8",
     "@material-ui/styles": "4.8.2",
     "@material-ui/system": "4.7.1",
-    "axios": "^0.19.1",
+    "axios": "^0.21.1",
     "date-fns": "2.9.0",
     "deepmerge": "^4.0.0",
     "i18next": "^19.0.3",
